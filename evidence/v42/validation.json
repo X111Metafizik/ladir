@@ -1,0 +1,40 @@
+{
+  "version": "1.26.1",
+  "recordedAt": "2026-10-24T22:40:50.9517169Z",
+  "baselineCommit": "661fe3d60338c40cbb1aae8dffc41c3f5b266a53",
+  "radiusMeters": 4000000,
+  "diameterKilometers": 8000,
+  "worldHash": "b7aefd351cef8c3f6e23e5878c5369987fa41d29e28a4fe9297c891ad09efada",
+  "geometrySignature": "5b7301100c35e03164364a81a065695f36be1cd99a8098c7ebff9926756f67ca",
+  "tests": {
+    "passed": 228,
+    "durationMs": 151207.8753,
+    "failed": 0,
+    "skipped": 0,
+    "command": "npm test"
+  },
+  "build": {
+    "command": "npm run build",
+    "passed": true
+  },
+  "productionSmoke": {
+    "passed": true,
+    "shaderModules": 154,
+    "path": "smoke/smoke.json",
+    "softwareGpu": false
+  },
+  "comparison": {
+    "fps100Verified": false,
+    "coldAndWarmPairsPerBuild": 1,
+    "baseline": "baseline/descent.json",
+    "gpuTimestampMeasured": false,
+    "release": "release/descent.json"
+  },
+  "report": "../../output/reports/LADIR_V42_Kiyi_ve_Alcalma.md",
+  "limitations": [
+    "Near reference detail arrives earlier, but the entire queue takes longer.",
+    "Prefetch increases tracked terrain buffer memory.",
+    "Frame p99 did not improve; long frames remain.",
+    "Other applications were not completely isolated."
+  ]
+}

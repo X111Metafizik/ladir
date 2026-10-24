@@ -1,0 +1,20 @@
+{
+  "worldHash": "595aee80687ce1d3acf102bfd9e8bb925f9b5ee4a3bca2bdc3fca5f58b2b463d",
+  "version": "atlas-terrain-35.1/5b7301100c35e03164364a81a065695f36be1cd99a8098c7ebff9926756f67ca",
+  "faces": 6,
+  "tiles": 384,
+  "level": 3,
+  "wholeGlobe": true,
+  "nearDetail": "Generated at original LOD quality and persisted on demand",
+  "bytes": 4549600,
+  "milliseconds": 1294.4146999999998,
+  "samples": {
+    "hits": 6524,
+    "misses": 24580,
+    "size": 24380,
+    "capacity": 80000,
+    "keyBytes": 3300000,
+    "referenceSlots": 80000,
+    "evictions": 200
+  }
+}

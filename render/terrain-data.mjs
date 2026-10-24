@@ -1,4 +1,4 @@
-import {clipWaterTriangle} from './water-clip.mjs';
+import {clipWaterTriangle,clipWaterPolygon,waterBody,riverBankOffsets} from './water-clip.mjs';
 import {referenceWeight,referenceCoordinates,modernTerrain} from '../core/landforms.mjs';
 import {boundsOf} from './terrain-budget.mjs';
 import {faceDirection,directionFace,projectToFace} from '../core/cube.mjs';
@@ -11,12 +11,15 @@ export function selectPatches(world,camera,detail=1,view=null,options={}){
   const sample=options.sample??((d,o)=>sampleTerrain(world,d,o));
   const leaves=[],length=Math.hypot(...camera),up=camera.map(v=>v/length),scale=1000/world.radiusMeters;
   const altitude=(length-1000)/scale,stamped=!!world.buffers?.stampHeights&&(world.generationConfig.terrainStamps??0)>0;
-  const under=sample(up),clearance=altitude-Math.max(under.elevationMeters,under.waterSurfaceMeters);
+  const under=sample(up),currentClearance=altitude-Math.max(under.elevationMeters,under.waterSurfaceMeters);
+  let clearance=currentClearance;
+  if(view?.predict){const length=Math.hypot(...view.predict),d=view.predict.map(v=>v/length),ahead=sample(d,{micro:false});clearance=Math.min(clearance,Math.max(150,(length-1000)/scale-Math.max(ahead.elevationMeters,ahead.waterSurfaceMeters)));}
+  const approaching=view?.descending||clearance<currentClearance-50,previousTiles=new Map((options.previous??[]).map(p=>[`${p.face}/${p.level}/${p.x}/${p.y}`,p]));
   const intermediate=stamped&&altitude<=60000&&clearance>8000;
   // Spend the dense grid on the expanded visible footprint, keeping reusable
   // background geometry lighter. Stitching below also handles 16/32 neighbors
   // at the same quadtree level, so neither a crack nor a skirt is needed.
-  const resolutionFor=(level,visible=true,meters=0)=>options.resolution??(options.referenceResolution&&level>=10&&visible?options.referenceResolution:altitude>60000?20:level>=14?(visible&&meters<16000?32:PATCH):level<(intermediate?11:14)?8:PATCH);
+  const resolutionFor=(level,visible=true,meters=0)=>options.resolution??(options.referenceResolution&&level>=10&&visible?options.referenceResolution:altitude>60000?20:level>=14?(visible&&meters<16000?32:PATCH):level<11?8:PATCH);
   const surfaceView=!!view&&clearance<8000;
   const transition=clamp((clearance-4000)/4000,0,1),surfaceSpacing=.0045+.0205*transition*transition*(3-2*transition);
   const maxLevel=Math.min(options.maxLevel??30,Math.max(Math.ceil(Math.log2(2*world.radiusMeters/(3/detail*PATCH))),surfaceView?Math.ceil(Math.log2(2*world.radiusMeters/(.75*32))):0));
@@ -39,7 +42,12 @@ export function selectPatches(world,camera,detail=1,view=null,options={}){
     const riverSpacing=nearRiver?(view?Math.max(6,Math.min(160,nearRiver.widthMeters/4)):Math.max(8,Math.min(160,nearRiver.widthMeters/3),distance/scale*.0018)):0;
     let refineRiver=riverVisible&&p.size*world.radiusMeters/PATCH>riverSpacing&&nearRiver.distanceMeters<extent/scale*.75+nearRiver.widthMeters/2+100;
     const delta=d.map((v,i)=>v*(1000+h*scale)-camera[i]),forward=view?dot(delta,view.forward):0,margin=extent*1.2;
-    const visible=!view||(forward+margin>0&&Math.abs(dot(delta,view.right))<forward*view.tanX*1.25+margin&&Math.abs(dot(delta,view.up))<forward*view.tanY*1.25+margin);
+    const inView=(delta,forward)=>forward+margin>0&&Math.abs(dot(delta,view.right))<forward*view.tanX*1.25+margin&&Math.abs(dot(delta,view.up))<forward*view.tanY*1.25+margin;
+    const currentVisible=!view||inView(delta,forward);
+    // A downward approach exposes ground which is BELOW the current frustum.
+    // Distance-only prediction never prepared that future visible footprint.
+    const predictedDelta=view?.predict?d.map((v,i)=>v*(1000+h*scale)-view.predict[i]):null;
+    const visible=currentVisible||!!predictedDelta&&inView(predictedDelta,dot(predictedDelta,view.forward));
     refineRiver &&= visible||distance/scale<1400;
     const geology=options.arrival?.6:detailDistance/scale<1800?3.05:detailDistance/scale<5000?2.3:detailDistance/scale<60000?1.8:1.35;
     const nearbyDetail=visible||distance/scale<1400||p.level<10;
@@ -102,9 +110,11 @@ export function selectPatches(world,camera,detail=1,view=null,options={}){
         if(Math.abs(rx-axis)<1800+p.size*world.radiusMeters&&300*pixelsPerMeter>2)geometric ||= cell*world.radiusMeters>75;
       }
     }
-    if(p.level<3||(p.level<maxLevel&&((nearbyDetail&&detailDistance<extent*(geology+detail*.35))||refineRiver||regional||geometric||shoreRefine))){
+    const approachFootprint=approaching&&distance/scale<16000&&(visible||distance/scale<Math.max(2000,currentClearance*1.2));
+    const retainApproach=approachFootprint&&previousBranches.has(p.key);
+    if(p.level<3||(p.level<maxLevel&&((nearbyDetail&&detailDistance<extent*(geology+detail*.35))||refineRiver||regional||geometric||shoreRefine||retainApproach))){
       for(let y=0;y<2;y++)for(let x=0;x<2;x++)visit(descriptor(p.face,p.x*2+x,p.y*2+y,p.level+1));
-    }else {p.priority=distance/scale*(visible?1:5);p.resolution=resolutionFor(p.level,visible,detailDistance/scale);leaves.push(p);}
+    }else {p.priority=(currentVisible?distance:detailDistance*1.3)/scale*(visible?1:5);p.resolution=resolutionFor(p.level,visible,detailDistance/scale);if(approachFootprint)p.resolution=Math.max(p.resolution,previousTiles.get(p.key)?.resolution??0);leaves.push(p);}
   }
   for(let f=0;f<6;f++)visit(descriptor(f,0,0,0));
   const lookup=new Map(leaves.map(p=>[p.key,p]));
@@ -166,9 +176,9 @@ export function buildPatch(world,p,layer='natural',sample=(d,options)=>sampleTer
   for(let y=0;y<=N;y++)for(let x=0;x<=N;x++){
     const {d,sample:s,point}=pointAt(x,y);
     positions.push(...point);
-    const wi=y*(N+1)+x;waterLevels[wi]=s.waterSurfaceMeters;terrainHeights[wi]=s.elevationMeters;waterBodies[wi]=s.featureId??'ocean';
+    const wi=y*(N+1)+x;waterLevels[wi]=s.waterSurfaceMeters;terrainHeights[wi]=s.elevationMeters;waterBodies[wi]=waterBody(s,world.generationConfig.seaLevel);
     waterPositions.push(...d.map((v,i)=>v*(1000+(s.waterSurfaceMeters+.03)*scale)-center[i]));
-    waterNormals.push(...d);wet.push(s.waterDepthMeters>0&&(!s.featureId||s.featureId.startsWith('lake')));shallows.push(Math.exp(-s.waterDepthMeters/350));
+    waterNormals.push(...d);wet.push(s.waterDepthMeters>0&&(waterBodies[wi]==='ocean'||s.featureId?.startsWith('lake')));shallows.push(Math.exp(-s.waterDepthMeters/350));
     if(p.level<8)normals.push(...d);else{const step=bandStep(x,y),e=pointAt(x+step,y,step).point,w=pointAt(x-step,y,step).point,n=pointAt(x,y+step,step).point,south=pointAt(x,y-step,step).point;const ax=e[0]-w[0],ay=e[1]-w[1],az=e[2]-w[2],bx=n[0]-south[0],by=n[1]-south[1],bz=n[2]-south[2],nx=ay*bz-az*by,ny=az*bx-ax*bz,nz=ax*by-ay*bx,k=(nx*d[0]+ny*d[1]+nz*d[2]<0?-1:1)/(Math.hypot(nx,ny,nz)||1);normals.push(nx*k,ny*k,nz*k);}
     const color=colorOf(s,d);
     colors.push(...color);surface.push(layer==='natural'?s.biome:-1,s.forest??0,s.lava??0,s.elevationMeters);climate.push(s.snow??0,s.moisture??0);
@@ -232,20 +242,21 @@ export function buildPatch(world,p,layer='natural',sample=(d,options)=>sampleTer
   for(const edge of (p.level<8?edges:[])){const start=positions.used/3;for(const i of edge){const n=waterNormals.slice(i*3,i*3+3);positions.push(...point(i).map((v,k)=>v-n[k]*(p.level>=8?2*scale:depth)));normals.push(...normals.slice(i*3,i*3+3));colors.push(...colors.slice(i*3,i*3+3));surface.push(...surface.slice(i*4,i*4+4));climate.push(...climate.slice(i*2,i*2+2));}for(let j=0;j<N;j++){const a=edge[j],b=edge[j+1],c=start+j,d=c+1;triangle(a,b,c,indices);triangle(b,d,c,indices);}}
   if(!waterIndices.length){waterPositions.length=waterNormals.length=shallows.length=0;}
   for(const edge of (waterIndices.length?edges:[])){const start=waterPositions.length/3;for(const i of edge){const n=waterNormals.slice(i*3,i*3+3);waterPositions.push(...waterPositions.slice(i*3,i*3+3).map((v,k)=>v-n[k]*depth));waterNormals.push(...n);shallows.push(shallows[i]);}for(let j=0;j<N;j++)if(wet[edge[j]]&&wet[edge[j+1]]&&waterBodies[edge[j]]===waterBodies[edge[j+1]]&&waterLevels[edge[j]]===waterLevels[edge[j+1]]){const a=edge[j],b=edge[j+1],c=start+j,d=c+1;waterIndices.push(a,b,c,b,d,c,a,c,b,b,c,d);}}
-  // Narrow watercourses survive a terrain grid coarser than the channel width.
-  if(p.level>=9)for(const {a,b} of segmentsForPatch(world,p)){
+  // Inland channels retain their own falling water level. Sea-level reaches
+  // are already covered by the continuous ocean surface above.
+  if(p.level>=9)for(const {a,b,river} of segmentsForPatch(world,p)){
+    if(Math.max(a.waterLevelMeters,b.waterLevelMeters)<=world.generationConfig.seaLevel+1e-5)continue;
     const A=projectToFace(a.direction,p.face),B=projectToFace(b.direction,p.face);if(!A||!B)continue;
-    let lo=0,hi=1;const du=B[1]-A[1],dv=B[2]-A[2];
-    for(const [start,delta,min,max] of [[A[1],du,p.u,p.u+p.size],[A[2],dv,p.v,p.v+p.size]]){
-      if(Math.abs(delta)<1e-14){if(start<min||start>max){hi=-1;break;}}else{const t1=(min-start)/delta,t2=(max-start)/delta;lo=Math.max(lo,Math.min(t1,t2));hi=Math.min(hi,Math.max(t1,t2));}
-    }
-    if(lo>=hi)continue;
-    const length=Math.hypot(...b.direction.map((v,i)=>v-a.direction[i]))*world.radiusMeters,steps=Math.max(1,Math.ceil(length*(hi-lo)/Math.max(80,Math.min(1200,p.size*world.radiusMeters/N)))),side=normalize(cross(a.direction,b.direction)),start=waterPositions.length/3;
-    for(let j=0;j<=steps;j++){
-      const t=mix(lo,hi,j/steps),d=normalize(a.direction.map((v,i)=>mix(v,b.direction[i],t))),half=mix(a.widthMeters,b.widthMeters,t)*.48/world.radiusMeters,level=mix(a.waterLevelMeters,b.waterLevelMeters,t);
-      for(const sign of [-1,1]){const q=normalize(d.map((v,i)=>v+sign*side[i]*half));waterPositions.push(...q.map((v,i)=>v*(1000+(level+.09)*scale)-center[i]));waterNormals.push(...q);shallows.push(.8);}
-      if(j<steps){const k=start+j*2;waterIndices.push(k,k+1,k+2,k+1,k+3,k+2,k,k+2,k+1,k+1,k+2,k+3);}
-    }
+    const pad=2*Math.max(a.widthMeters,b.widthMeters)/world.radiusMeters;
+    if(Math.max(A[1],B[1])+pad<p.u||Math.min(A[1],B[1])-pad>p.u+p.size||Math.max(A[2],B[2])+pad<p.v||Math.min(A[2],B[2])-pad>p.v+p.size)continue;
+    const banks=riverBankOffsets(river),corners=[];
+    for(const [point,sign]of [[a,-1],[a,1],[b,1],[b,-1]]){const side=banks.get(point),q=normalize(point.direction.map((v,i)=>v+sign*side[i]*point.widthMeters*.48/world.radiusMeters)),uv=projectToFace(q,p.face);if(uv){const invW=Math.hypot(1,uv[1],uv[2]);corners.push([uv[1],uv[2],point.waterLevelMeters*invW,invW]);}}
+    if(corners.length!==4)continue;
+    const polygon=clipWaterPolygon(corners,p.u,p.v,p.size);if(polygon.length<3)continue;
+    const start=waterPositions.length/3;
+    // Perspective-correct level interpolation also agrees across cube faces.
+    for(const [u,v,levelW,invW]of polygon){const d=faceDirection(p.face,u,v),level=levelW/invW;waterPositions.push(...d.map((n,i)=>n*(1000+(level+.03)*scale)-center[i]));waterNormals.push(...d);shallows.push(.8);}
+    for(let j=1;j+1<polygon.length;j++){waterIndices.push(start,start+j,start+j+1,start,start+j+1,start+j);}
   }
   for(const a of [positions,normals,colors,surface,climate,indices]){delete a.push;delete a.used;}
   const remap=new Int32Array(waterPositions.length/3).fill(-1),wp=[],wn=[],ws=[];

@@ -1,0 +1,63 @@
+{
+  "scope": "Production state integration and WGSL compilation; does not certify visual correctness or FPS",
+  "softwareGpu": false,
+  "visualValidation": "manual hardware inspection required; software screenshots are diagnostic only",
+  "viewport": [
+    960,
+    640
+  ],
+  "errors": [],
+  "consoleErrors": [],
+  "editor": {
+    "radius": 4000000,
+    "worldHash": "595aee80687ce1d3acf102bfd9e8bb925f9b5ee4a3bca2bdc3fca5f58b2b463d",
+    "kernel": {
+      "memoPolicy": "explicit-only; canonical sample cache owns reuse",
+      "mode": "wasm",
+      "requested": "auto",
+      "loadMs": 8.419999986886978,
+      "bytes": 1908,
+      "memoryBytes": 589824,
+      "reason": null,
+      "cacheBytes": 458752,
+      "cacheEntries": 8192,
+      "cacheUsed": 0,
+      "hits": 0,
+      "misses": 0
+    },
+    "backend": "WebGPU",
+    "adapter": {
+      "vendor": "nvidia",
+      "architecture": "turing",
+      "description": ""
+    },
+    "patches": 2421,
+    "isolated": true,
+    "observedReadyMs": 11880
+  },
+  "flight": {
+    "state": "flying",
+    "health": 100,
+    "patches": 2431,
+    "draws": 196,
+    "skills": [
+      "warp",
+      "repair"
+    ]
+  },
+  "gpu": {
+    "modules": 154,
+    "pending": 0,
+    "errors": [],
+    "lost": [],
+    "adapters": [
+      {
+        "vendor": "nvidia",
+        "architecture": "turing",
+        "device": "",
+        "description": ""
+      }
+    ]
+  },
+  "passed": true
+}

@@ -188,13 +188,23 @@ export class StreamingTerrain{
   if(this.cache.size>200||this.stats.cacheBytes>TERRAIN_BUDGET.cacheBytes){clearTimeout(this.trimTimer);this.trimTimer=setTimeout(()=>this.trim(),40);}
  }
 
- request(){this.worker.postMessage({type:'terrain',id:++this.id,camera:this.lastPosition.toArray(),view:this.view,detail:this.detail,layer:this.layer,referenceResolution:this.referenceResolution,preview:this.preview,known:[...this.active.keys(),...this.cache.keys()],previous:[...this.active].map(([key,m])=>{const {face,level,x,y}=m.userData.patch;return {key,face,level,x,y};})});}
+ request(){this.worker.postMessage({type:'terrain',id:++this.id,camera:this.lastPosition.toArray(),view:this.view,detail:this.detail,layer:this.layer,referenceResolution:this.referenceResolution,preview:this.preview,known:[...this.active.keys(),...this.cache.keys()],previous:[...this.active].map(([key,m])=>({...m.userData.patch,key}))});}
  update(camera,detail=1,force=false){
   if(this.disposed||this.arrival)return Promise.resolve();const scale=1000/this.world.radiusMeters,forward=this.viewCamera.getWorldDirection(new THREE.Vector3()),travel=camera.distanceTo(this.lastPosition)/scale,altitude=(camera.length()-1000)/scale;
+  const now=performance.now();this.observedMotion??=new THREE.Vector3();
+  if(this.observedCamera){const dt=(now-this.observedTime)/1000,travel=camera.distanceTo(this.observedCamera)/scale;
+   // Use actual camera translation for descent/zoom, not just engine speed.
+   // Ignore teleports, long pauses and synthetic back-to-back updates.
+   if(dt>=.016){if(dt<.75&&travel<4000)this.observedMotion.lerp(camera.clone().sub(this.observedCamera).multiplyScalar(1/dt),.55);else this.observedMotion.set(0,0,0);this.observedCamera.copy(camera);this.observedTime=now;}
+  }else{this.observedCamera=camera.clone();this.observedTime=now;}
   if(this.building){
    // Let the first dense footprint finish during normal cruise. Cancelling it
    // every 700 m can starve refinement forever when its cold job takes >3.6 s.
-   const obsolete=(travel>Math.max(this.flightRefining?2500:700,Math.abs(altitude)*.3)||forward.dot(this.lastForward)<.65)&&performance.now()-(this.retargeted??0)>250;
+   // Motion along the forecast corridor is expected, not obsolete work.
+   // Cancelling it on radial descent discarded the very tiles prepared ahead.
+   let uncovered=travel;
+   if(this.view?.predict){const delta=new THREE.Vector3(...this.view.predict).sub(this.lastPosition),length=delta.lengthSq();if(length>1e-12){const t=Math.max(0,Math.min(1,camera.clone().sub(this.lastPosition).dot(delta)/length));uncovered=camera.distanceTo(delta.multiplyScalar(t).add(this.lastPosition))/scale;}}
+   const obsolete=(uncovered>Math.max(this.flightRefining?2500:700,Math.abs(altitude)*.3)||forward.dot(this.lastForward)<.65)&&performance.now()-(this.retargeted??0)>250;
    if(obsolete){
     // Reuse completed buffers, retain the visible watertight mesh, and let the
     // worker abandon its old view at the next yield instead of queuing seconds
@@ -209,8 +219,10 @@ export class StreamingTerrain{
   if(!force&&travel<Math.max(45,altitude>60000?altitude*.05:45)&&forward.dot(this.lastForward)>.997)return Promise.resolve();
   this.lastPosition.copy(camera);this.lastForward.copy(forward);this.detail=detail;this.preview=!!this.previewNext;this.previewNext=false;this.started=performance.now();this.firstVisible=false;this.stats.nearVisibleMilliseconds=null;this.building=true;
   const right=new THREE.Vector3().setFromMatrixColumn(this.viewCamera.matrixWorld,0),up=new THREE.Vector3().setFromMatrixColumn(this.viewCamera.matrixWorld,1),tanY=Math.tan(Math.max(this.minimumFov??0,this.viewCamera.fov)*Math.PI/360);
-  const predict=this.motion?camera.clone().addScaledVector(this.motion,Math.min(2.4,1500/Math.max(1,this.motion.length()/scale))).toArray():null;
-  this.view={viewportHeight:this.viewCamera.userData.viewportHeight??1000,predict,forward:forward.toArray(),right:right.toArray(),up:up.toArray(),tanY,tanX:tanY*this.viewCamera.aspect};const p={};p.promise=new Promise((resolve,reject)=>Object.assign(p,{resolve,reject}));this.pending=p;this.request();return p.promise;
+  const measuredDescent=this.observedMotion.dot(camera)/camera.length()/scale<-40,motion=measuredDescent?this.observedMotion:this.motion;
+  const descending=motion&&motion.dot(camera)/camera.length()/scale<-40;
+  const predict=motion?camera.clone().addScaledVector(motion,Math.min(descending?6:2.4,(descending?4000:1500)/Math.max(1,motion.length()/scale))).toArray():null;
+  this.view={viewportHeight:this.viewCamera.userData.viewportHeight??1000,predict,descending:!!descending,forward:forward.toArray(),right:right.toArray(),up:up.toArray(),tanY,tanX:tanY*this.viewCamera.aspect};const p={};p.promise=new Promise((resolve,reject)=>Object.assign(p,{resolve,reject}));this.pending=p;this.request();return p.promise;
  }
  // Interpolate the displayed triangle, including stitched boundaries. Tree
  // roots follow the mesh the player actually sees, not an unrendered heightfield.

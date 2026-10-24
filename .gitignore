@@ -46,3 +46,10 @@ Thumbs.db
 !/evidence/v41/flight-final/
 !/evidence/v41/smoke/
 !/evidence/v41/validation.json
+!/evidence/v42/
+/evidence/v42/*
+!/evidence/v42/baseline/
+!/evidence/v42/release/
+!/evidence/v42/smoke/
+!/evidence/v42/bake/
+!/evidence/v42/validation.json

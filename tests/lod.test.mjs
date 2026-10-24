@@ -67,6 +67,20 @@ test('travel prefetch refines a forward corridor without coarsening the current 
  for(const p of base){const descendants=ahead.filter(q=>q.face===p.face&&q.level>=p.level&&Math.floor(q.x/2**(q.level-p.level))===p.x&&Math.floor(q.y/2**(q.level-p.level))===p.y);assert.ok(descendants.length>0,'every current leaf keeps or refines its coverage');}
 });
 
+test('a descending forecast prepares the surface band and retains visible fine leaves',async()=>{
+ const w=await get(),d=w.frame.center,scale=1000/w.radiusMeters,h=sampleTerrain(w,d).elevationMeters;
+ const view={forward:d.map(v=>-v),up:w.frame.north,right:w.frame.east,tanX:.64,tanY:.445,viewportHeight:1000};
+ const camera=d.map(v=>v*(1000+(h+8500)*scale)),predict=d.map(v=>v*(1000+(h+4500)*scale));
+ const high=selectPatches(w,camera,1,view),ahead=selectPatches(w,camera,1,{...view,predict},{previous:high});
+ const spacing=p=>p.size*w.radiusMeters/p.resolution;
+ assert.ok(Math.min(...ahead.map(spacing))<Math.min(...high.map(spacing)),'descent starts surface refinement before reaching it');
+ assert.ok(ahead.length<2200,'forecast has a bounded footprint');
+ for(const p of high.filter(p=>p.priority<16000)){
+  const descendants=ahead.filter(q=>q.face===p.face&&q.level>=p.level&&Math.floor(q.x/2**(q.level-p.level))===p.x&&Math.floor(q.y/2**(q.level-p.level))===p.y);
+  assert.ok(descendants.length>0);assert.ok(descendants.every(q=>spacing(q)<=spacing(p)),'approach cannot halve an already visible grid');
+ }
+});
+
 test('orbital relief covers the entire view beyond 480 km without a cliff in detail or unbounded grids',async()=>{
  const w=await get(),lat=11.29*Math.PI/180,lon=57.63*Math.PI/180,d=[Math.cos(lat)*Math.sin(lon),Math.sin(lat),Math.cos(lat)*Math.cos(lon)];
  const north=normalize([0,1,0].map((v,i)=>v-d[i]*d[1])),right=normalize(cross(north,d)),forward=normalize(north.map((v,i)=>v*Math.cos(-1.05)+d[i]*Math.sin(-1.05))),up=normalize(cross(right,forward));

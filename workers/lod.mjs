@@ -5,7 +5,7 @@ import {initRegional} from '../io/regional-runtime.mjs';
 import {TERRAIN_BUDGET,patchBytes} from '../render/terrain-budget.mjs';
 import {selectPatches} from '../render/terrain-data.mjs';
 import {PatchPool} from '../render/patch-pool.mjs';
-import {transitionGroups,createSampleCache} from '../render/stream-plan.mjs';
+import {transitionGroups,createSampleCache,prioritizeTransitions} from '../render/stream-plan.mjs';
 import {vegetationTile} from '../core/vegetation.mjs';
 import {faceDirection,directionFace} from '../core/cube.mjs';
 import {sampleTerrain,nearestRiver} from '../core/terrain.mjs';
@@ -31,6 +31,7 @@ self.onmessage=async({data})=>{
    // Neighbor/stitch grouping can cost hundreds of milliseconds during fast
    // travel. It is deterministic planning, so keep it off the render thread.
    const transitions=data.previous?transitionGroups(data.previous,patches):undefined;
+   prioritizeTransitions(missing,transitions,data.layer);
    self.postMessage({id:data.id,type:'terrain-plan',patches,transitions});
    const planningMs=performance.now()-planStarted;ensurePool();
    const result=await pool.run(missing,data.layer,patches=>{inflightBytes+=patches.reduce((n,p)=>n+patchBytes(p),0);pool.setPaused(inflightBytes>TERRAIN_BUDGET.inflightBytes);self.postMessage({id:data.id,type:'terrain-chunk',patches},patches.flatMap(p=>Object.values(p).filter(ArrayBuffer.isView).map(v=>v.buffer)));});

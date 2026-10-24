@@ -95,3 +95,13 @@ test('the first dense flight footprint can finish while cruise advances one kilo
   const next={...packet(0),key:'0/3/4/4/dense/natural'};deliver(t.worker,next,detailedId);t.flushFrame();assert.equal(t.flightRefining,false);assert.ok(t.active.has(next.key));
  }finally{t?.dispose();material?.dispose();globalThis.Worker=original;}
 });
+
+test('descent along the prepared corridor does not cancel its pending surface',()=>{
+ const original=globalThis.Worker;globalThis.Worker=FakeWorker;let t,material;
+ try{const camera=new PerspectiveCamera();camera.updateMatrixWorld();material=new MeshBasicNodeMaterial();t=new StreamingTerrain({radiusMeters:4000000},material,new Group(),material,camera);t.setFrameDriven(true);
+  t.motion=new Vector3(0,0,-.15);t.update(new Vector3(0,0,1002),1,true);const id=t.id;
+  assert.ok(t.view.predict[2]<1001.2,'vertical velocity predicts several seconds ahead');
+  t.update(new Vector3(0,0,1001.2));assert.equal(t.id,id,'expected descent does not throw away the arriving grid');assert.equal(t.stats.cancelledJobs??0,0);
+  t.update(new Vector3(2,0,1001.2));assert.ok(t.id>id,'leaving the forecast corridor still cancels stale work');
+ }finally{t?.dispose();material?.dispose();globalThis.Worker=original;}
+});
