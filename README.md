@@ -1,8 +1,8 @@
-# ORVANTA / Planet Studio
+# NADİR / Planet Studio
 
-## Güncel ad: ORVANTA - v1.22.2
+## Güncel ad: NADİR - v1.22.3
 
-Projenin yeni adı **ORVANTA**. Uygulama başlığı, marka alanı, havza inceleme ekranı, ayar/kamera dosyalarının dışa aktarma adları ve npm paket adı güncellendi. Terrain, fizik ve performans davranışı V37 temelindedir.
+Projenin yeni adı **NADİR**. Uygulama başlığı, marka alanı, havza inceleme ekranı, ayar/kamera dosyalarının dışa aktarma adları ve npm paket adı güncellendi. Terrain, fizik ve performans davranışı V37 temelindedir.
 
 Dünya seed'leri, kayıt dosyaları, mevcut `atlas-config-v35` tarayıcı ayar anahtarı ve bake/cache kimlikleri korunur; isim değişikliği kayıtları sıfırlamaz. Tarihsel ölçüm raporları ve kaynak kanıtları özgün **ATLAS** adlarıyla durur.
 

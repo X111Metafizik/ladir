@@ -1,0 +1,5 @@
+
+> nadir-planet-studio@1.22.3 build
+> node scripts/build.mjs
+
+Bağımsız dağıtım dist/ dizinine oluşturuldu.
