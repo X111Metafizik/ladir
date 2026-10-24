@@ -42,7 +42,7 @@ cancellation of superseded runs limit redundant storage and execution.
 
 [Local validation evidence](../evidence/v40/validation.json) and
 [browser diagnostics](../evidence/v40/browser/smoke.json) record the local results.
-Hosted Linux/Windows and SwiftShader results are reported separately in the
+Hosted Linux/Windows and Mesa results are reported separately in the
 [GitHub Actions run for the commit](https://github.com/X111Metafizik/ladir/actions/workflows/ci.yml).
 A local pass is not presented as a hosted pass. See [Development](DEVELOPMENT.md)
 for reproduction commands and the scope of each job.
@@ -56,7 +56,8 @@ or weakening the exact comparisons. A development directory containing ignored
 data had concealed that missing dependency.
 
 The first Linux software-GPU run lost its WebGPU device during startup. The
-browser job now includes Vulkan/Mesa runtime dependencies, retains device and
-browser diagnostics, and disables the software GPU watchdog within the existing
-job deadline. Device loss remains a failing check; it is not skipped or counted
+browser job now follows the upstream Three.js Mesa/lavapipe and Xvfb setup,
+selects the installed Vulkan ICD, retains device/browser diagnostics, and disables
+the software GPU watchdog within the job deadline. The earlier SwiftShader
+configuration was not reliable on the hosted runner. Device loss remains a failing check; it is not skipped or counted
 as a pass. Hosted status remains the authority for this platform check.

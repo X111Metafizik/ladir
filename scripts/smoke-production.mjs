@@ -1,6 +1,6 @@
 // Functional production/shader validation. Software GPU results are never FPS evidence.
 import {spawn} from 'node:child_process';
-import {mkdir,writeFile} from 'node:fs/promises';
+import {mkdir,writeFile,readdir} from 'node:fs/promises';
 import path from 'node:path';
 import assert from 'node:assert/strict';
 const {chromium}=await import(process.env.PLAYWRIGHT_MODULE||'playwright');
@@ -15,8 +15,16 @@ try{
   server.once('error',error=>{clearTimeout(timer);reject(error);});server.once('exit',code=>{clearTimeout(timer);reject(Error('Production server exited: '+code));});
  });
  const args=['--enable-unsafe-webgpu','--disable-background-timer-throttling','--disable-renderer-backgrounding'];
- if(report.softwareGpu)args.push('--enable-features=Vulkan','--use-angle=vulkan','--use-vulkan=swiftshader','--use-webgpu-adapter=swiftshader','--disable-vulkan-surface','--disable-gpu-watchdog');
- browser=await chromium.launch({channel:process.env.BROWSER_CHANNEL||'chromium',headless:true,args});
+ const browserEnv={...process.env};
+ if(report.softwareGpu){
+  if(process.platform!=='linux')throw Error('Software Vulkan CI requires Linux/Mesa; use hardware smoke on other platforms');
+  const folder='/usr/share/vulkan/icd.d',driver=(await readdir(folder)).sort().find(n=>/^lvp_icd.*\.json$/.test(n));
+  if(!driver)throw Error('Mesa lavapipe ICD is missing; install mesa-vulkan-drivers');
+  browserEnv.VK_DRIVER_FILES=path.join(folder,driver);report.vulkanDriver=browserEnv.VK_DRIVER_FILES;
+  // Match Three.js upstream CI: Mesa/lavapipe, a virtual display, no SwiftShader override.
+  args.push('--enable-features=Vulkan','--disable-vulkan-surface','--ignore-gpu-blocklist','--disable-gpu-driver-bug-workarounds','--disable-gpu-watchdog');
+ }
+ browser=await chromium.launch({channel:process.env.BROWSER_CHANNEL||'chromium',headless:process.env.BROWSER_HEADLESS!=='0',env:browserEnv,args});
  const context=await browser.newContext({viewport:{width:960,height:640},deviceScaleFactor:1});
  await context.addInitScript(()=>{
   const state=window.__gpuValidation={modules:0,pending:0,errors:[],lost:[],adapters:[]};
@@ -40,14 +48,14 @@ try{
  page.on('console',message=>{if(message.type()==='error')report.consoleErrors.push(message.text());});
  page.setDefaultTimeout(30000);
  const started=Date.now();await page.goto(base+'/?world=fixtures/lumen-v35.planet&view=reference&region=baked');
- await page.waitForFunction(()=>window.planetStudio?.view&&document.querySelector('#loading').hidden||!document.querySelector('#error').hidden,null,{timeout:300000});
+ await page.waitForFunction(()=>window.planetStudio?.view&&document.querySelector('#loading').hidden||!document.querySelector('#error').hidden,null,{timeout:report.softwareGpu?600000:300000});
  if(await page.locator('#error').isVisible())throw Error(await page.locator('#error-message').innerText());
  report.editor=await page.evaluate(()=>{const v=planetStudio.view;return {radius:v.world.radiusMeters,worldHash:v.world.manifest.worldDataHash,kernel:v.terrainKernel,backend:v.diagnostics.backend,adapter:v.diagnostics.adapter,patches:v.terrain.active.size,isolated:crossOriginIsolated};});
  report.editor.observedReadyMs=Date.now()-started;
  assert.equal(report.editor.worldHash,'595aee80687ce1d3acf102bfd9e8bb925f9b5ee4a3bca2bdc3fca5f58b2b463d');assert.equal(report.editor.radius,4000000);assert.equal(report.editor.backend,'WebGPU');assert.equal(report.editor.kernel.mode,'wasm');assert.ok(report.editor.isolated&&report.editor.patches>0);
  await page.screenshot({path:path.join(out,'editor.png')});
  await page.locator('#flight-mode').click();
- await page.waitForFunction(()=>planetStudio.view.flight.active&&!planetStudio.view.flight.sim.paused,null,{timeout:180000});
+ await page.waitForFunction(()=>planetStudio.view.flight.active&&!planetStudio.view.flight.sim.paused,null,{timeout:report.softwareGpu?300000:180000});
  await page.waitForFunction(()=>planetStudio.view.renderer.info.render.drawCalls>0&&__gpuValidation.modules>0&&__gpuValidation.pending===0,null,{timeout:60000});
  report.flight=await page.evaluate(()=>{const v=planetStudio.view;return {state:v.flight.sim.state,health:v.flight.sim.health,patches:v.terrain.active.size,draws:v.renderer.info.render.drawCalls,skills:Object.keys(v.flight.sim.skills)};});
  assert.ok(report.flight.patches>0&&report.flight.draws>0);assert.ok(report.flight.skills.includes('warp'));

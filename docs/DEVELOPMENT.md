@@ -64,7 +64,7 @@ The smoke script starts and stops its own production server on a free port,
 loads the saved reference world, enters/exits flight and checks actual generated
 WebGPU shader compilation and validation errors. It saves screenshots and JSON
 under `test-results/browser`. Set `BROWSER_CHANNEL=chrome` to use installed
-Chrome. Linux CI sets `BROWSER_SOFTWARE_GPU=1` to use SwiftShader; this is a
+Chrome. Linux CI sets `BROWSER_SOFTWARE_GPU=1` and `BROWSER_HEADLESS=0` to use Mesa/lavapipe under Xvfb; this is a
 functional check with Vulkan/Mesa runtime dependencies and the GPU watchdog
 disabled for slow software compilation, never a GPU-performance measurement or a 100 FPS result.
 The 960 x 640 smoke viewport does not change application quality defaults.
@@ -82,7 +82,7 @@ pushes to `main`, pull requests targeting `main`, and manual dispatch:
   tests, production build and a check for unintended tracked-file changes.
 - Ubuntu: pinned Rust release rebuild, byte-for-byte WASM comparison and parity
   tests. A generated artifact cannot silently drift from its sources.
-- Chromium/SwiftShader: production editor/flight and generated shader smoke.
+- Chromium/Mesa: production editor/flight and generated shader smoke.
 
 Actions are pinned to reviewed commit IDs, jobs have explicit timeouts and
 read-only repository permissions, and superseded runs are cancelled. npm's
@@ -118,3 +118,8 @@ which release, hardware, route and quality settings they describe.
 References: [npm ci](https://docs.npmjs.com/cli/v11/commands/npm-ci/),
 [Playwright CI](https://playwright.dev/docs/ci),
 [Chromium SwiftShader](https://github.com/chromium/chromium/blob/main/docs/gpu/swiftshader.md).
+
+The Linux browser launch follows [Three.js upstream CI](https://github.com/mrdoob/three.js/blob/dev/test/e2e/puppeteer.js):
+select the installed lavapipe Vulkan ICD and use Xvfb. SwiftShader overrides are
+not mixed with this driver. A missing driver, device loss or shader error fails
+the job; tests never silently substitute a WebGL backend.
