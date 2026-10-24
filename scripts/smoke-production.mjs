@@ -5,7 +5,7 @@ import path from 'node:path';
 import assert from 'node:assert/strict';
 const {chromium}=await import(process.env.PLAYWRIGHT_MODULE||'playwright');
 const out=path.resolve(process.env.SMOKE_OUT||'test-results/browser');await mkdir(out,{recursive:true});
-const report={scope:'Production editor/flight and generated shader validation; not a performance benchmark',softwareGpu:process.env.BROWSER_SOFTWARE_GPU==='1',viewport:[960,640],errors:[],consoleErrors:[]};
+const report={scope:'Production state integration and WGSL compilation; does not certify visual correctness or FPS',softwareGpu:process.env.BROWSER_SOFTWARE_GPU==='1',visualValidation:'manual hardware inspection required; software screenshots are diagnostic only',viewport:[960,640],errors:[],consoleErrors:[]};
 const server=spawn(process.execPath,['scripts/serve.mjs','--dist'],{env:{...process.env,PORT:'0',WORLD_SHARED_MEMORY:'1'},stdio:['ignore','pipe','pipe'],windowsHide:true});
 let browser,page,serverLog='';server.stderr.on('data',b=>{serverLog+=b;});
 try{

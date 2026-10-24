@@ -61,3 +61,22 @@ selects the installed Vulkan ICD, retains device/browser diagnostics, and disabl
 the software GPU watchdog within the job deadline. The earlier SwiftShader
 configuration was not reliable on the hosted runner. Device loss remains a failing check; it is not skipped or counted
 as a pass. Hosted status remains the authority for this platform check.
+
+## Hosted results and remaining limitation
+
+[Hosted run 40107488859](https://github.com/X111Metafizik/ladir/actions/runs/40107488859)
+passed Windows and Linux test/build jobs, the exact Rust rebuild and 154 WebGPU
+shader-module checks. Its actual WebGPU adapter was Google/SwiftShader, not the
+lavapipe ICD used to configure the surrounding Vulkan environment.
+
+Manual screenshot inspection found that the software adapter did not display
+the complete terrain/ship scene, despite successful API and compilation checks.
+This is recorded as a **remaining software-rendering limitation**. The job name
+and report scope now explicitly describe compilation and UI-state integration;
+no visual check was removed or counted as passed. Real NVIDIA/Chrome screenshots
+in the local evidence show the terrain and ship and were inspected separately.
+No game geometry, shaders or quality settings were changed to hide the issue.
+
+The plan's build/repository goals are implemented. A hardware visual-regression
+runner would be a separate step; hosted software output cannot currently replace
+hardware visual QA or justify performance claims.

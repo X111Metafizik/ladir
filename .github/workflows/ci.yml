@@ -68,7 +68,7 @@ jobs:
       - run: npm run test:wasm
       - run: git diff --exit-code
   browser:
-    name: Production WebGPU smoke
+    name: WebGPU compilation and UI integration
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     steps:

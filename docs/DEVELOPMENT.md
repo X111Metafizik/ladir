@@ -64,7 +64,9 @@ The smoke script starts and stops its own production server on a free port,
 loads the saved reference world, enters/exits flight and checks actual generated
 WebGPU shader compilation and validation errors. It saves screenshots and JSON
 under `test-results/browser`. Set `BROWSER_CHANNEL=chrome` to use installed
-Chrome. Linux CI sets `BROWSER_SOFTWARE_GPU=1` and `BROWSER_HEADLESS=0` to use Mesa/lavapipe under Xvfb; this is a
+Chrome. Linux CI sets `BROWSER_SOFTWARE_GPU=1` and `BROWSER_HEADLESS=0` to configure
+the Mesa Vulkan loader under Xvfb; Chromium may still choose its SwiftShader
+WebGPU adapter (the actual adapter is recorded); this is a
 functional check with Vulkan/Mesa runtime dependencies and the GPU watchdog
 disabled for slow software compilation, never a GPU-performance measurement or a 100 FPS result.
 The 960 x 640 smoke viewport does not change application quality defaults.
@@ -123,3 +125,18 @@ The Linux browser launch follows [Three.js upstream CI](https://github.com/mrdoo
 select the installed lavapipe Vulkan ICD and use Xvfb. SwiftShader overrides are
 not mixed with this driver. A missing driver, device loss or shader error fails
 the job; tests never silently substitute a WebGL backend.
+
+### Visual-validation limit on hosted software GPUs
+
+The hosted run for commit `2de8245` compiled 154 shader modules without WebGPU
+validation errors and passed editor/flight state checks. Chromium reported its
+Google/SwiftShader adapter despite the Mesa loader configuration. Inspection of
+its screenshots found missing/white scene content. This is a known incomplete
+software-rendering result, **not a passed visual regression test**.
+
+The CI job is explicitly a compilation and UI-state integration check. It must
+still fail on shader errors, device loss, missing geometry/state or page errors.
+Its green status does not certify pixels, material appearance, smoothness or FPS.
+Use the separately recorded real NVIDIA/Chrome screenshots for hardware visual
+QA; do not replace that check with the software job. The runtime's image-quality
+settings were not changed to obtain a passing CI status.

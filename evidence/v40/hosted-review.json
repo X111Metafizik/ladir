@@ -1,0 +1,22 @@
+{
+  "codeCommit": "2de8245",
+  "run": "https://github.com/X111Metafizik/ladir/actions/runs/40107488859",
+  "jobs": {
+    "windows": "success",
+    "linux": "success",
+    "rustRebuild": "success",
+    "webgpuCompilationAndState": "success"
+  },
+  "compiledShaderModules": 154,
+  "actualWebGPUAdapter": {
+    "vendor": "google",
+    "architecture": "swiftshader",
+    "description": ""
+  },
+  "visualInspection": {
+    "software": "incomplete terrain/ship rendering in screenshots; NOT a visual pass",
+    "hardware": "local NVIDIA/Chrome editor and flight screenshots inspected; scene content visible"
+  },
+  "qualityReduction": false,
+  "performanceClaim": null
+}
