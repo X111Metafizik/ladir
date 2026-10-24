@@ -24,7 +24,9 @@ import {createRoutePreview} from './routes.mjs';
 import {tacticalMix,cloudVisibility} from './tactical.mjs';
 import {createStormField} from './storms.mjs';
 import {StableShadowFocus} from './stable-shadow.mjs';
-export async function createPlanetView({world,canvas,appearanceConfig,renderSettings,onCamera=()=>{},onError=()=>{},onFlightMessage=()=>{},hostLoop=false,initialCamera=null}){
+export async function createPlanetView({world,canvas,appearanceConfig,renderSettings,onCamera=()=>{},onError=()=>{},onFlightMessage=()=>{},onProgress=()=>{},hostLoop=false,initialCamera=null}){
+  const initialStarted=performance.now(),initial={stages:{},surfaceReady:false,detailReady:false};
+  const initialStage=async(name,label,fn)=>{onProgress(label);const start=performance.now();try{return await fn();}finally{initial.stages[name]=performance.now()-start;}};
   if(!navigator.gpu)throw Error('Bu tarayıcı WebGPU sunmuyor. Gezegen üretimi ve paket kaydı kullanılabilir; 3B görünüm için güncel Chrome veya Edge ile localhost adresini aç.');
   await initTerrainKernel();
   const regional=initRegional(world,{...regionalOptions(),main:true});regional?.prefetch([initialCamera?.direction??world.frame.center],2000);
@@ -82,8 +84,8 @@ export async function createPlanetView({world,canvas,appearanceConfig,renderSett
   const storms=createStormField(shared,(strength,distance)=>flight.audio.thunder(strength,distance));
   const tactical={active:false,blend:0,altitude:0,cloudVisibility:1};let selectedLayer='natural',lastCloudVisibility=1;
   let appearance={...appearanceConfig},settings={...renderSettings},disposed=false,frame=0,last=performance.now(),errorReported=false,rendering=false,warming=false,gpuFrames=0;
-  const performanceStats={frames:0,backpressureSkips:0,shadowUpdates:0,fftUpdates:0,maxQueuedFrames:2};
-  const startupStats={entries:0,stages:{},totalMilliseconds:0,assetsReady:false};let flightShadersReady=false;
+  const performanceStats={frames:0,backpressureSkips:0,shadowUpdates:0,fftUpdates:0,maxQueuedFrames:2,queueWaitMaxMs:0,queueWaitMs:0,consecutiveSkips:0,maxConsecutiveSkips:0};
+  const startupStats={entries:0,stages:{},totalMilliseconds:0,assetsReady:false,initial};let flightShadersReady=false;
   const flightAssets=flight.preload().then(()=>{startupStats.assetsReady=true;return true;},e=>{startupStats.preloadError=e.message;return false;});
   const shadowOrigin=new THREE.Vector3(1e9,0,0),shadowFocus=new THREE.Vector3(1e9,0,0),shadowSun=new THREE.Vector3();
   const stableShadow=new StableShadowFocus(),lightFocus=new THREE.Vector3();
@@ -108,7 +110,8 @@ export async function createPlanetView({world,canvas,appearanceConfig,renderSett
     if(disposed||rendering||warming||document.hidden){last=now;return;}
     if(flight.active&&flight.sim?.paused&&now-last<100)return;
     // Keep CPU/GPU overlap without letting the queue or input latency grow unbounded.
-    if(gpuFrames>=2){performanceStats.backpressureSkips++;return;}
+    if(gpuFrames>=2){performanceStats.backpressureSkips++;performanceStats.consecutiveSkips++;performanceStats.maxConsecutiveSkips=Math.max(performanceStats.maxConsecutiveSkips,performanceStats.consecutiveSkips);return;}
+    performanceStats.consecutiveSkips=0;
     rendering=true;const frameStarted=performance.now();
     try{
       const elapsed=Math.max(0,(now-last)/1000),dt=Math.min(.08,elapsed);last=now;if(!appearance.paused)shared.clock.value+=dt;
@@ -163,7 +166,7 @@ export async function createPlanetView({world,canvas,appearanceConfig,renderSett
       if(!fftReady||(nearWater&&!appearance.paused)){fft.update(renderer);fftReady=true;performanceStats.fftUpdates++;}
       boostBlur.amount.value=flight.active?flight.boostAmount:0;atmosphere.update(activeControls.absolute);pipeline.render();frame++;
       terrain.noteFrameCost(performance.now()-frameStarted);performanceStats.frames++;gpuFrames++;rendering=false;
-      device.queue.onSubmittedWorkDone().catch(()=>{}).finally(()=>{gpuFrames--;});
+      const submitted=performance.now();device.queue.onSubmittedWorkDone().catch(()=>{}).finally(()=>{gpuFrames--;performanceStats.queueWaitMs=performance.now()-submitted;terrain.queueWaitMs=performanceStats.queueWaitMs;performanceStats.queueWaitMaxMs=Math.max(performanceStats.queueWaitMaxMs,performanceStats.queueWaitMs);});
     }catch(error){rendering=false;if(!errorReported){errorReported=true;onError(error.message);console.error(error);}}
   }
   function pick(clientX,clientY){
@@ -230,15 +233,22 @@ export async function createPlanetView({world,canvas,appearanceConfig,renderSett
     sun.shadow.dispose();regions.dispose();routes.dispose();atmosphere.dispose();scenePass.dispose();atmosphereTexture.dispose();bloomNode.dispose();boostBlur.dispose();pipeline.dispose();renderer.dispose();
   }
   setAppearance(appearance);resize();if(initialCamera){controls.setMode('region',initialCamera.direction);controls.tilt=initialCamera.tilt;controls.setRangeMeters(initialCamera.rangeMeters);}controls.update(0,origin);root.position.copy(origin).negate();root.updateMatrix();
-  const initialTerrain=terrain.update(controls.absolute,settings.detail,true);
+  initial.stages.setup=performance.now()-initialStarted;
+  const initialTerrain=terrain.prepareInitial(controls.absolute,settings.detail);
+  const initialSurface=initialStage('firstSurface','İlk kesintisiz yüzey hazırlanıyor',()=>initialTerrain.surface).then(result=>{initial.surfaceReady=!result?.cancelled;});
+  initialSurface.catch(()=>{});
+  initialTerrain.detail.then(result=>{initial.detailReady=!!result?.complete;initial.detailCancelled=!initial.detailReady;initial.fullDetailMilliseconds=performance.now()-initialStarted;},error=>{initial.detailError=error.message;onError(error.message);});
   // Workers generate the planet while the otherwise idle GPU prepares the
   // flight assets. No animation or other compile pass runs concurrently.
   const initialFlight=flightAssets.then(async loaded=>{if(!loaded)return;const t=performance.now();try{await flight.prewarm(renderer,camera,scene,scenePass.renderTarget);startupStats.flightPreparedBeforeEditor=true;}catch(e){startupStats.preloadError=e.message;}startupStats.initialFlightMilliseconds=performance.now()-t;});
-  await Promise.all([initialTerrain,initialFlight]);
+  await Promise.all([initialSurface,initialFlight]);
   while(terrain.shadows.stats.pending||terrain.shadows.stats.batches===0){terrain.shadows.update(4);if(!terrain.shadows.stats.pending)break;await new Promise(r=>setTimeout(r,0));}
-  await vegetation.prewarm(renderer,camera,scene,scenePass.renderTarget,sun);await renderer.compileComputeAsync(fft.passes);
-  await prewarmSpace();
+  await initialStage('vegetationShaders','Bitki ve gölge malzemeleri hazırlanıyor',()=>vegetation.prewarm(renderer,camera,scene,scenePass.renderTarget,sun));
+  await initialStage('waterShaders','Su hazırlanıyor',()=>renderer.compileComputeAsync(fft.passes));
+  await initialStage('surfaceShaders','Yüzey malzemeleri hazırlanıyor',prewarmSpace);
   terrain.setFrameDriven(true);
+  await initialStage('firstRender','İlk görüntü çiziliyor',async()=>{update();await device.queue.onSubmittedWorkDone();});
+  initial.readyMilliseconds=performance.now()-initialStarted;
   if(!hostLoop)renderer.setAnimationLoop(update);
   return {world,get terrainKernel(){return terrainKernelStats();},get workerTransport(){return workerWorldStats(world);},regional,renderer,scene,camera,performanceStats,startupStats,tactical,stormStats:storms.stats,volumeStats:atmosphere.light.stats,controls,flight,startFlight,stopFlight,terrain,vegetation,shared,routes,previewRoute(query){resetHistory();return routes.preview(query);},features:markerFeatures,pick,featurePosition,setCamera,setAppearance,update,capture,dispose,setLayer:layer=>{resetHistory();selectedLayer=layer;regions.mesh.visible=!flight.active&&(layer==='political'||tactical.active);return flight.active?Promise.resolve():terrain.setLayer(layer==='political'?'natural':layer,controls.absolute,settings.detail);},setRenderSettings(next){settings={...settings,...next};shared.steps.value=settings.volumeSteps;sun.shadow.mapSize.set(settings.shadowResolution,settings.shadowResolution);sun.shadow.map?.dispose();sun.shadow.map=null;shadowRevision=-1;shadowOrigin.set(Infinity,Infinity,Infinity);resize();terrain.update(controls.absolute,settings.detail,true);},diagnostics:{backend:'WebGPU',three:THREE.REVISION,adapter:{vendor:adapter.info.vendor,architecture:adapter.info.architecture,description:adapter.info.description},features:[...adapter.features],limits:{maxTextureDimension2D:adapter.limits.maxTextureDimension2D,maxStorageBufferBindingSize:adapter.limits.maxStorageBufferBindingSize},fft:'64 × 64 radix-2 inverse FFT, 12 butterfly passes',temporal:'MSAA 4x scene; half-resolution volume with depth-rejected five-phase history and camera reprojection',lod:'Worker terrain and water patches; horizon culling; regional forests, camera-distance fade 1400–3000 m, stable tree pools; persistent instanced terrain grids and partial storage updates; 2.4 s travel prefetch; half-resolution volumetrics with five-phase depth-rejected history and intracloud lightning'}};
 }

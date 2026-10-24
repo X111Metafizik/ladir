@@ -16,6 +16,15 @@ test('a frame admits two dense surface tiles while the third waits below the 144
  const ctx={warmQueue:records,gridMode:true,batches:{prepare(){uploaded+=1089*64;}},prepareMeshes(){},stats:{},schedule(){}};
  StreamingTerrain.prototype.warm.call(ctx);assert.equal(uploaded,1089*64*2);assert.ok(uploaded<=144*1024);assert.equal(ctx.warmQueue.length,2);
 });
+test('uploads respect the shared CPU deadline without losing queued buffers',()=>{
+ const records=[{mesh:{geometry:{attributes:{position:{count:1089}}}},prepared:false}];let scheduled=0;
+ const ctx={warmQueue:records,gridMode:true,batches:{prepare(){throw Error('past deadline');}},stats:{},schedule(){scheduled++;}};
+ StreamingTerrain.prototype.warm.call(ctx,-Infinity);assert.equal(ctx.warmQueue.length,1);assert.equal(records[0].prepared,false);assert.equal(scheduled,1);
+});
+test('cheap uploads use available headroom but GPU queue pressure restores throttling',()=>{
+ const run=queueWaitMs=>{let uploaded=0;const ctx={warmQueue:Array.from({length:8},()=>({mesh:{geometry:{attributes:{position:{count:1089}}}},prepared:false})),gridMode:true,batches:{prepare(){uploaded+=1089*64;}},prepareMeshes(){},stats:{},schedule(){},cpuAverage:8,uploadCpuAverage:.1,queueWaitMs};StreamingTerrain.prototype.warm.call(ctx);return uploaded;};
+ assert.equal(run(5),4*1089*64);assert.equal(run(30),1089*64);
+});
 test('streamed children replace a parent only as a complete footprint',()=>{const old=p(3,2,3),wanted=[p(4,4,6),p(4,5,6),p(4,4,7),p(4,5,7)],groups=transitionGroups([old],wanted);assert.equal(groups.length,1);assert.deepEqual(groups[0].remove,[old.key]);assert.deepEqual(new Set(groups[0].add),new Set(wanted.map(p=>p.key)));});
 test('coarsening, refinement and stitch changes partition replacements without duplicates',()=>{const old=[p(4,4,6),p(4,5,6),p(4,4,7),p(4,5,7),p(3,3,3),p(3,4,3)],wanted=[p(3,2,3),p(4,6,6),p(4,7,6),p(4,6,7),p(4,7,7),p(3,4,3,'s1')],groups=transitionGroups(old,wanted);assert.equal(groups.length,1,'adjacent stitch changes commit together');assert.deepEqual(new Set(groups.flatMap(g=>g.remove)),new Set(old.map(p=>p.key)));assert.deepEqual(new Set(groups.flatMap(g=>g.add)),new Set(wanted.map(p=>p.key)));assert.equal(groups.flatMap(g=>g.add).length,wanted.length);});
 test('an unfinished neighboring grid blocks a refinement from exposing an edge',()=>{

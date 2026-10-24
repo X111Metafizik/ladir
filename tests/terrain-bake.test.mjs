@@ -9,6 +9,28 @@ import {BAKED_WORLDS} from '../io/baked-worlds.mjs';
 import {TerrainBakeCache,persistentBakeEligible} from '../io/terrain-bake-cache.mjs';
 import {sha256} from '../core/math.mjs';
 import {BakeMembership} from '../io/bake-membership.mjs';
+import {STARTUP_BAKES} from '../io/startup-bakes.mjs';
+import {selectPatches} from '../render/terrain-data.mjs';
+import {createSampleCache} from '../render/stream-plan.mjs';
+import {initRegional} from '../io/regional-runtime.mjs';
+test('a late IndexedDB open remains usable after the foreground wait budget expires',async()=>{
+ const w=await world();let request,closed=false;const db={close(){closed=true;},transaction(){throw Error('skip test index');}};
+ const cache=new TerrainBakeCache(w,{staticPacks:false,openTimeoutMs:5,indexedDB:{open(){request={};return request;}}});
+ try{assert.equal(await cache.database(),null);assert.equal(cache.disabled,false);request.result=db;request.onsuccess();assert.equal(await cache.database(),db);assert.equal(closed,false);assert.equal(cache.stats.bakeOpenTimeouts,1);db.onversionchange();assert.equal(closed,true);assert.equal(await cache.database(),null);}finally{cache.channel?.close();}
+});
+test('cached LOD planning returns exactly the same geometry inputs and reuses samples',async()=>{
+ const w=await world(),sample=createSampleCache((d,o)=>sampleTerrain(w,d,o),80000),camera=w.frame.center.map(x=>x*1005);
+ const expected=selectPatches(w,camera,1,null,{maxLevel:12}),actual=selectPatches(w,camera,1,null,{maxLevel:12,sample});assert.deepEqual(actual,expected);
+ const misses=sample.stats().misses;assert.deepEqual(selectPatches(w,camera,1,null,{maxLevel:12,sample}),expected);assert.equal(sample.stats().misses,misses);assert.ok(sample.stats().hits>0);
+});
+test('compressed startup meshes match the canonical regional surface and reject other identities',async()=>{
+ const w=await world(),region=initRegional(w,{mode:'procedural'}),profile=region.catalog.manifest.id,descriptor=STARTUP_BAKES[w.manifest.worldDataHash][profile],catalog=JSON.parse(await readFile('assets/terrain-bakes/'+w.manifest.worldDataHash+'/'+descriptor.index.file)),fetchFn=async url=>new Response(await readFile(url));
+ const cache=new TerrainBakeCache(w,{indexedDB:null,profile,fetchFn});
+ try{assert.ok(cache.catalog);for(const info of [catalog.packs[0],catalog.packs.at(-1)]){const id=Object.keys(info.entries)[0],p={...JSON.parse(id.slice(id.indexOf('/{')+1,id.lastIndexOf('/profile/'))),key:'test'};const [loaded]=await cache.read([p],'natural');assert.ok(loaded);const fresh=buildPatch(w,p,'natural');for(const field of Object.keys(BAKE_FIELDS))assert.deepEqual(loaded[field],fresh[field],field);}
+  assert.ok(cache.packBytes<=4*1024*1024);assert.equal(new TerrainBakeCache(w,{indexedDB:null,profile:profile+'-old'}).catalog,null);assert.equal(new TerrainBakeCache({...w,radiusMeters:6000000},{indexedDB:null,profile}).catalog,null);
+  const broken=new TerrainBakeCache(w,{indexedDB:null,profile,fetchFn:async()=>new Response(new Uint8Array(8))}),p=coarseBakePatch(0,0,0);assert.equal(await broken.staticRead(p,'natural'),null);assert.ok(broken.stats.bakeErrors>0);
+ }finally{region.dispose();}
+});
 test('bounded bake membership has no false negatives for recorded keys',()=>{
  const index=new BakeMembership();for(let i=0;i<12000;i++)index.add('world/grid/stitch/'+i);
  for(let i=0;i<12000;i++)assert.ok(index.has('world/grid/stitch/'+i));
@@ -57,9 +79,9 @@ test('offline bake covers all six faces with signed exact base meshes',async()=>
  }
  assert.equal(count,384);
 });
-test('persistent bake saves detailed tiles without flooding disk with cheap transient parents',()=>{
+test('persistent bake retains near flight previews and detail but skips distant parents',()=>{
  assert.equal(persistentBakeEligible(coarseBakePatch(0,0,0)),false);
- assert.equal(persistentBakeEligible({level:14,resolution:8}),false);
+ assert.equal(persistentBakeEligible({level:14,resolution:8}),true);
  assert.equal(persistentBakeEligible({level:9,resolution:32}),false);
  assert.equal(persistentBakeEligible({level:10,resolution:16}),true);
  assert.equal(persistentBakeEligible({level:18,resolution:32}),true);

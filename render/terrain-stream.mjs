@@ -22,12 +22,13 @@ export class StreamingTerrain{
   this.worker.onerror=e=>this.fail(Error(e.message));
   this.worker.onmessage=({data})=>{if(this.disposed||data.id!==this.id)return;try{
    if(data.type==='error')return this.fail(Error(data.message));
+   if(data.type==='terrain-cache'){this.stats.bake=data.bake;if(this.done)this.done.bake=data.bake;return;}
    if(data.type==='terrain-plan'){this.transitions=data.transitions??transitionGroups([...this.active].map(([key,m])=>({...m.userData.patch,key})),data.patches);this.schedule();}
    if(data.type==='terrain-chunk'){this.inbox.push(...data.patches);this.schedule();}
    if(data.type==='terrain-done'){this.done=data;this.schedule();}
   }catch(e){this.fail(e);}};
  }
- fail(error){this.flightReady?.reject(error);this.flightReady=null;this.building=false;this.pending?.reject(error);this.pending=null;this.queued?.reject?.(error);this.queued=null;}
+ fail(error){this.initialReady?.reject(error);this.initialReady=null;this.flightReady?.reject(error);this.flightReady=null;this.building=false;this.pending?.reject(error);this.pending=null;this.queued?.reject?.(error);this.queued=null;}
  retireReady(){
   const discarded=new Set();
   for(const [key,p]of this.ready){if(p.prepared)this.cache.set(key,p);else{discarded.add(p);this.stats.discardedBytes=(this.stats.discardedBytes??0)+recordBytes(p);this.retire(p);}}
@@ -35,9 +36,25 @@ export class StreamingTerrain{
  }
  cancelRequest(){
   this.worker.postMessage({type:'cancel-terrain'});
+  this.initialReady?.resolve({cancelled:true});this.initialReady=null;
   this.flightReady?.resolve();this.flightReady=null;this.flightRefining=false;
   ++this.id;clearTimeout(this.timer);this.timer=null;this.inbox=[];this.done=null;this.transitions=[];
   this.retireReady();this.pending?.resolve();this.pending=null;this.queued?.resolve?.();this.queued=null;this.building=false;
+ }
+ prepareInitial(camera,detail=1){
+  // Publish a complete, stitched first footprint, then refine with the exact
+  // same selector and sample density as normal streaming. No hole is exposed
+  // while the dense footprint is still in the worker/upload queue.
+  this.cancelRequest();
+  if((camera.length()-1000)*this.world.radiusMeters/1000>=8000){
+   // A high orbit already uses a small screen-error-selected mesh. Forcing
+   // an 8-cell preview there creates MORE tiles than the final 20-cell grid.
+   const detailReady=this.update(camera,detail,true);return {surface:detailReady.then(result=>({cancelled:!result?.complete})),detail:detailReady};
+  }
+  const ready={};ready.promise=new Promise((resolve,reject)=>Object.assign(ready,{resolve,reject}));this.initialReady=ready;
+  this.previewNext=true;const complete=this.update(camera,detail,true);
+  complete.catch(error=>this.fail(error));
+  return {surface:ready.promise,detail:complete};
  }
  prepareFlight(camera,detail=1){
   // Start from a complete stitched footprint, without blocking the cockpit on
@@ -104,43 +121,57 @@ export class StreamingTerrain{
   if(selected!==a){this.stats.arrivalDetailWaitMilliseconds=performance.now()-a.arrivedAt;this.arrival=null;this.releaseArrival(a);this.update(a.camera,a.detail,true).catch(error=>this.fail(error));}
  }
  geometry(positions,normals,indices,bounds){const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.BufferAttribute(positions,3));g.setAttribute('normal',new THREE.BufferAttribute(normals,3));g.setIndex(new THREE.BufferAttribute(indices,1));if(bounds)g.boundingSphere=new THREE.Sphere(new THREE.Vector3(...bounds.center),bounds.radius);else g.computeBoundingSphere();return g;}
- schedule(){if(this.disposed)return;this.needsDrain=true;if(this.frameDriven||this.timer)return;this.timer=setTimeout(()=>{this.timer=null;this.needsDrain=false;this.drain();},16);}
+ schedule(){if(this.disposed)return;this.needsDrain=true;if(this.frameDriven||this.timer)return;this.timer=setTimeout(()=>{this.timer=null;this.needsDrain=false;this.drain();},0);}
  setFrameDriven(value){this.frameDriven=value;if(value){clearTimeout(this.timer);this.timer=null;}else if(this.needsDrain)this.schedule();}
  flushFrame(){this.stats.framePlannedUploadBytes=0;if(this.needsDrain){this.needsDrain=false;this.drain();}this.reap();if(performance.now()-(this.memoryTime??0)>500){this.measureMemory();this.memoryTime=performance.now();if(this.stats.cacheBytes>TERRAIN_BUDGET.cacheBytes)this.trim();}}
  retire(record){this.retiring.push(record);if(!this.frameDriven&&!this.reapTimer)this.reapTimer=setTimeout(()=>{this.reapTimer=null;this.reap();},16);}
  reap(){const start=performance.now();let count=0;while(this.retiring.length&&count++<8){const r=this.retiring.shift();r.mesh.geometry.dispose();r.water?.geometry.dispose();if(performance.now()-start>.7)break;}this.stats.cleanupMilliseconds=(this.stats.cleanupMilliseconds??0)+performance.now()-start;if(this.retiring.length&&!this.frameDriven&&!this.reapTimer)this.reapTimer=setTimeout(()=>{this.reapTimer=null;this.reap();},16);}
- drain(){if(this.disposed)return;try{const start=performance.now();let count=0;this.batches.beginFrame?.();
+ drain(){if(this.disposed)return;try{const start=performance.now(),deadline=start+2.5;let count=0;this.batches.beginFrame?.();
   const stage=this.arrival?.inbox.length?this.arrival:this.arrival?.refinement??this.arrival;
   while((this.inbox.length||stage?.inbox.length)&&count++<8&&performance.now()-start<1.25){const arrival=!!stage?.inbox.length,p=arrival?stage.inbox.shift():this.inbox.shift(),g=this.geometry(p.positions,p.normals,p.indices,p.bounds);g.setAttribute('color',new THREE.BufferAttribute(p.colors,3));g.setAttribute('surface',new THREE.BufferAttribute(p.surface,4));g.setAttribute('climate',new THREE.BufferAttribute(p.climate,2));const mesh=new THREE.Mesh(g,this.material);mesh.position.set(...p.center);mesh.updateMatrix();mesh.matrixAutoUpdate=false;mesh.receiveShadow=true;mesh.castShadow=false;mesh.userData.patch=p.patch;let water=null;
    if(p.waterIndices.length){const w=this.geometry(p.waterPositions,p.waterNormals,p.waterIndices,p.waterBounds);w.setAttribute('shallows',new THREE.BufferAttribute(p.shallows,1));water=new THREE.Mesh(w,this.waterMaterial);water.position.set(...p.center);water.updateMatrix();water.matrixAutoUpdate=false;water.userData.patch=p.patch;}const record={mesh,water,prepared:!this.prepareMeshes,delivery:{worker:arrival?this.arrivalWorker:this.worker,id:arrival?stage.id:this.id,bytes:patchBytes(p)}};if(record.prepared)record.delivery.worker?.postMessage({type:"terrain-consumed",id:record.delivery.id,bytes:record.delivery.bytes});(arrival?stage.records:this.ready).set(p.key,record);if(!record.prepared)this.warmQueue.push(record);
   }
-  this.warm();this.commit();this.finishArrival();if(this.inbox.length||this.arrival?.inbox.length||this.arrival?.refinement?.inbox.length)this.schedule();else if(this.done&&!this.transitions.length&&!this.warmQueue.length)this.finish();
+  this.warm(deadline);this.commit(deadline);this.finishArrival();if(this.transitions.length||this.inbox.length||this.arrival?.inbox.length||this.arrival?.refinement?.inbox.length)this.schedule();else if(this.done&&!this.transitions.length&&!this.warmQueue.length)this.finish();
+  this.stats.drainMaxMilliseconds=Math.max(this.stats.drainMaxMilliseconds??0,performance.now()-start);
  }catch(e){this.fail(e);}}
- warm(){
+ warm(deadline=Infinity){
   if(this.disposed||!this.warmQueue.length)return;
   const start=performance.now();let count=0,bytes=0;
-  while(this.warmQueue.length&&count<8&&performance.now()-start<1.25){
+  // A slow total frame is not proof that a 70 KiB buffer upload is expensive.
+  // Use measured preparation cost + GPU completion pressure before throttling
+  // a growing queue. The original maximum byte cap and CPU deadline still apply.
+  const cheapUpload=this.uploadCpuAverage!==undefined&&this.uploadCpuAverage<.6&&(this.cpuAverage??4)<9&&(this.queueWaitMs??0)<25;
+  const allowance=cheapUpload?TERRAIN_BUDGET.maxUploadBytes:uploadAllowance(this.cpuAverage);
+  this.stats.uploadAllowanceBytes=allowance;
+  while(this.warmQueue.length&&count<8&&performance.now()-start<1.25&&performance.now()<deadline){
    const next=this.warmQueue[0],nextBytes=next.mesh.geometry.attributes.position.count*64+(next.water?geometryBytes(next.water.geometry):0);
    if(this.gridMode&&this.batches.canPrepare&&!this.batches.canPrepare(next.mesh))break;
    // Two dense 33x33 tiles total 136 KiB. A 144 KiB ceiling admits both
    // instead of wasting almost half of a frame's transfer allowance.
-   if(count&&bytes+nextBytes>uploadAllowance(this.cpuAverage))break;bytes+=nextBytes;count++;
+   if(count&&bytes+nextBytes>allowance)break;bytes+=nextBytes;count++;
    const r=this.warmQueue.shift();if(this.gridMode)this.batches.prepare(r.mesh);
    this.prepareMeshes?.(this.gridMode?(r.water?[r.water]:[]):(r.water?[r.mesh,r.water]:[r.mesh]));
    this.stats.framePlannedUploadBytes=bytes;this.stats.maxPlannedUploadBytes=Math.max(this.stats.maxPlannedUploadBytes??0,bytes);
    r.prepared=true;if(r.delivery){r.delivery.worker?.postMessage({type:"terrain-consumed",id:r.delivery.id,bytes:r.delivery.bytes});delete r.delivery;}this.stats.preparedMeshes=(this.stats.preparedMeshes??0)+1;
   }
+  if(count){const elapsed=performance.now()-start;this.uploadCpuAverage=(this.uploadCpuAverage??elapsed)*.8+elapsed*.2;this.stats.uploadCpuAverageMilliseconds=this.uploadCpuAverage;this.stats.uploadCpuMaxMilliseconds=Math.max(this.stats.uploadCpuMaxMilliseconds??0,elapsed);}
   if(this.warmQueue.length)this.schedule();
  }
 
- commit(){let changed=false;this.transitions=this.transitions.filter(t=>{
+ commit(deadline=Infinity){const started=performance.now();let changed=false,groups=0;this.transitions=this.transitions.filter(t=>{
+  // A connected seam/stitch transaction is indivisible. Yield only BETWEEN
+  // groups; record unavoidable single-group overruns instead of exposing holes.
+  if(groups&&performance.now()>=deadline)return true;
   if(!t.add.every(k=>this.active.has(k)||(this.ready.get(k)??this.cache.get(k))?.prepared))return true;
+  groups++;
   for(const k of t.remove){const mesh=this.active.get(k),water=this.water.get(k);if(mesh){this.batches.remove(mesh);this.shadows.remove(mesh);this.group.remove(mesh);if(water){this.waterBatches?.remove(water);this.group.remove(water);}this.active.delete(k);this.lookup.delete(tileId(mesh.userData.patch));this.water.delete(k);this.cache.set(k,{mesh,water,prepared:true});changed=true;}}
   for(const k of t.add){if(this.active.has(k))continue;const p=this.ready.get(k)??this.cache.get(k);if(this.cache.has(k))this.stats.cacheHits++;this.ready.delete(k);this.cache.delete(k);this.batches.add(p.mesh);this.shadows.add(p.mesh);this.active.set(k,p.mesh);this.lookup.set(tileId(p.mesh.userData.patch),p.mesh);this.group.add(p.mesh);if(this.stats.nearVisibleMilliseconds===null&&p.mesh.userData.patch.level>=17&&p.mesh.userData.patch.priority<1500)this.stats.nearVisibleMilliseconds=performance.now()-this.started;if(p.water){this.water.set(k,p.water);this.group.add(p.water);this.waterBatches?.add(p.water);}changed=true;}return false;
- });if(changed){this.revision++;this.stats.patches=this.active.size;this.stats.maxLevel=Math.max(3,...[...this.active.values()].map(m=>m.userData.patch.level));if(!this.firstVisible){this.firstVisible=true;this.stats.firstVisibleMilliseconds=performance.now()-this.started;}}}
- finish(){this.stats.workerMilliseconds=this.done.milliseconds;this.stats.samples=this.done.samples;this.stats.bake=this.done.bake;this.stats.planningMs=this.done.planningMs;this.stats.production=this.done.production;this.stats.kernels=this.done.kernels;this.stats.plannerKernel=this.done.plannerKernel;this.stats.regions=this.done.regions;this.stats.plannerRegion=this.done.plannerRegion;this.stats.workers=this.done.workers;this.stats.totalMilliseconds=performance.now()-this.started;this.done=null;this.history.push({...this.stats,preview:!!this.preview});if(this.history.length>24)this.history.shift();
-  if(this.preview){this.preview=false;if(this.flightReady){this.stats.flightReadyMilliseconds=performance.now()-this.started;this.flightReady.resolve();this.flightReady=null;}this.request();return;}
-  this.flightRefining=false;this.building=false;this.pending?.resolve();this.pending=null;this.trim();const q=this.queued;this.queued=null;if(q)this.update(q.camera,q.detail,q.force).then(q.resolve??(()=>{}),q.reject??(()=>{}));
+ });if(changed){this.revision++;this.stats.patches=this.active.size;let maxLevel=3;for(const mesh of this.active.values())maxLevel=Math.max(maxLevel,mesh.userData.patch.level);this.stats.maxLevel=maxLevel;if(!this.firstVisible){this.firstVisible=true;this.stats.firstVisibleMilliseconds=performance.now()-this.started;}}
+  const elapsed=performance.now()-started;this.stats.commitMaxMilliseconds=Math.max(this.stats.commitMaxMilliseconds??0,elapsed);if(groups&&performance.now()>deadline)this.stats.commitBudgetOverruns=(this.stats.commitBudgetOverruns??0)+1;
+ }
+ finish(){this.stats.workerMilliseconds=this.done.milliseconds;this.stats.samples=this.done.samples;this.stats.bake=this.done.bake;this.stats.planningMs=this.done.planningMs;this.stats.plannerSamples=this.done.plannerSamples;this.stats.production=this.done.production;this.stats.kernels=this.done.kernels;this.stats.plannerKernel=this.done.plannerKernel;this.stats.regions=this.done.regions;this.stats.plannerRegion=this.done.plannerRegion;this.stats.workers=this.done.workers;this.stats.totalMilliseconds=performance.now()-this.started;this.done=null;this.history.push({...this.stats,preview:!!this.preview});if(this.history.length>24)this.history.shift();
+  if(this.preview){this.preview=false;if(this.initialReady){this.stats.initialSurfaceMilliseconds=performance.now()-this.started;this.initialReady.resolve({cancelled:false});this.initialReady=null;}if(this.flightReady){this.stats.flightReadyMilliseconds=performance.now()-this.started;this.flightReady.resolve();this.flightReady=null;}this.request();return;}
+  this.flightRefining=false;this.building=false;this.pending?.resolve({complete:true});this.pending=null;this.trim();const q=this.queued;this.queued=null;if(q)this.update(q.camera,q.detail,q.force).then(q.resolve??(()=>{}),q.reject??(()=>{}));
  }
  measureMemory(){
   Object.assign(this.stats,terrainMemorySnapshot(this));
@@ -185,7 +216,7 @@ export class StreamingTerrain{
  // roots follow the mesh the player actually sees, not an unrendered heightfield.
  surfaceAt(direction,reference=null){const [face,u,v]=directionFace(direction);for(let level=this.stats.maxLevel;level>=3;level--){const n=2**level,x=Math.min(n-1,Math.max(0,Math.floor((u+1)*n/2))),y=Math.min(n-1,Math.max(0,Math.floor((v+1)*n/2))),m=this.lookup.get(`${face}/${level}/${x}/${y}`);if(!m)continue;if(reference)reference.mesh=m;const p=m.userData.patch,N=p.resolution??PATCH,gx=Math.max(0,Math.min(N-1e-7,(u-p.u)/p.size*N)),gy=Math.max(0,Math.min(N-1e-7,(v-p.v)/p.size*N)),ix=Math.floor(gx),iy=Math.floor(gy),fx=gx-ix,fy=gy-iy,a=iy*(N+1)+ix,b=a+1,c=a+N+1,d=c+1,ids=fx+fy<=1?[a,b,c]:[b,d,c],weights=fx+fy<=1?[1-fx-fy,fx,fy]:[1-fy,fx+fy-1,1-fx],pos=m.geometry.attributes.position.array;let radius=0;for(let k=0;k<3;k++){let coordinate=m.position.getComponent(k);for(let j=0;j<3;j++)coordinate+=pos[ids[j]*3+k]*weights[j];radius+=coordinate*direction[k];}return (radius-1000)*this.world.radiusMeters/1000;}if(reference)reference.mesh=null;return null;}
  setLayer(layer,camera,detail){this.layer=layer;return this.update(camera,detail,true);}
- dispose(){this.disposed=true;this.flightReady?.resolve();this.flightReady=null;this.cancelArrival();this.arrivalWorker?.postMessage({type:'dispose'});this.arrivalWorker=null;this.warmQueue.length=0;this.waterBatches?.dispose();this.batches.dispose();this.shadows.dispose();clearTimeout(this.timer);clearTimeout(this.trimTimer);clearTimeout(this.reapTimer);for(const r of this.retiring){r.mesh.geometry.dispose();r.water?.geometry.dispose();}this.retiring.length=0;this.worker.terminate();this.pending?.resolve();this.queued?.resolve?.();const all=[...[...this.active].map(([k,mesh])=>({mesh,water:this.water.get(k)})),...this.cache.values(),...this.ready.values()];for(const {mesh,water}of all){mesh.removeFromParent();mesh.geometry.dispose();water?.removeFromParent();water?.geometry.dispose();}this.active.clear();this.water.clear();this.cache.clear();this.ready.clear();}
+ dispose(){this.disposed=true;this.initialReady?.resolve({cancelled:true});this.initialReady=null;this.flightReady?.resolve();this.flightReady=null;this.cancelArrival();this.arrivalWorker?.postMessage({type:'dispose'});this.arrivalWorker=null;this.warmQueue.length=0;this.waterBatches?.dispose();this.batches.dispose();this.shadows.dispose();clearTimeout(this.timer);clearTimeout(this.trimTimer);clearTimeout(this.reapTimer);for(const r of this.retiring){r.mesh.geometry.dispose();r.water?.geometry.dispose();}this.retiring.length=0;this.worker.terminate();this.pending?.resolve();this.queued?.resolve?.();const all=[...[...this.active].map(([k,mesh])=>({mesh,water:this.water.get(k)})),...this.cache.values(),...this.ready.values()];for(const {mesh,water}of all){mesh.removeFromParent();mesh.geometry.dispose();water?.removeFromParent();water?.geometry.dispose();}this.active.clear();this.water.clear();this.cache.clear();this.ready.clear();}
 }
 
 

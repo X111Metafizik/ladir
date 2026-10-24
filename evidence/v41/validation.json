@@ -1,0 +1,37 @@
+{
+  "version": "1.26.0",
+  "baselineCommit": "e64618f51c60bb791b55f175402e646010f08e65",
+  "radiusMeters": 4000000,
+  "unitRuns": [
+    {
+      "command": "npm test",
+      "tests": 215,
+      "passed": 213,
+      "failed": 2,
+      "reason": "Both server tests were blocked by sandbox spawn EPERM; no assertion failure. They were rerun with child-process permission."
+    },
+    {
+      "command": "node --test --test-isolation=none tests/server.test.mjs tests/patch-pool.test.mjs",
+      "tests": 7,
+      "passed": 7,
+      "failed": 0
+    },
+    {
+      "command": "node --test --test-isolation=none tests/terrain-bake.test.mjs tests/streaming.test.mjs tests/warp-streaming.test.mjs tests/patch-pool.test.mjs",
+      "tests": 41,
+      "passed": 41,
+      "failed": 0,
+      "note": "Final rerun after cache telemetry and adaptive-budget regression tests; includes three tests added after the full run."
+    }
+  ],
+  "repositoryCheck": "passed: dependency lock, local documentation links, archive policy and pinned WASM artifact",
+  "productionBuild": "passed",
+  "diffWhitespace": "passed with core.whitespace=cr-at-eol",
+  "hardwareSmoke": "smoke/smoke.json",
+  "loadingComparison": ["user-before/loading.json", "user-final/loading.json"],
+  "staticPackVerification": "fixture-final/loading.json",
+  "flightComparison": ["flight-before/benchmark.json", "flight-final/benchmark.json"],
+  "visualInspection": "Manually inspected the same-location old/new completed terrain screenshots; relief and quality were retained. This does not certify every terrain seam or flight route.",
+  "exclusions": "Earlier experiments with a concurrently rendering interactive GPU tab and a prototype unbound fetch failure are not used for speedup claims. The fixture cold cacheSettled flag predates the final telemetry fix; a regression test verifies that a later cache completion is not overwritten by older terrain-done statistics.",
+  "limits": "One cold/warm pair per loading build and one 60-second cold/warm flight pair per build. Headless/60 Hz measurements do not validate 100 FPS. Worst individual stalls remain and increased in this comparison."
+}

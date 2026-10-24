@@ -8,9 +8,10 @@ import {dot,cross,normalize,mix,clamp,smooth} from '../core/math.mjs';
 export const PATCH=16;
 const descriptor=(face,x,y,level)=>{const size=2/2**level;return {face,x,y,level,u:x*size-1,v:y*size-1,size,key:`${face}/${level}/${x}/${y}`};};
 export function selectPatches(world,camera,detail=1,view=null,options={}){
+  const sample=options.sample??((d,o)=>sampleTerrain(world,d,o));
   const leaves=[],length=Math.hypot(...camera),up=camera.map(v=>v/length),scale=1000/world.radiusMeters;
   const altitude=(length-1000)/scale,stamped=!!world.buffers?.stampHeights&&(world.generationConfig.terrainStamps??0)>0;
-  const under=sampleTerrain(world,up),clearance=altitude-Math.max(under.elevationMeters,under.waterSurfaceMeters);
+  const under=sample(up),clearance=altitude-Math.max(under.elevationMeters,under.waterSurfaceMeters);
   const intermediate=stamped&&altitude<=60000&&clearance>8000;
   // Spend the dense grid on the expanded visible footprint, keeping reusable
   // background geometry lighter. Stitching below also handles 16/32 neighbors
@@ -23,7 +24,7 @@ export function selectPatches(world,camera,detail=1,view=null,options={}){
   function visit(p){
     const d=faceDirection(p.face,p.u+p.size/2,p.v+p.size/2),extent=p.size*1000;
     if(p.level>=3&&dot(d,up)+p.size*1.5<1000/length-Math.sqrt(12000/world.radiusMeters))return;
-    const h=p.level>(options.arrival?9:4)?sampleTerrain(world,d,{micro:false}).elevationMeters:0;
+    const h=p.level>(options.arrival?9:4)?sample(d,{micro:false}).elevationMeters:0;
     const distance=Math.hypot(...d.map((v,i)=>v*(1000+h*scale)-camera[i]));
     // Refinement covers the current camera and the bounded travel corridor.
     // A single union tree is stitched, so preloading cannot open LOD seams.
@@ -91,7 +92,7 @@ export function selectPatches(world,camera,detail=1,view=null,options={}){
     let geometric=false;
     if(view&&visible&&p.level>=8&&p.level<maxLevel&&distance/scale<200000&&!regional){
       const cell=p.size/resolutionFor(p.level),x=p.u+p.size/2,y=p.v+p.size/2;
-      const sampleH=(u,v)=>sampleTerrain(world,faceDirection(p.face,u,v),{micro:false}).elevationMeters;
+      const sampleH=(u,v)=>sample(faceDirection(p.face,u,v),{micro:false}).elevationMeters;
       const error=Math.abs(h-(sampleH(x-cell,y-cell)+sampleH(x+cell,y-cell)+sampleH(x-cell,y+cell)+sampleH(x+cell,y+cell))*.25);
       const pixelsPerMeter=(view.viewportHeight??1000)/(2*view.tanY*Math.max(1,distance/scale));
       const retained=previousBranches.has(p.key);

@@ -26,3 +26,12 @@ test('world cache keys separate every generation setting and ignore object key o
  assert.notEqual(worldCacheKey({seed:'A'}),worldCacheKey({seed:'B'}));
  assert.notEqual(worldCacheKey({seed:'A',terrainStamps:1}),worldCacheKey({seed:'A',terrainStamps:0}));
 });
+test('background cache completion updates telemetry without consuming an active geometry task',async()=>{
+ const {pool,workers}=fixture(),seen=[],status=[];pool.onCacheStatus=s=>status.push(s);
+ const pending=pool.run([{key:'terrain'}],'natural',p=>seen.push(...p)),task=pool.slots[0].busy;
+ workers[0].onmessage({data:{type:'cache-status',bake:{bakeWrites:24,bakeQueuedBytes:0,bakeDiskBytes:500}}});
+ workers[1].onmessage({data:{type:'cache-status',bake:{bakeWrites:12,bakeQueuedBytes:200,bakeDiskBytes:700}}});
+ assert.equal(pool.slots[0].busy,task);assert.deepEqual(seen,[]);
+ assert.deepEqual(status.at(-1),{bakeWrites:36,bakeQueuedBytes:200,bakeDiskBytes:700});
+ workers[0].complete();assert.equal((await pending).generated,1);assert.deepEqual(seen,[{key:'terrain'}]);pool.dispose();
+});

@@ -34,6 +34,7 @@ Use `npm run dev` for development and `npm test` to run the tests.
 - [Rust/WASM implementation and measurements](docs/WASM.md)
 - [Project history](docs/PROJECT_HISTORY.md)
 - [Production-plan review](docs/PRODUCTION_REVIEW.md)
+- [Terrain loading measurements and changes](docs/STREAMING_PERFORMANCE.md)
 - [Third-party credits and licenses](THIRD_PARTY_NOTICES.md)
 
 [CI status](https://github.com/X111Metafizik/ladir/actions/workflows/ci.yml)

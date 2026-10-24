@@ -3,9 +3,32 @@ import assert from 'node:assert/strict';
 import {Group,MeshBasicNodeMaterial,PerspectiveCamera,Vector3} from 'three/webgpu';
 import {StreamingTerrain} from '../render/terrain-stream.mjs';
 class FakeWorker {static all=[];constructor(){this.sent=[];FakeWorker.all.push(this);}postMessage(data){this.sent.push(data);}terminate(){}emit(data){this.onmessage({data});}}
+test('initial editor readiness waits for all preview buffers, but not the full-resolution job',async()=>{
+ const original=globalThis.Worker;globalThis.Worker=FakeWorker;let t,material;
+ try{const camera=new PerspectiveCamera();camera.updateMatrixWorld();material=new MeshBasicNodeMaterial();t=new StreamingTerrain({radiusMeters:4000000},material,new Group(),material,camera);t.setFrameDriven(true);t.prepareMeshes=()=>{};
+  const job=t.prepareInitial(new Vector3(0,0,1001));let detailed=false;job.detail.then(()=>detailed=true);
+  deliver(t.worker,packet(0),t.id);assert.equal(t.active.size,0);t.flushFrame();assert.deepEqual(await job.surface,{cancelled:false});assert.equal(detailed,false);assert.equal(t.worker.sent.at(-1).preview,false);
+  const fine={...packet(0),key:'0/3/4/4/full/natural'};deliver(t.worker,fine,t.id);t.flushFrame();assert.deepEqual(await job.detail,{complete:true});assert.ok(t.active.has(fine.key));
+ }finally{t?.dispose();material?.dispose();globalThis.Worker=original;}
+});
+test('cancelled and failed initial loading releases both readiness promises without reporting full detail',async()=>{
+ const original=globalThis.Worker;globalThis.Worker=FakeWorker;let t,material;
+ try{const camera=new PerspectiveCamera();camera.updateMatrixWorld();material=new MeshBasicNodeMaterial();t=new StreamingTerrain({radiusMeters:4000000},material,new Group(),material,camera);t.setFrameDriven(true);
+  const job=t.prepareInitial(new Vector3(0,0,1001));t.cancelRequest();assert.deepEqual(await job.surface,{cancelled:true});assert.equal(await job.detail,undefined);
+  const broken=t.prepareInitial(new Vector3(0,0,1001));const a=assert.rejects(broken.surface,/test failure/),b=assert.rejects(broken.detail,/test failure/);t.fail(Error('test failure'));await Promise.all([a,b]);
+  const closing=t.prepareInitial(new Vector3(0,0,1001));t.dispose();assert.deepEqual(await closing.surface,{cancelled:true});await closing.detail;t=null;
+ }finally{t?.dispose();material?.dispose();globalThis.Worker=original;}
+});
 function packet(face){const patch={face,level:3,x:4,y:4,u:0,v:0,size:.25,resolution:8,priority:100},key=`${face}/3/4/4/test/natural`;
  return {key,patch,center:[0,0,1000],positions:new Float32Array([0,0,0,.01,0,0,0,.01,0]),normals:new Float32Array([0,0,1,0,0,1,0,0,1]),indices:new Uint16Array([0,1,2]),colors:new Float32Array(9),surface:new Float32Array(12),climate:new Float32Array(6),waterIndices:new Uint16Array(),waterPositions:new Float32Array(),waterNormals:new Float32Array(),shallows:new Float32Array()};}
 function deliver(worker,p,id=0){worker.emit({id,type:'terrain-plan',patches:[{...p.patch,key:p.key}]});worker.emit({id,type:'terrain-chunk',patches:[p]});worker.emit({id,type:'terrain-done',milliseconds:1,samples:3,workers:1});}
+test('cache telemetry remains current when disk completes before a delayed GPU commit',()=>{
+ const original=globalThis.Worker;globalThis.Worker=FakeWorker;let t,material;
+ try{const camera=new PerspectiveCamera();material=new MeshBasicNodeMaterial();t=new StreamingTerrain({radiusMeters:4000000},material,new Group(),material,camera);t.setFrameDriven(true);
+  deliver(t.worker,packet(0));t.done.bake={bakeQueuedBytes:4096};t.worker.emit({type:'terrain-cache',id:0,bake:{bakeQueuedBytes:0,bakeWrites:24}});t.flushFrame();
+  assert.equal(t.stats.bake.bakeQueuedBytes,0);assert.equal(t.stats.bake.bakeWrites,24);
+ }finally{t?.dispose();material?.dispose();globalThis.Worker=original;}
+});
 test('warp preloading leaves the visible terrain intact, then swaps a prepared footprint atomically',()=>{
  const original=globalThis.Worker;globalThis.Worker=FakeWorker;let t,material;
  try{

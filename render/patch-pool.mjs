@@ -5,6 +5,7 @@ export class PatchPool {
   this.serial=0;this.job=null;this.paused=false;
   this.slots=Array.from({length:count},()=>{const worker=factory(),slot={worker,busy:null,samples:null};
    worker.onmessage=({data})=>{
+    if(data.type==='cache-status'){slot.bake=data.bake;this.onCacheStatus?.(this.bakeStats());return;}
     const task=slot.busy;if(!task||data.task!==task.id)return;
     slot.busy=null;slot.samples=data.samples;slot.bake=data.bake;slot.region=data.region;slot.production=data.production;slot.kernel=data.kernel;
     if(task.job===this.job){
@@ -16,6 +17,7 @@ export class PatchPool {
    worker.onerror=e=>{this.job?.reject(Error(e.message));this.job=null;};return slot;
   });
  }
+ bakeStats(){const bake={};for(const slot of this.slots)for(const [key,value]of Object.entries(slot.bake??{}))bake[key]=key==='bakeDiskBytes'?Math.max(bake[key]??0,value):(bake[key]??0)+value;return bake;}
  run(patches,layer,onChunk){
   this.job?.resolve(null);for(const slot of this.slots)if(slot.busy)slot.worker.postMessage({type:'cancel-build'});this.paused=false;
   return new Promise((resolve,reject)=>{

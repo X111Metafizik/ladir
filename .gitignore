@@ -37,3 +37,12 @@ Thumbs.db
 
 /test-results/
 !/evidence/v40/
+!/evidence/v41/
+/evidence/v41/*
+!/evidence/v41/user-before/
+!/evidence/v41/user-final/
+!/evidence/v41/fixture-final/
+!/evidence/v41/flight-before/
+!/evidence/v41/flight-final/
+!/evidence/v41/smoke/
+!/evidence/v41/validation.json
