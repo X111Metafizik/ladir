@@ -1,0 +1,233 @@
+{
+  "worldHash": "595aee80687ce1d3acf102bfd9e8bb925f9b5ee4a3bca2bdc3fca5f58b2b463d",
+  "scope": "Worker initialization transport only; not FPS, total process memory or full flight loading.",
+  "summary": {
+    "copy": {
+      "runs": 24,
+      "postMedianMs": 23.330399999999827,
+      "postP95Ms": 29.047399999999925,
+      "roundTripMedianMs": 62.805399999999736,
+      "roundTripP95Ms": 69.84979999999996
+    },
+    "shared": {
+      "runs": 24,
+      "postMedianMs": 0.053399999999783176,
+      "postP95Ms": 0.10390000000006694,
+      "roundTripMedianMs": 39.37049999999999,
+      "roundTripP95Ms": 56.4399999999996
+    }
+  },
+  "transport": {
+    "mode": "copy",
+    "worldBytes": 5939480,
+    "sharedSnapshotBytes": 5939480,
+    "metadataBytes": 7700009,
+    "metadataSnapshotBytes": 7700009,
+    "preparationMs": 3.453100000000177,
+    "metadataPreparationMs": 86.52919999999995,
+    "decodeMs": 0,
+    "dispatches": 56,
+    "sharedDispatches": 28,
+    "copiedDispatches": 28,
+    "avoidedCopyBytes": 166305440,
+    "fallbacks": 0
+  },
+  "samples": {
+    "copy": [
+      {
+        "postMs": 28.422099999999773,
+        "roundTripMs": 64.86760000000004
+      },
+      {
+        "postMs": 23.330399999999827,
+        "roundTripMs": 60.51249999999982
+      },
+      {
+        "postMs": 22.6858000000002,
+        "roundTripMs": 61.81719999999996
+      },
+      {
+        "postMs": 22.45970000000034,
+        "roundTripMs": 58.18319999999994
+      },
+      {
+        "postMs": 21.73409999999967,
+        "roundTripMs": 57.95719999999983
+      },
+      {
+        "postMs": 29.442000000000007,
+        "roundTripMs": 66.0940999999998
+      },
+      {
+        "postMs": 22.809000000000196,
+        "roundTripMs": 65.1527000000001
+      },
+      {
+        "postMs": 22.981399999999667,
+        "roundTripMs": 62.805399999999736
+      },
+      {
+        "postMs": 28.597999999999956,
+        "roundTripMs": 67.03940000000011
+      },
+      {
+        "postMs": 29.047399999999925,
+        "roundTripMs": 66.57479999999987
+      },
+      {
+        "postMs": 21.8757999999998,
+        "roundTripMs": 58.3130000000001
+      },
+      {
+        "postMs": 21.77729999999974,
+        "roundTripMs": 56.87219999999979
+      },
+      {
+        "postMs": 27.078199999999924,
+        "roundTripMs": 64.98990000000049
+      },
+      {
+        "postMs": 22.234600000000682,
+        "roundTripMs": 60.16359999999986
+      },
+      {
+        "postMs": 21.88539999999921,
+        "roundTripMs": 59.05439999999999
+      },
+      {
+        "postMs": 25.11070000000018,
+        "roundTripMs": 64.45100000000002
+      },
+      {
+        "postMs": 21.505299999999806,
+        "roundTripMs": 80.36159999999927
+      },
+      {
+        "postMs": 23.386999999999716,
+        "roundTripMs": 63.14710000000014
+      },
+      {
+        "postMs": 25.48279999999977,
+        "roundTripMs": 62.1296999999995
+      },
+      {
+        "postMs": 25.245900000000802,
+        "roundTripMs": 69.84979999999996
+      },
+      {
+        "postMs": 21.96469999999954,
+        "roundTripMs": 58.3175999999994
+      },
+      {
+        "postMs": 22.849099999999453,
+        "roundTripMs": 58.74409999999989
+      },
+      {
+        "postMs": 26.55029999999988,
+        "roundTripMs": 63.59349999999995
+      },
+      {
+        "postMs": 24.33520000000044,
+        "roundTripMs": 62.113500000000386
+      }
+    ],
+    "shared": [
+      {
+        "postMs": 0.06679999999960273,
+        "roundTripMs": 35.64529999999968
+      },
+      {
+        "postMs": 0.06059999999979482,
+        "roundTripMs": 35.1288999999997
+      },
+      {
+        "postMs": 0.10390000000006694,
+        "roundTripMs": 55.653899999999794
+      },
+      {
+        "postMs": 0.051899999999932334,
+        "roundTripMs": 40.17020000000002
+      },
+      {
+        "postMs": 0.10489999999981592,
+        "roundTripMs": 39.37049999999999
+      },
+      {
+        "postMs": 0.054099999999834836,
+        "roundTripMs": 46.35539999999992
+      },
+      {
+        "postMs": 0.05540000000019063,
+        "roundTripMs": 37.46050000000014
+      },
+      {
+        "postMs": 0.051499999999577994,
+        "roundTripMs": 42.19349999999986
+      },
+      {
+        "postMs": 0.0498000000002321,
+        "roundTripMs": 35.5963999999999
+      },
+      {
+        "postMs": 0.05349999999998545,
+        "roundTripMs": 46.60939999999982
+      },
+      {
+        "postMs": 0.08649999999988722,
+        "roundTripMs": 35.10939999999982
+      },
+      {
+        "postMs": 0.05039999999962674,
+        "roundTripMs": 35.386099999999715
+      },
+      {
+        "postMs": 0.04879999999957363,
+        "roundTripMs": 36.15309999999954
+      },
+      {
+        "postMs": 0.0500000000001819,
+        "roundTripMs": 36.24210000000039
+      },
+      {
+        "postMs": 0.05540000000019063,
+        "roundTripMs": 55.57369999999992
+      },
+      {
+        "postMs": 0.04879999999957363,
+        "roundTripMs": 42.34649999999965
+      },
+      {
+        "postMs": 0.06550000000061118,
+        "roundTripMs": 73.23630000000048
+      },
+      {
+        "postMs": 0.05900000000019645,
+        "roundTripMs": 56.4399999999996
+      },
+      {
+        "postMs": 0.053399999999783176,
+        "roundTripMs": 39.62029999999959
+      },
+      {
+        "postMs": 0.05259999999998399,
+        "roundTripMs": 46.612199999999575
+      },
+      {
+        "postMs": 0.04849999999987631,
+        "roundTripMs": 35.69160000000011
+      },
+      {
+        "postMs": 0.04860000000007858,
+        "roundTripMs": 38.04119999999966
+      },
+      {
+        "postMs": 0.05050000000028376,
+        "roundTripMs": 39.24110000000019
+      },
+      {
+        "postMs": 0.05259999999998399,
+        "roundTripMs": 37.32349999999951
+      }
+    ]
+  }
+}

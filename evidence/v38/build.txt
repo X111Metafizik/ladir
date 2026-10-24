@@ -1,0 +1,5 @@
+
+> ladir-planet-studio@1.23.0 build
+> node scripts/build.mjs
+
+Bağımsız dağıtım dist/ dizinine oluşturuldu.

@@ -29,9 +29,11 @@ Use `npm run dev` for development and `npm test` to run the tests.
 
 ## Documentation
 
+- [Architecture and worker transport](docs/ARCHITECTURE.md)
+
 - [Performance report](output/reports/ATLAS_V37_Rapor.md) / [PDF](output/pdf/ATLAS_V37_Sonuc.pdf)
 - [Benchmark results](evidence/v37/results.json)
-- [Development history and bake instructions](PROJECT_HISTORY_TR.md)
+- [Development history and bake instructions](docs/history/PROJECT_HISTORY_TR.md)
 - [Third-party credits and licenses](THIRD_PARTY_NOTICES.md)
 
 Historical reports and development notes are in Turkish and retain the former ATLAS name.

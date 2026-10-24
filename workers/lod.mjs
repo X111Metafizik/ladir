@@ -1,3 +1,4 @@
+import {postWorkerWorld,receiveWorkerWorld} from '../io/worker-world.mjs';
 import {initRegional} from '../io/regional-runtime.mjs';
 import {TERRAIN_BUDGET,patchBytes} from '../render/terrain-budget.mjs';
 import {selectPatches} from '../render/terrain-data.mjs';
@@ -6,10 +7,10 @@ import {transitionGroups} from '../render/stream-plan.mjs';
 import {vegetationTile} from '../core/vegetation.mjs';
 import {faceDirection,directionFace} from '../core/cube.mjs';
 import {sampleTerrain,nearestRiver} from '../core/terrain.mjs';
-let planningController,region,regionOptions,world,pool,workerCount,terrainRequest=0,inflightBytes=0,deliveryId=0;const vegetationCache=new Map(),yieldWork=()=>new Promise(r=>setTimeout(r,0));
-function ensurePool(){return pool??=new PatchPool(()=>{const w=new Worker(new URL('./patches.mjs',import.meta.url),{type:'module'});w.postMessage({type:'init',world,warm:!!workerCount,regionalOptions:regionOptions,bake:regionOptions?.meshBake!==false});return w;},workerCount??Math.min(3,Math.max(1,Math.floor((navigator.hardwareConcurrency??4)/2))));}
+let sharedWorld=false,planningController,region,regionOptions,world,pool,workerCount,terrainRequest=0,inflightBytes=0,deliveryId=0;const vegetationCache=new Map(),yieldWork=()=>new Promise(r=>setTimeout(r,0));
+function ensurePool(){return pool??=new PatchPool(()=>{const w=new Worker(new URL('./patches.mjs',import.meta.url),{type:'module'});postWorkerWorld(w,{type:'init',world,warm:!!workerCount,regionalOptions:regionOptions,bake:regionOptions?.meshBake!==false},{shared:sharedWorld});return w;},workerCount??Math.min(3,Math.max(1,Math.floor((navigator.hardwareConcurrency??4)/2))));}
 self.onmessage=async({data})=>{
- if(data.type==='init'){world=data.world;regionOptions=data.regionalOptions;region=initRegional(world,regionOptions);workerCount=data.workerCount;pool?.dispose();pool=null;vegetationCache.clear();if(workerCount){ensurePool();sampleTerrain(world,world.frame.center);nearestRiver(world,world.frame.center);}return;}
+ if(data.type==='init'){world=receiveWorkerWorld(data);sharedWorld=data.worldTransport?.shared===true;regionOptions=data.regionalOptions;region=initRegional(world,regionOptions);workerCount=data.workerCount;pool?.dispose();pool=null;vegetationCache.clear();if(workerCount){ensurePool();sampleTerrain(world,world.frame.center);nearestRiver(world,world.frame.center);}return;}
  if(data.type==='terrain-consumed'){if(data.id===deliveryId){inflightBytes=Math.max(0,inflightBytes-data.bytes);pool?.setPaused(inflightBytes>TERRAIN_BUDGET.inflightBytes);}return;}
  if(data.type==='dispose'){pool?.dispose();self.close();return;}
  if(data.type==='cancel-terrain'){planningController?.abort();terrainRequest++;pool?.run([],'natural',()=>{});return;}

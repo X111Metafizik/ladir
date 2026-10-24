@@ -1,3 +1,4 @@
+import {postWorkerWorld} from '../io/worker-world.mjs';
 import {regionalOptions} from '../io/regional-runtime.mjs';
 import * as THREE from 'three/webgpu';
 import {positionLocal,positionGeometry,positionWorld,sin,vec3} from 'three/tsl';
@@ -31,7 +32,7 @@ export function createVegetation(world,shared,terrain,camera){
   for(const mesh of [leaves,trunks]){mesh.instanceMatrix=buffer;mesh.count=0;mesh.receiveShadow=true;mesh.castShadow=lod===0;mesh.layers.enable(1);mesh.frustumCulled=false;mesh.matrixAutoUpdate=false;group.add(mesh);}
   leaves.userData.species=sp;trunks.userData.trunk=true;pools.push({leaves,trunks,buffer,count:0});
  }
- const worker=isDry(world)?{postMessage(){},terminate(){}}:new Worker(new URL('../workers/lod.mjs',import.meta.url),{type:'module'});worker.postMessage({type:'init',world,regionalOptions:regionalOptions()});
+ const dry=isDry(world),worker=dry?{postMessage(){},terminate(){}}:new Worker(new URL('../workers/lod.mjs',import.meta.url),{type:'module'});if(!dry)postWorkerWorld(worker,{type:'init',world,regionalOptions:regionalOptions()});
  const cache=new Map(),active=new Map(),inbox=[],eye=new THREE.Vector3(),last=new THREE.Vector3(1e9,0,0),packedEye=last.clone(),packedForward=new THREE.Vector3(),forward=new THREE.Vector3(),frustum=new THREE.Frustum(),projection=new THREE.Matrix4(),sphere=new THREE.Sphere();
  let building=false,disposed=false,pending=null,queued=null,wanted=new Set(),id=0,done=null,timer=null,started=0,settleCursor=0,dirty=true,packedFov=0,packedAspect=0;
  const stats={tiles:0,instances:0,renderedInstances:0,cachedTiles:0,lod:'none',fadeMeters:[1400,3000],workerMilliseconds:0,rootOffsetMeters:-.25,revision:0,rootQueries:0,rootUpdates:0,poolMeshes:pools.length*2,poolRebuilds:0,poolOverflow:0};

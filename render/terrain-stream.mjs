@@ -1,3 +1,4 @@
+import {postWorkerWorld} from '../io/worker-world.mjs';
 import {regionalOptions} from '../io/regional-runtime.mjs';
 import {TERRAIN_BUDGET,geometryBytes,recordBytes,patchBytes,uploadAllowance,terrainMemorySnapshot} from './terrain-budget.mjs';
 import * as THREE from 'three/webgpu';
@@ -17,7 +18,7 @@ export class StreamingTerrain{
   this.batches=createGridMaterial?createTerrainGrids(group,createGridMaterial):createTerrainBatches(group,material);
   this.waterBatches=createWaterBatches(group,waterMaterial);
   this.shadows=this.gridMode?{stats:this.batches.stats,add(){},remove(){},update(){},dispose(){}}:createShadowBatches(group,material);
-  this.worker=new Worker(new URL('../workers/lod.mjs',import.meta.url),{type:'module'});this.worker.postMessage({type:'init',world,regionalOptions:regionalOptions()});
+  this.worker=new Worker(new URL('../workers/lod.mjs',import.meta.url),{type:'module'});postWorkerWorld(this.worker,{type:'init',world,regionalOptions:regionalOptions()});
   this.worker.onerror=e=>this.fail(Error(e.message));
   this.worker.onmessage=({data})=>{if(this.disposed||data.id!==this.id)return;try{
    if(data.type==='error')return this.fail(Error(data.message));
@@ -48,7 +49,7 @@ export class StreamingTerrain{
   const ready={};ready.promise=new Promise((resolve,reject)=>Object.assign(ready,{resolve,reject}));this.flightReady=ready;
   this.previewNext=true;this.update(camera,detail,true).catch(e=>this.fail(e));return ready.promise;
  }
- prepareArrivalWorker(){if(this.arrivalWorker||this.disposed)return;this.arrivalWorker=new Worker(new URL('../workers/lod.mjs',import.meta.url),{type:'module'});this.arrivalWorker.postMessage({type:'init',world:this.world,workerCount:2,regionalOptions:regionalOptions()});}
+ prepareArrivalWorker(){if(this.arrivalWorker||this.disposed)return;this.arrivalWorker=new Worker(new URL('../workers/lod.mjs',import.meta.url),{type:'module'});postWorkerWorld(this.arrivalWorker,{type:'init',world:this.world,workerCount:2,regionalOptions:regionalOptions()});}
  prepareArrival(camera,detail=1,view=null){
   this.cancelArrival();if(this.disposed)return;
   // The current complete surface stays visible. Stop jobs for fleeting warp

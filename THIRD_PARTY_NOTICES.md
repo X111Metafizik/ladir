@@ -23,6 +23,6 @@ referans uygulamalarının bu pakette bulunduğu iddia edilmez:
 - Sébastien Hillaire — [Atmosphere reference](https://github.com/sebh/UnrealEngineSkyAtmosphere).
 - [WebGPU standardı](https://www.w3.org/TR/webgpu/).
 
-Kapsam farkları `TESLIM_RAPORU.md` içinde açıkça belirtilir.
+Kapsam farkları `docs/history/TESLIM_RAPORU.md` içinde açıkça belirtilir.
 
-V1.3 arazi araştırması ve kullanılan kavramlar [ARAZI_V13.md](ARAZI_V13.md) içinde kaynaklarıyla açıklanır. Kaya dokusu yerel olarak üretilir. Three.Terrain veya üçüncü taraf erozyon eklentisi pakete dahil edilmemiştir.
+V1.3 arazi araştırması ve kullanılan kavramlar [ARAZI_V13.md](docs/history/ARAZI_V13.md) içinde kaynaklarıyla açıklanır. Kaya dokusu yerel olarak üretilir. Three.Terrain veya üçüncü taraf erozyon eklentisi pakete dahil edilmemiştir.

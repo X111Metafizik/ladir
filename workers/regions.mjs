@@ -1,3 +1,4 @@
+import {receiveWorkerWorld} from '../io/worker-world.mjs';
 import {REGIONAL_CATALOG} from '../io/regional-catalog.mjs';
 import {RegionLoader} from '../io/regional-loader.mjs';
 let loader,tiles,controller,delivery;
@@ -8,7 +9,7 @@ function waitForConsumer(epoch,key,signal){
 }
 self.onmessage=async({data})=>{
  if(data.type==='consumed'){if(delivery?.epoch===data.epoch&&delivery.key===data.key)delivery.done();return;}
- if(data.type==='init'){loader=new RegionLoader(data.world,REGIONAL_CATALOG[data.world.manifest.worldDataHash],{disk:data.disk,baseURL:new URL('../',import.meta.url)});tiles=new Map(loader.manifest.tiles.map(t=>[t.key,t]));return;}
+ if(data.type==='init'){const world=receiveWorkerWorld(data);loader=new RegionLoader(world,REGIONAL_CATALOG[world.manifest.worldDataHash],{disk:data.disk,baseURL:new URL('../',import.meta.url)});tiles=new Map(loader.manifest.tiles.map(t=>[t.key,t]));return;}
  if(data.type!=='prefetch')return;controller?.abort();const job=new AbortController();controller=job;
  for(const key of data.keys){
   if(job.signal.aborted)break;const t=tiles.get(key);if(!t)continue;const tile=await loader.load(t,job.signal);

@@ -1,0 +1,20 @@
+✔ patch production is bounded and completes every patch exactly once (2.5591ms)
+✔ retargeting drops all queued obsolete work and does not publish stale chunks (1.1702ms)
+✔ empty plans complete and worker errors reject instead of leaving loading pending (0.7298ms)
+✔ world cache keys separate every generation setting and ignore object key order (0.3273ms)
+✔ warp preloading leaves the visible terrain intact, then swaps a prepared footprint atomically (8.4182ms)
+✔ a short warp shows its prepared preview immediately while detail finishes without a loading gate (1.3864ms)
+✔ staged cache dependencies stay resident and cancellation preserves the active preview (0.8969ms)
+✔ cancelling a charge releases staged meshes and their pending uploads (0.6698ms)
+✔ a new charge reuses its workers and rejects late buffers from a cancelled route (0.7302ms)
+✔ flight becomes ready after a stitched first surface while maximum detail continues in the worker (1.2827ms)
+✔ closing or cancelling a pending flight surface releases the readiness waiter (0.5857ms)
+✔ the first dense flight footprint can finish while cruise advances one kilometre (1.2537ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 12
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 182.9758

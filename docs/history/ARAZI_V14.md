@@ -18,7 +18,7 @@ Açık tarayıcıda **V 1.4** görünür. **Büyük yarık · 1–2 km**, **Ayr�
 
 ## Doğrulama
 
-Kabul görüntüleri ve donanım/kare hızı kayıtları: [evidence/v14/index.html](evidence/v14/index.html), [acceptance.json](evidence/v14/acceptance.json).
+Kabul görüntüleri ve donanım/kare hızı kayıtları: [evidence/v14/index.html](../../evidence/v14/index.html), [acceptance.json](../../evidence/v14/acceptance.json).
 
 37 otomatik kontrol; dört tohumda 10.000 dağ kesiti, dengeli iklimde kar geçişi, derin vadi kesiti, akarsu kıvrımlılığı ve aşağı akış kotu, 170 km geometri bütçesi, 33,4 km–yüzey LOD sınırı, geçit/boğaz ve paket imzası kontrollerini kapsar. Sekiz örnek paket tekrar üretildi ve açılıp doğrulandı. Ayrıntı yeni bölgelerde Worker tamamlanınca yüklenir; bu süre FPS ölçümünden ayrıdır.
 

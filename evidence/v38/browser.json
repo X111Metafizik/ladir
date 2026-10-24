@@ -1,0 +1,155 @@
+{
+  "scope": "Functional browser smoke, not an FPS comparison",
+  "cases": [
+    {
+      "mode": "shared",
+      "errors": [],
+      "consoleErrors": [],
+      "start": {
+        "isolated": true,
+        "transport": {
+          "mode": "shared",
+          "worldBytes": 5939480,
+          "sharedSnapshotBytes": 5939480,
+          "metadataBytes": 7700009,
+          "metadataSnapshotBytes": 7700009,
+          "preparationMs": 3.525000000372529,
+          "metadataPreparationMs": 90.95000000111759,
+          "decodeMs": 0,
+          "dispatches": 3,
+          "sharedDispatches": 3,
+          "copiedDispatches": 0,
+          "avoidedCopyBytes": 17818440,
+          "fallbacks": 0
+        },
+        "hash": "595aee80687ce1d3acf102bfd9e8bb925f9b5ee4a3bca2bdc3fca5f58b2b463d",
+        "radius": 4000000,
+        "activePatches": 2403,
+        "backend": "WebGPU"
+      },
+      "flight": {
+        "state": "flying",
+        "health": 100,
+        "speed": 211.8579158002828,
+        "agl": 294.3337362797149,
+        "position": [
+          -503040.37672083534,
+          356862.441489989,
+          3953837.7845050083
+        ],
+        "activePatches": 718,
+        "transport": {
+          "mode": "shared",
+          "worldBytes": 5939480,
+          "sharedSnapshotBytes": 5939480,
+          "metadataBytes": 7700009,
+          "metadataSnapshotBytes": 7700009,
+          "preparationMs": 3.525000000372529,
+          "metadataPreparationMs": 90.95000000111759,
+          "decodeMs": 0,
+          "dispatches": 4,
+          "sharedDispatches": 4,
+          "copiedDispatches": 0,
+          "avoidedCopyBytes": 23757920,
+          "fallbacks": 0
+        }
+      },
+      "arrival": {
+        "ready": true,
+        "records": 57,
+        "transport": {
+          "mode": "shared",
+          "worldBytes": 5939480,
+          "sharedSnapshotBytes": 5939480,
+          "metadataBytes": 7700009,
+          "metadataSnapshotBytes": 7700009,
+          "preparationMs": 3.525000000372529,
+          "metadataPreparationMs": 90.95000000111759,
+          "decodeMs": 0,
+          "dispatches": 4,
+          "sharedDispatches": 4,
+          "copiedDispatches": 0,
+          "avoidedCopyBytes": 23757920,
+          "fallbacks": 0
+        },
+        "retainedPatches": 718
+      },
+      "passed": true
+    },
+    {
+      "mode": "copy",
+      "errors": [],
+      "consoleErrors": [],
+      "start": {
+        "isolated": false,
+        "transport": {
+          "mode": "copy",
+          "worldBytes": 5939480,
+          "sharedSnapshotBytes": 0,
+          "metadataBytes": 0,
+          "metadataSnapshotBytes": 0,
+          "preparationMs": 0,
+          "metadataPreparationMs": 0,
+          "decodeMs": 0,
+          "dispatches": 3,
+          "sharedDispatches": 0,
+          "copiedDispatches": 3,
+          "avoidedCopyBytes": 0,
+          "fallbacks": 0
+        },
+        "hash": "595aee80687ce1d3acf102bfd9e8bb925f9b5ee4a3bca2bdc3fca5f58b2b463d",
+        "radius": 4000000,
+        "activePatches": 2403,
+        "backend": "WebGPU"
+      },
+      "flight": {
+        "state": "flying",
+        "health": 100,
+        "speed": 212.53913628365936,
+        "agl": 294.5288993070294,
+        "position": [
+          -503040.44865760586,
+          356856.0756296233,
+          3953838.3499195077
+        ],
+        "activePatches": 718,
+        "transport": {
+          "mode": "copy",
+          "worldBytes": 5939480,
+          "sharedSnapshotBytes": 0,
+          "metadataBytes": 0,
+          "metadataSnapshotBytes": 0,
+          "preparationMs": 0,
+          "metadataPreparationMs": 0,
+          "decodeMs": 0,
+          "dispatches": 4,
+          "sharedDispatches": 0,
+          "copiedDispatches": 4,
+          "avoidedCopyBytes": 0,
+          "fallbacks": 0
+        }
+      },
+      "arrival": {
+        "ready": true,
+        "records": 57,
+        "transport": {
+          "mode": "copy",
+          "worldBytes": 5939480,
+          "sharedSnapshotBytes": 0,
+          "metadataBytes": 0,
+          "metadataSnapshotBytes": 0,
+          "preparationMs": 0,
+          "metadataPreparationMs": 0,
+          "decodeMs": 0,
+          "dispatches": 4,
+          "sharedDispatches": 0,
+          "copiedDispatches": 4,
+          "avoidedCopyBytes": 0,
+          "fallbacks": 0
+        },
+        "retainedPatches": 718
+      },
+      "passed": true
+    }
+  ]
+}

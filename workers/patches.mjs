@@ -1,3 +1,4 @@
+import {receiveWorkerWorld} from '../io/worker-world.mjs';
 import {buildPatch} from '../render/terrain-data.mjs';
 import {createSampleCache} from '../render/stream-plan.mjs';
 import {sampleTerrain} from '../core/terrain.mjs';
@@ -7,7 +8,7 @@ import {initRegional} from '../io/regional-runtime.mjs';
 let world,sample,bake,region,controller;const production={samplingMs:0,buildMs:0,patches:0,maxBuildMs:0};
 self.onmessage=async({data})=>{
  if(data.type==='cancel-build'){controller?.abort();return;}
- if(data.type==='init'){world=data.world;region=initRegional(world,data.regionalOptions);sample=createSampleCache((d,options)=>{const t=performance.now(),s=sampleTerrain(world,d,options);production.samplingMs+=performance.now()-t;return s;},80000);bake=new TerrainBakeCache(world,{enabled:data.bake!==false,staticPacks:!region,profile:region?.catalog.manifest.id??''});bake.database();if(data.warm){const [face,u,v]=directionFace(world.frame.center),level=12,n=2**level,x=Math.floor((u+1)*n/2),y=Math.floor((v+1)*n/2),size=2/n;buildPatch(world,{face,level,x,y,u:x*size-1,v:y*size-1,size,resolution:8,key:'warm'},'natural',sample);}return;}
+ if(data.type==='init'){world=receiveWorkerWorld(data);region=initRegional(world,data.regionalOptions);sample=createSampleCache((d,options)=>{const t=performance.now(),s=sampleTerrain(world,d,options);production.samplingMs+=performance.now()-t;return s;},80000);bake=new TerrainBakeCache(world,{enabled:data.bake!==false,staticPacks:!region,profile:region?.catalog.manifest.id??''});bake.database();if(data.warm){const [face,u,v]=directionFace(world.frame.center),level=12,n=2**level,x=Math.floor((u+1)*n/2),y=Math.floor((v+1)*n/2),size=2/n;buildPatch(world,{face,level,x,y,u:x*size-1,v:y*size-1,size,resolution:8,key:'warm'},'natural',sample);}return;}
  const job=new AbortController();controller=job;
  try{
   if(region)await region.ensure(region.keysForPatches(data.patches),{signal:job.signal,limit:12});

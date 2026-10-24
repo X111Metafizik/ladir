@@ -11,6 +11,7 @@ await build({entryPoints:['workers/regions.mjs'],bundle:true,format:'esm',target
 const html=(await readFile('index.html','utf8')).replace(/<script type="importmap">[\s\S]*?<\/script>/,'');
 await writeFile('dist/index.html',html);await cp('studio/style.css','dist/studio/style.css');await cp('node_modules/three/LICENSE','dist/THREE-LICENSE.txt');
 await cp('assets','dist/assets',{recursive:true});
+await cp('docs','dist/docs',{recursive:true});
 await cp('studio/flight.css','dist/studio/flight.css');
 await cp('fixtures','dist/fixtures',{recursive:true});
 console.log('Bağımsız dağıtım dist/ dizinine oluşturuldu.');

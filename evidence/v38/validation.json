@@ -1,0 +1,43 @@
+{
+  "baselineCommit": "fbe8cbf7c30cbc7c7a68a13b6d5b17cef0d6b9f7",
+  "version": "1.23.0",
+  "fullSuite": {
+    "passed": 194,
+    "failed": 0
+  },
+  "finalTargetedSuite": {
+    "passed": 10,
+    "failed": 0
+  },
+  "productionBuild": "passed",
+  "browserModes": [
+    {
+      "mode": "shared",
+      "passed": true,
+      "pageErrors": 0,
+      "consoleErrors": 0,
+      "warpArrivalReady": true
+    },
+    {
+      "mode": "copy",
+      "passed": true,
+      "pageErrors": 0,
+      "consoleErrors": 0,
+      "warpArrivalReady": true
+    }
+  ],
+  "worldHash": "595aee80687ce1d3acf102bfd9e8bb925f9b5ee4a3bca2bdc3fca5f58b2b463d",
+  "radiusMeters": 4000000,
+  "protectedSourceHashes": {
+    "core/build-id.mjs": "6922cd64a45838ddf953aa159e69112e2ec576678e0e46251e1d15a6a71c7af4",
+    "io/terrain-bake-build.mjs": "7287f9f8878dbb7ac54307c0b430a0fd8314d7730c3180f27a1be072169ac510",
+    "io/regional-catalog.mjs": "f3ce4f92b430672ed86cde30214c6bd74905a75da8a027363c46e763fe17c8be",
+    "render/terrain-data.mjs": "1edd657f0be96b85928351436b2fbce1d0957a6d09292825676a16a41656a2c0",
+    "render/water-clip.mjs": "eb5b87297795c24ec22a1ea8c3715ef5fe363e29f613cd27d9b38cfad23d5ae7",
+    "render/terrain-budget.mjs": "82f2ab7df8ec863dfb76153de3449f7e92c1f0cb1d070ec577623e2b5f88788a",
+    "io/regional-field.mjs": "1d08c4ae17d84eff770546f2e81d00d74fa95c4aa2f3b1e3db7435b2f35601e6",
+    "io/regional-format.mjs": "9e20fdcd5809027fefee5fc64e83dadb4fd3f8eb5b686c80c6fdd7a0bbac0fcf",
+    "fixtures/lumen-v35.planet": "b070b3e26a568f7d2cdbaaddc0e4c34608d85d7bf2021ad4d28eda8cd0f33b0c"
+  },
+  "performanceScope": "Worker initialization transport only; not FPS, total process memory or full flight loading."
+}

@@ -1,3 +1,4 @@
+import {postWorkerWorld} from './worker-world.mjs';
 import {REGIONAL_CATALOG} from './regional-catalog.mjs';
 import {RegionField} from './regional-field.mjs';
 import {RegionLoader,REGION_IO_BUDGET} from './regional-loader.mjs';
@@ -18,7 +19,7 @@ export class RegionalRuntime{
  constructor(world,catalog,{mode,main,disk}){
   Object.assign(this,{world,catalog,mode,main,disk});this.field=new RegionField(world,catalog.manifest,{maxBytes:REGION_IO_BUDGET.ramBytes});this.stats={installMs:0,maxInstallMs:0,prefetchCancelled:0};this.epoch=0;this.pending=new Map();this.byKey=new Map(catalog.manifest.tiles.map(t=>[t.key,t]));
   if(mode==='baked'){
-   if(main){this.worker=new Worker(new URL('../workers/regions.mjs',import.meta.url),{type:'module'});this.worker.postMessage({type:'init',world,disk});this.worker.onmessage=({data})=>{
+   if(main){this.worker=new Worker(new URL('../workers/regions.mjs',import.meta.url),{type:'module'});postWorkerWorld(this.worker,{type:'init',world,disk});this.worker.onmessage=({data})=>{
     if(data.type==='tile'){
      if(data.epoch===this.epoch){const s=performance.now();this.field.install(data.tile);const ms=performance.now()-s;this.stats.installMs+=ms;this.stats.maxInstallMs=Math.max(this.stats.maxInstallMs,ms);}
      this.worker.postMessage({type:'consumed',epoch:data.epoch,key:data.tile.x+'/'+data.tile.y});

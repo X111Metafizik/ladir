@@ -20,6 +20,7 @@ Thumbs.db
 # Historical benchmark copies stay on the development machine
 /evidence/*
 !/evidence/v37/
+!/evidence/v38/
 /evidence/v37/*.zip
 /evidence/v37/*.cpuprofile
 /evidence/v37/**/profiles/

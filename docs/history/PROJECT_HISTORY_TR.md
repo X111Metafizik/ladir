@@ -23,10 +23,10 @@ Sunucu varsayılan olarak `http://127.0.0.1:4399/` adresinde açılır. Derlenmi
 
 Hazır bake ve bölge dosyaları `assets/` içindedir; ilk kurulumda yeniden bake gerekmez. Terrain kaynakları değişirse aşağıda açıklanan bölgesel bake, taban bake ve build sırası izlenir. Kaynak baytları cache imzasına dahil olduğundan Git satır sonlarını otomatik dönüştürmez.
 
-- [Tam Markdown raporu](output/reports/ATLAS_V37_Rapor.md)
-- [PDF raporu](output/pdf/ATLAS_V37_Sonuc.pdf)
-- [Ölçüm sonuçları](evidence/v37/results.json)
-- [Kaydedilmiş kamera rotası](evidence/v37/camera-route.json)
+- [Tam Markdown raporu](../../output/reports/ATLAS_V37_Rapor.md)
+- [PDF raporu](../../output/pdf/ATLAS_V37_Sonuc.pdf)
+- [Ölçüm sonuçları](../../evidence/v37/results.json)
+- [Kaydedilmiş kamera rotası](../../evidence/v37/camera-route.json)
 
 `main` tamamlanmış ve doğrulanmış değişiklikleri tutar. Sonraki geliştirmeler ayrı dalda yapılır; ilgili testler ve üretim derlemesi geçtikten sonra birleştirilir. Her değişiklik açıklaması uygulanan işi, doğrulamayı ve kalan sınırları belirtir. Otomatik test/derleme geçişi tek başına uçuş akıcılığı veya 100 FPS doğrulaması değildir.
 
@@ -267,7 +267,7 @@ Yeni üretici **1.6.0**. İmzalı 1.4.0 ve 1.5.0 paketleri kendi coğrafyaların
 
 ## GLB arazileri · v1.8
 
-Dört kullanıcı modelinin gerçek geometrisinden 16 bit yükseklik haritaları çıkarıldı. Malzeme renkleri veya gölgeleri yükseklik olarak yorumlanmadı. Kaynaklar ve indirilebilir haritalar: [Arazi kaynakları](assets/terrain-stamps/sources.html).
+Dört kullanıcı modelinin gerçek geometrisinden 16 bit yükseklik haritaları çıkarıldı. Malzeme renkleri veya gölgeleri yükseklik olarak yorumlanmadı. Kaynaklar ve indirilebilir haritalar: [Arazi kaynakları](../../assets/terrain-stamps/sources.html).
 
 `?view=stamps` ile açıldığında yeni dağ bölgesine gidilir. Coğrafya bölümündeki **GLB arazi etkisi** sürgüsü ve **Gezegen oluştur** ile etki ayarlanır. Dört kaynak İncele → Biyom ve coğrafya keşfi listesinde seçilebilir. Dairesel C2 geçiş, küresel deterministik yerleşim, kübik yükseklik örnekleme ve LOD kenarlarında eşleşen konum/normal/renk, kare sınırlarını yumuşatır. Atlas 3,5 MiB; özgün GLB'ler çizim sahnesine yüklenmez.
 

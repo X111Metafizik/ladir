@@ -1,0 +1,18 @@
+✔ shadow batching preserves every triangle and millimetre local positions (5.184ms)
+✔ tree pools keep identities, roots and versioned uploads through terrain/origin changes (2533.6432ms)
+✔ space flight hides vegetation without accessing or generating any surface data (2.6954ms)
+✔ server isolates both document and worker responses, and preserves archived URLs (208.2349ms)
+✔ non-isolated hosting remains supported for the ordinary worker-copy path (135.23ms)
+✔ worker sharing requires isolation and supports an explicit copy comparison (0.2442ms)
+✔ shared snapshot preserves aliased views, offsets, types and original ownership (0.4983ms)
+✔ unsupported or denied sharing falls back without detaching authoritative data (0.4854ms)
+✔ unrelated postMessage errors are not swallowed or retried (0.5928ms)
+✔ real workers preserve geography, saved bytes, nested sharing and transferable output (4538.4805ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 10
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 7561.9076

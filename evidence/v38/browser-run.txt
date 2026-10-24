@@ -1,0 +1,9 @@
+shared: loading production build
+shared: entering flight
+shared: preparing warp destination worker
+shared: passed
+copy: loading production build
+copy: entering flight
+copy: preparing warp destination worker
+copy: passed
+{"passed":["shared","copy"],"worldHash":"595aee80687ce1d3acf102bfd9e8bb925f9b5ee4a3bca2bdc3fca5f58b2b463d"}
