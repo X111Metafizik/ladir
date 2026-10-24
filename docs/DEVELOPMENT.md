@@ -65,7 +65,8 @@ loads the saved reference world, enters/exits flight and checks actual generated
 WebGPU shader compilation and validation errors. It saves screenshots and JSON
 under `test-results/browser`. Set `BROWSER_CHANNEL=chrome` to use installed
 Chrome. Linux CI sets `BROWSER_SOFTWARE_GPU=1` to use SwiftShader; this is a
-functional check, never a GPU-performance measurement or a 100 FPS result.
+functional check with Vulkan/Mesa runtime dependencies and the GPU watchdog
+disabled for slow software compilation, never a GPU-performance measurement or a 100 FPS result.
 The 960 x 640 smoke viewport does not change application quality defaults.
 
 Hardware flight profiling remains separate:

@@ -81,10 +81,13 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npx playwright install --with-deps chromium
+      - name: Install Linux Vulkan loader and software drivers
+        run: sudo apt-get install -y libvulkan1 mesa-vulkan-drivers
       - run: npm run build
       - run: npm run test:smoke
         env:
           BROWSER_SOFTWARE_GPU: '1'
+          DEBUG: 'pw:browser'
       - name: Upload browser diagnostics
         if: always()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2

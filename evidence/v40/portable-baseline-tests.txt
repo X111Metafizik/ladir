@@ -1,0 +1,17 @@
+✔ bounded bake membership has no false negatives for recorded keys (20.7464ms)
+✔ signed V34 world preserves the exact original surface at 384 global coordinates (2307.1233ms)
+✔ new physical stamp bands cover all faces at unchanged metre scales (2101.5838ms)
+✔ stamp memo never changes height and avoids repeated field reconstruction (0.7514ms)
+✔ baked patches preserve every geometry, water, normal and material byte (18.7734ms)
+✔ terrain bake keys reject stale worlds, layers, resolutions, seams and boundary knots (0.5481ms)
+✔ offline bake covers all six faces with signed exact base meshes (80.4205ms)
+✔ persistent bake saves detailed tiles without flooding disk with cheap transient parents (0.2379ms)
+✔ missing browser storage falls back to procedural production without errors (3.2985ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 9
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4574.1463

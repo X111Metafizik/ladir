@@ -7,7 +7,7 @@ const {chromium}=await import(process.env.PLAYWRIGHT_MODULE||'playwright');
 const out=path.resolve(process.env.SMOKE_OUT||'test-results/browser');await mkdir(out,{recursive:true});
 const report={scope:'Production editor/flight and generated shader validation; not a performance benchmark',softwareGpu:process.env.BROWSER_SOFTWARE_GPU==='1',viewport:[960,640],errors:[],consoleErrors:[]};
 const server=spawn(process.execPath,['scripts/serve.mjs','--dist'],{env:{...process.env,PORT:'0',WORLD_SHARED_MEMORY:'1'},stdio:['ignore','pipe','pipe'],windowsHide:true});
-let browser,serverLog='';server.stderr.on('data',b=>{serverLog+=b;});
+let browser,page,serverLog='';server.stderr.on('data',b=>{serverLog+=b;});
 try{
  const base=await new Promise((resolve,reject)=>{
   const timer=setTimeout(()=>reject(Error('Production server startup timed out')),20000);let stdout='';
@@ -15,11 +15,11 @@ try{
   server.once('error',error=>{clearTimeout(timer);reject(error);});server.once('exit',code=>{clearTimeout(timer);reject(Error('Production server exited: '+code));});
  });
  const args=['--enable-unsafe-webgpu','--disable-background-timer-throttling','--disable-renderer-backgrounding'];
- if(report.softwareGpu)args.push('--enable-features=Vulkan','--use-angle=vulkan','--use-vulkan=swiftshader','--use-webgpu-adapter=swiftshader','--disable-vulkan-surface');
+ if(report.softwareGpu)args.push('--enable-features=Vulkan','--use-angle=vulkan','--use-vulkan=swiftshader','--use-webgpu-adapter=swiftshader','--disable-vulkan-surface','--disable-gpu-watchdog');
  browser=await chromium.launch({channel:process.env.BROWSER_CHANNEL||'chromium',headless:true,args});
  const context=await browser.newContext({viewport:{width:960,height:640},deviceScaleFactor:1});
  await context.addInitScript(()=>{
-  const state=window.__gpuValidation={modules:0,pending:0,errors:[],lost:[]};
+  const state=window.__gpuValidation={modules:0,pending:0,errors:[],lost:[],adapters:[]};
   if(!globalThis.GPUDevice)return;
   const original=GPUDevice.prototype.createShaderModule;
   GPUDevice.prototype.createShaderModule=function(descriptor){
@@ -29,13 +29,14 @@ try{
   };
   const request=GPUAdapter.prototype.requestDevice;
   GPUAdapter.prototype.requestDevice=async function(...args){
+   state.adapters.push({vendor:this.info.vendor,architecture:this.info.architecture,device:this.info.device,description:this.info.description});
    const device=await request.apply(this,args);
    device.addEventListener('uncapturederror',event=>state.errors.push({message:event.error.message}));
    device.lost.then(info=>{if(info.reason!=='destroyed')state.lost.push({reason:info.reason,message:info.message});});
    return device;
   };
  });
- const page=await context.newPage();page.on('pageerror',error=>report.errors.push(error.message));
+ page=await context.newPage();page.on('pageerror',error=>report.errors.push(error.message));
  page.on('console',message=>{if(message.type()==='error')report.consoleErrors.push(message.text());});
  page.setDefaultTimeout(30000);
  const started=Date.now();await page.goto(base+'/?world=fixtures/lumen-v35.planet&view=reference&region=baked');
@@ -58,7 +59,7 @@ try{
  assert.equal(report.gpu.errors.length,0,JSON.stringify(report.gpu.errors));assert.equal(report.gpu.lost.length,0,JSON.stringify(report.gpu.lost));
  assert.equal(report.errors.length,0,JSON.stringify(report.errors));assert.equal(report.consoleErrors.length,0,JSON.stringify(report.consoleErrors));
  report.passed=true;console.log(JSON.stringify({passed:true,shaderModules:report.gpu.modules,editor:report.editor,flight:report.flight}));
-}catch(error){report.passed=false;report.failure=error.stack;console.error(error.stack);process.exitCode=1;}
+}catch(error){if(page)report.gpu=await page.evaluate(()=>window.__gpuValidation).catch(()=>null);report.passed=false;report.failure=error.stack;console.error(error.stack);process.exitCode=1;}
 finally{
  if(browser)await browser.close();server.kill();
  await writeFile(path.join(out,'smoke.json'),JSON.stringify(report,null,2)+'\n');await writeFile(path.join(out,'server.txt'),serverLog);

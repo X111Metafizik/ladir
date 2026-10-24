@@ -16,7 +16,7 @@ test('bounded bake membership has no false negatives for recorded keys',()=>{
 });
 let saved;const world=async()=>saved??=await deserializePlanet(await readFile(new URL('../fixtures/lumen-v35.planet',import.meta.url)));
 test('signed V34 world preserves the exact original surface at 384 global coordinates',async()=>{
- const old=await deserializePlanet(await readFile(new URL('../fixtures/lumen-v34.planet',import.meta.url))),record=JSON.parse(await readFile(new URL('../evidence/v35/old-surface.json',import.meta.url)));
+ const old=await deserializePlanet(await readFile(new URL('../fixtures/lumen-v34.planet',import.meta.url))),record=JSON.parse(await readFile(new URL('../fixtures/regressions/v34-surface.json',import.meta.url)));
  assert.equal(old.manifest.worldDataHash,record.worldHash);
  for(const s of record.samples){assert.equal(sampleTerrain(old,s.d).elevationMeters,s.height);for(let i=0;i<3;i++)assert.equal(stampBand(old,s.d,i).value,s.bands[i]);}
 });
