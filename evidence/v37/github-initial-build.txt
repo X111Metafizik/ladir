@@ -1,0 +1,5 @@
+
+> planet-studio@1.22.1 build
+> node scripts/build.mjs
+
+Bağımsız dağıtım dist/ dizinine oluşturuldu.

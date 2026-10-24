@@ -1,0 +1,29 @@
+✔ water shoreline intersections meet the terrain bed at the local lake level (11.6582ms)
+✔ two lake levels never create an interpolated upward water ramp (0.7705ms)
+✔ clipped water stays level and all uploaded water vertices are referenced (17.5593ms)
+✔ canonical baked sampling is bit-identical without allocating typed-array stencil views (8544.5892ms)
+✔ a replacement request does not inherit an aborted pending tile load (5.5512ms)
+✔ same-view prefetch retries a missing package instead of permanently pinning failure (18.6769ms)
+✔ regional identity validates seed, generator, radius, field version and immutable manifest (6583.5757ms)
+✔ cold canonical fallback and baked samples match exactly at mixed micro bands and tile edges (303.8446ms)
+✔ regional source stays finite at exact bounds and joins original planet at outer boundary (7.2154ms)
+✔ regional runtime source is shared by original public terrain API and removable without changing world identity (3.4089ms)
+✔ regional RAM tiles and node samples obey payload byte limits (127.5006ms)
+✔ corrupt or missing tiles fail soft, aborted preloads do not install data (260.2816ms)
+✔ real regional tile loader verifies compressed and raw signatures without extra GPU data allocation (349.8456ms)
+✔ regional mesh positions, stitched normals, materials and water are identical with and without a resident tile (382.1327ms)
+✔ warp sweep hits the same surface and impact normal before and after package residency (168.2984ms)
+✔ quota transaction failure backs off and does not publish uncommitted disk byte counts (13.4769ms)
+✔ resident allocation skips empty-slot copy and keeps Three accounting / revision fallback (1.082ms)
+✔ water batching preserves positions including separate levels, normals, shore values and triangle indices (5.1649ms)
+✔ water batch replacement is atomic and invalidation immediately restores the original shore meshes (22.1295ms)
+✔ live byte telemetry counts shared arrival / cache records once and separates transition / retirement (3.5093ms)
+✔ obsolete geometry cleanup is spread across frames instead of draining hundreds in a cancellation (1.2468ms)
+ℹ tests 21
+ℹ suites 0
+ℹ pass 21
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 17353.0693

@@ -1,0 +1,32 @@
+# Dependencies and reproducible build output
+/node_modules/
+/dist/
+/tmp/
+/.publish/
+
+# Local settings, credentials and logs
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.pfx
+.npmrc
+.netrc
+*.log
+.DS_Store
+Thumbs.db
+
+# Historical benchmark copies stay on the development machine
+/evidence/*
+!/evidence/v37/
+/evidence/v37/*.zip
+/evidence/v37/*.cpuprofile
+/evidence/v37/**/profiles/
+/evidence/v37/pdf-pages/
+
+# Generated archives duplicate the checked-in sources and region assets
+/output/*
+!/output/pdf/
+!/output/reports/
+/output/regions/

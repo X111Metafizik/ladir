@@ -1,0 +1,146 @@
+[
+  {
+    "path": "README.md",
+    "beforeSha256": "dcbfab4b24988d1235d95eafc8fcb2e74f27083d36179df7be24a17e0ce4deda",
+    "sha256": "3c4b01d903fb3bbb5d0568b3b15f79bb2574796525787cc3e58e3d90f8c0672d",
+    "bytes": 56777
+  },
+  {
+    "path": "index.html",
+    "beforeSha256": "1e76006b52c6d84421dffad2121c0b4f6f7dab15ab8c4c8a48d039b36a1115ec",
+    "sha256": "8251c90b292e1664151d730d3a594734664d3166ef11f9bed7a1bf3bc5e6e4b5",
+    "bytes": 11349
+  },
+  {
+    "path": "io/baked-worlds.mjs",
+    "beforeSha256": "fb17b3653274dcae56552622a3f96d9c4c9a9a0495f4159f9cd9fd648146bd5c",
+    "sha256": "93936a70e5e4c3796b14d5a79548d63df02440e0838d0cd4981618a295f2c482",
+    "bytes": 139964
+  },
+  {
+    "path": "io/regional-field.mjs",
+    "beforeSha256": "37a40fa35e6ffa33be318ef35bfd3806aaea12c310860478ef8c097624a6e77d",
+    "sha256": "1d08c4ae17d84eff770546f2e81d00d74fa95c4aa2f3b1e3db7435b2f35601e6",
+    "bytes": 5993
+  },
+  {
+    "path": "io/regional-runtime.mjs",
+    "beforeSha256": "653f097c74e67957d8bf3f7ab53764b42273cd56ab7418740a1e48e8824703e4",
+    "sha256": "e4b5995a5675ff70265746a402bffd174a074c57293be34ac44676694ebad9ad",
+    "bytes": 4544
+  },
+  {
+    "path": "io/terrain-bake-build.mjs",
+    "beforeSha256": "3e0d138c697199c89411c1d43b645ae928400b6b0374bff0636d54bab0e3632c",
+    "sha256": "7287f9f8878dbb7ac54307c0b430a0fd8314d7730c3180f27a1be072169ac510",
+    "bytes": 103
+  },
+  {
+    "path": "package-lock.json",
+    "beforeSha256": "58123a4258275ce162a0e0c1a08394f72105e760c79c54791ca6104f658f6de4",
+    "sha256": "82060e4a1ceb04aa8c9a16942427ee64b6ede623efed5393aad5780d508e5083",
+    "bytes": 15373
+  },
+  {
+    "path": "package.json",
+    "beforeSha256": "aac335627fb18f07c3884fc6804e60211bc4c63644236eec8626592f9c8615b8",
+    "sha256": "66eb2c2d431371b5578720c83d1a472a49ea66d754d8cd91837c17fa3cdc980d",
+    "bytes": 755
+  },
+  {
+    "path": "render/terrain-data.mjs",
+    "beforeSha256": "c2b6cfc24c05cfe12e999b041fa6b2c776dba0524c6cbc0046573c9a2ce01229",
+    "sha256": "1edd657f0be96b85928351436b2fbce1d0957a6d09292825676a16a41656a2c0",
+    "bytes": 23577
+  },
+  {
+    "path": "render/view.mjs",
+    "beforeSha256": "ccd7410ee70b37b67ef990b69dbc79633ba79e50467ce169adcfe9077b77bf25",
+    "sha256": "59c3443e2e463d7398a0373fe7e288a8c1bb353ff8d0862992e0a8d7e0d4785f",
+    "bytes": 27514
+  },
+  {
+    "path": "render/water-clip.mjs",
+    "beforeSha256": null,
+    "sha256": "eb5b87297795c24ec22a1ea8c3715ef5fe363e29f613cd27d9b38cfad23d5ae7",
+    "bytes": 686
+  },
+  {
+    "path": "scripts/bake-terrain.mjs",
+    "beforeSha256": "e72f4da297280eb301bc47241fb44016b39154c5915b3ac4145dc41f288a481e",
+    "sha256": "adc4cbc4a93974cf76e3fb527ebde44a6489d84a6eaa263d96b18608071f337b",
+    "bytes": 2504
+  },
+  {
+    "path": "scripts/benchmark-sampling-v37.mjs",
+    "beforeSha256": null,
+    "sha256": "0c5338c3d189119e23009cf21f6151f82ba7c3c37a4cf887898de89764495dcb",
+    "bytes": 1746
+  },
+  {
+    "path": "scripts/benchmark-water-v37.mjs",
+    "beforeSha256": null,
+    "sha256": "1025f526cbe0d118bf2721b3a1240e7dfce9e35dfbc305accc5c39a1ecf87685",
+    "bytes": 2188
+  },
+  {
+    "path": "scripts/summarize-v37.py",
+    "beforeSha256": null,
+    "sha256": "538a76c2629b5702de6bef1d210fa272aaa2a9306716906134ebd5f4462d02a3",
+    "bytes": 5859
+  },
+  {
+    "path": "scripts/terrain-bake-signature.mjs",
+    "beforeSha256": "74e11a7cc5e7cfec23fb857b6422e17b65d93d022b6779885db30f3b14a99f79",
+    "sha256": "1d99b2d50d1a4cb9540d1eceb0d87126da4865c30e012a38dc2accf513685ede",
+    "bytes": 577
+  },
+  {
+    "path": "scripts/verify-flight-v37.mjs",
+    "beforeSha256": null,
+    "sha256": "acb22874a69bb33b09e20f5725d376a3612fe699bab99067c00d81cb69f82382",
+    "bytes": 3249
+  },
+  {
+    "path": "scripts/verify-navigation-v37.mjs",
+    "beforeSha256": null,
+    "sha256": "3428f5c81fcd7607fa378bd2aed719a26648c3bbe4cf58f80bed6e5928d01a56",
+    "bytes": 9109
+  },
+  {
+    "path": "scripts/verify-reference-v37.mjs",
+    "beforeSha256": null,
+    "sha256": "d918f57f9414abadf08a0f303bd45ce05a49e71c73ef6d144c58e67ddf554eba",
+    "bytes": 2167
+  },
+  {
+    "path": "scripts/verify-world-v37.mjs",
+    "beforeSha256": null,
+    "sha256": "7d338be5b529e019162e2dd6ba01f9f787de9ecdf1c66c2d36c5b1d60155b27a",
+    "bytes": 5023
+  },
+  {
+    "path": "studio/flight-ui.mjs",
+    "beforeSha256": "4b585d6d5a9b62982a5ee633dbbac9fac4bb7be9f968d16fd1b0d351052720fa",
+    "sha256": "4fc32cf2977fa27e80e4a8764b489cf88dfeb032d55c8baf3241ff0084555f6c",
+    "bytes": 17853
+  },
+  {
+    "path": "studio/main.mjs",
+    "beforeSha256": "9e1ab52043cb32cf25b06a706df408489fecf84ffd37034e652510ed7287356e",
+    "sha256": "4458387452ee317ea0f6e2648bfdde8cf3ed881f90e5542c5efb84738e46e380",
+    "bytes": 23197
+  },
+  {
+    "path": "tests/acceptance-v37.test.mjs",
+    "beforeSha256": null,
+    "sha256": "3d13c8996c9abe93901293f19e0d132c84565f61a83159fb5988e961bcb128b1",
+    "bytes": 7065
+  },
+  {
+    "path": "workers/regions.mjs",
+    "beforeSha256": "80a4b24d91ed026c9308d7efc58ec1d58e6b11e985213eab1daea93173d07b01",
+    "sha256": "233b19b363778dad0f08fe6a7f89845490282d686e9d4fc4c9745b4f9da424d5",
+    "bytes": 1664
+  }
+]

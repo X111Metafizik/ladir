@@ -1,0 +1,2 @@
+# Preserve exact source and package bytes: terrain bake identities hash source contents.
+* -text

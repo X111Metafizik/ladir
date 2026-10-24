@@ -1,0 +1,159 @@
+{
+  "version": "1.22.1",
+  "radiusMeters": 4000000,
+  "diameterMeters": 8000000,
+  "testsPassed": 187,
+  "testsFailed": 0,
+  "worldIdentity": "595aee80687ce1d3acf102bfd9e8bb925f9b5ee4a3bca2bdc3fca5f58b2b463d",
+  "filesChanged": 24,
+  "bundle": {
+    "path": "output/regions/ATLAS_V37_Source_Changes.zip",
+    "bytes": 1843897,
+    "sha256": "8adb054fe343f7a6b76fa923cb7d208e5814b9c7470f78b614382e6d3df80931"
+  },
+  "files": {
+    "dist/studio/main.mjs": "10ffdfd53dfe29c9e51459625c703d8a6c98abf8f5d2aafd489a67515d9fd364",
+    "dist/workers/lod.mjs": "8818a1067e58ddaf9f54123c6f5efb94d86c15b788be07bac04eef2f69062a4f",
+    "dist/workers/patches.mjs": "9cc9856e3b00ef0fc63534040d73aff16c615513b9d11ae90cf5c56811210cc3",
+    "dist/workers/regions.mjs": "c09335cf0e4b3755b07dc13671da53b39067e105135309f2c18a9810f63b6de4",
+    "io/terrain-bake-build.mjs": "7287f9f8878dbb7ac54307c0b430a0fd8314d7730c3180f27a1be072169ac510",
+    "output/pdf/ATLAS_V37_Sonuc.pdf": "2df177521d3ba58ccc20b74f1e5348cad4124a944382509c5f3c03bf7c9a3a3d",
+    "output/reports/ATLAS_V37_Sonuc.html": "bde3241aee1d000ec6bcfb9eed73c9907be2bfd16239701318a80dd8a159fb00"
+  },
+  "pdfPages": [
+    {
+      "page": 1,
+      "images": 0,
+      "textCharacters": 1451,
+      "boundsChecked": true,
+      "visuallyReviewed": true
+    },
+    {
+      "page": 2,
+      "images": 0,
+      "textCharacters": 1810,
+      "boundsChecked": true,
+      "visuallyReviewed": true
+    },
+    {
+      "page": 3,
+      "images": 2,
+      "textCharacters": 504,
+      "boundsChecked": true,
+      "visuallyReviewed": true
+    },
+    {
+      "page": 4,
+      "images": 2,
+      "textCharacters": 469,
+      "boundsChecked": true,
+      "visuallyReviewed": true
+    },
+    {
+      "page": 5,
+      "images": 1,
+      "textCharacters": 1063,
+      "boundsChecked": true,
+      "visuallyReviewed": true
+    },
+    {
+      "page": 6,
+      "images": 0,
+      "textCharacters": 1527,
+      "boundsChecked": true,
+      "visuallyReviewed": true
+    },
+    {
+      "page": 7,
+      "images": 0,
+      "textCharacters": 1782,
+      "boundsChecked": true,
+      "visuallyReviewed": true
+    },
+    {
+      "page": 8,
+      "images": 1,
+      "textCharacters": 1125,
+      "boundsChecked": true,
+      "visuallyReviewed": true
+    }
+  ],
+  "htmlValidation": [
+    {
+      "width": 390,
+      "bodyWidth": 390,
+      "images": [
+        {
+          "ok": true,
+          "width": 358,
+          "natural": 1440
+        },
+        {
+          "ok": true,
+          "width": 358,
+          "natural": 1440
+        },
+        {
+          "ok": true,
+          "width": 358,
+          "natural": 1440
+        },
+        {
+          "ok": true,
+          "width": 358,
+          "natural": 1440
+        },
+        {
+          "ok": true,
+          "width": 358,
+          "natural": 1440
+        },
+        {
+          "ok": true,
+          "width": 358,
+          "natural": 1440
+        }
+      ],
+      "sections": 8,
+      "paragraphs": 20
+    },
+    {
+      "width": 1280,
+      "bodyWidth": 1280,
+      "images": [
+        {
+          "ok": true,
+          "width": 944,
+          "natural": 1440
+        },
+        {
+          "ok": true,
+          "width": 944,
+          "natural": 1440
+        },
+        {
+          "ok": true,
+          "width": 944,
+          "natural": 1440
+        },
+        {
+          "ok": true,
+          "width": 944,
+          "natural": 1440
+        },
+        {
+          "ok": true,
+          "width": 944,
+          "natural": 1440
+        },
+        {
+          "ok": true,
+          "width": 944,
+          "natural": 1440
+        }
+      ],
+      "sections": 8,
+      "paragraphs": 20
+    }
+  ]
+}

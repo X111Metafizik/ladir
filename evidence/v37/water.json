@@ -1,0 +1,445 @@
+{
+  "worldHash": "595aee80687ce1d3acf102bfd9e8bb925f9b5ee4a3bca2bdc3fca5f58b2b463d",
+  "terrainEqual": true,
+  "cases": [
+    {
+      "key": "4/14/7174/8944",
+      "before": {
+        "vertices": 357,
+        "triangles": 84,
+        "bytes": 11004
+      },
+      "after": {
+        "vertices": 53,
+        "triangles": 86,
+        "bytes": 2516
+      }
+    },
+    {
+      "key": "4/14/7174/8945",
+      "before": {
+        "vertices": 357,
+        "triangles": 107,
+        "bytes": 11280
+      },
+      "after": {
+        "vertices": 63,
+        "triangles": 109,
+        "bytes": 3072
+      }
+    },
+    {
+      "key": "4/14/7173/8946",
+      "before": {
+        "vertices": 357,
+        "triangles": 408,
+        "bytes": 14892
+      },
+      "after": {
+        "vertices": 215,
+        "triangles": 418,
+        "bytes": 11036
+      }
+    },
+    {
+      "key": "4/14/7173/8947",
+      "before": {
+        "vertices": 357,
+        "triangles": 510,
+        "bytes": 16116
+      },
+      "after": {
+        "vertices": 267,
+        "triangles": 521,
+        "bytes": 13728
+      }
+    },
+    {
+      "key": "4/14/7173/8948",
+      "before": {
+        "vertices": 357,
+        "triangles": 302,
+        "bytes": 13620
+      },
+      "after": {
+        "vertices": 163,
+        "triangles": 309,
+        "bytes": 8272
+      }
+    },
+    {
+      "key": "4/14/7172/8948",
+      "before": {
+        "vertices": 357,
+        "triangles": 674,
+        "bytes": 18084
+      },
+      "after": {
+        "vertices": 333,
+        "triangles": 678,
+        "bytes": 17460
+      }
+    },
+    {
+      "key": "4/14/7171/8949",
+      "before": {
+        "vertices": 357,
+        "triangles": 202,
+        "bytes": 12420
+      },
+      "after": {
+        "vertices": 116,
+        "triangles": 210,
+        "bytes": 5768
+      }
+    },
+    {
+      "key": "4/14/7170/8949",
+      "before": {
+        "vertices": 373,
+        "triangles": 164,
+        "bytes": 12412
+      },
+      "after": {
+        "vertices": 105,
+        "triangles": 164,
+        "bytes": 4908
+      }
+    },
+    {
+      "key": "4/14/7169/8949",
+      "before": {
+        "vertices": 367,
+        "triangles": 169,
+        "bytes": 12304
+      },
+      "after": {
+        "vertices": 107,
+        "triangles": 178,
+        "bytes": 5132
+      }
+    },
+    {
+      "key": "4/14/7168/8948",
+      "before": {
+        "vertices": 357,
+        "triangles": 258,
+        "bytes": 13092
+      },
+      "after": {
+        "vertices": 152,
+        "triangles": 272,
+        "bytes": 7520
+      }
+    },
+    {
+      "key": "4/14/7168/8947",
+      "before": {
+        "vertices": 357,
+        "triangles": 632,
+        "bytes": 17580
+      },
+      "after": {
+        "vertices": 317,
+        "triangles": 640,
+        "bytes": 16556
+      }
+    },
+    {
+      "key": "4/14/7167/8947",
+      "before": {
+        "vertices": 357,
+        "triangles": 448,
+        "bytes": 15372
+      },
+      "after": {
+        "vertices": 236,
+        "triangles": 458,
+        "bytes": 12104
+      }
+    },
+    {
+      "key": "4/14/7166/8947",
+      "before": {
+        "vertices": 357,
+        "triangles": 186,
+        "bytes": 12228
+      },
+      "after": {
+        "vertices": 110,
+        "triangles": 194,
+        "bytes": 5408
+      }
+    },
+    {
+      "key": "4/14/7166/8946",
+      "before": {
+        "vertices": 357,
+        "triangles": 664,
+        "bytes": 17964
+      },
+      "after": {
+        "vertices": 335,
+        "triangles": 673,
+        "bytes": 17456
+      }
+    },
+    {
+      "key": "4/14/7165/8946",
+      "before": {
+        "vertices": 357,
+        "triangles": 78,
+        "bytes": 10932
+      },
+      "after": {
+        "vertices": 49,
+        "triangles": 79,
+        "bytes": 2320
+      }
+    },
+    {
+      "key": "4/14/7165/8945",
+      "before": {
+        "vertices": 357,
+        "triangles": 251,
+        "bytes": 13008
+      },
+      "after": {
+        "vertices": 141,
+        "triangles": 260,
+        "bytes": 7068
+      }
+    },
+    {
+      "key": "4/14/7165/8944",
+      "before": {
+        "vertices": 357,
+        "triangles": 203,
+        "bytes": 12432
+      },
+      "after": {
+        "vertices": 117,
+        "triangles": 212,
+        "bytes": 5820
+      }
+    },
+    {
+      "key": "4/14/7165/8943",
+      "before": {
+        "vertices": 357,
+        "triangles": 244,
+        "bytes": 12924
+      },
+      "after": {
+        "vertices": 138,
+        "triangles": 253,
+        "bytes": 6900
+      }
+    },
+    {
+      "key": "4/14/7165/8942",
+      "before": {
+        "vertices": 357,
+        "triangles": 33,
+        "bytes": 10392
+      },
+      "after": {
+        "vertices": 18,
+        "triangles": 27,
+        "bytes": 828
+      }
+    },
+    {
+      "key": "4/14/7166/8942",
+      "before": {
+        "vertices": 357,
+        "triangles": 292,
+        "bytes": 13500
+      },
+      "after": {
+        "vertices": 159,
+        "triangles": 300,
+        "bytes": 8052
+      }
+    },
+    {
+      "key": "4/14/7167/8942",
+      "before": {
+        "vertices": 357,
+        "triangles": 418,
+        "bytes": 15012
+      },
+      "after": {
+        "vertices": 217,
+        "triangles": 426,
+        "bytes": 11188
+      }
+    },
+    {
+      "key": "4/14/7168/8942",
+      "before": {
+        "vertices": 357,
+        "triangles": 744,
+        "bytes": 18924
+      },
+      "after": {
+        "vertices": 351,
+        "triangles": 740,
+        "bytes": 18708
+      }
+    },
+    {
+      "key": "4/14/7168/8941",
+      "before": {
+        "vertices": 357,
+        "triangles": 294,
+        "bytes": 13524
+      },
+      "after": {
+        "vertices": 157,
+        "triangles": 300,
+        "bytes": 7996
+      }
+    },
+    {
+      "key": "4/14/7169/8941",
+      "before": {
+        "vertices": 357,
+        "triangles": 575,
+        "bytes": 16896
+      },
+      "after": {
+        "vertices": 308,
+        "triangles": 584,
+        "bytes": 15632
+      }
+    },
+    {
+      "key": "4/14/7169/8940",
+      "before": {
+        "vertices": 357,
+        "triangles": 84,
+        "bytes": 11004
+      },
+      "after": {
+        "vertices": 49,
+        "triangles": 77,
+        "bytes": 2296
+      }
+    },
+    {
+      "key": "4/14/7170/8940",
+      "before": {
+        "vertices": 385,
+        "triangles": 159,
+        "bytes": 12688
+      },
+      "after": {
+        "vertices": 109,
+        "triangles": 162,
+        "bytes": 4996
+      }
+    },
+    {
+      "key": "4/14/7171/8940",
+      "before": {
+        "vertices": 357,
+        "triangles": 139,
+        "bytes": 11664
+      },
+      "after": {
+        "vertices": 84,
+        "triangles": 147,
+        "bytes": 4116
+      }
+    },
+    {
+      "key": "4/14/7172/8940",
+      "before": {
+        "vertices": 357,
+        "triangles": 278,
+        "bytes": 13332
+      },
+      "after": {
+        "vertices": 154,
+        "triangles": 287,
+        "bytes": 7756
+      }
+    },
+    {
+      "key": "4/14/7173/8940",
+      "before": {
+        "vertices": 357,
+        "triangles": 84,
+        "bytes": 11004
+      },
+      "after": {
+        "vertices": 52,
+        "triangles": 85,
+        "bytes": 2476
+      }
+    },
+    {
+      "key": "4/14/7173/8941",
+      "before": {
+        "vertices": 357,
+        "triangles": 384,
+        "bytes": 14604
+      },
+      "after": {
+        "vertices": 207,
+        "triangles": 395,
+        "bytes": 10536
+      }
+    },
+    {
+      "key": "4/14/7173/8942",
+      "before": {
+        "vertices": 357,
+        "triangles": 488,
+        "bytes": 15852
+      },
+      "after": {
+        "vertices": 257,
+        "triangles": 500,
+        "bytes": 13196
+      }
+    },
+    {
+      "key": "4/14/7173/8943",
+      "before": {
+        "vertices": 357,
+        "triangles": 644,
+        "bytes": 17724
+      },
+      "after": {
+        "vertices": 329,
+        "triangles": 654,
+        "bytes": 17060
+      }
+    },
+    {
+      "key": "4/14/7173/8944",
+      "before": {
+        "vertices": 357,
+        "triangles": 732,
+        "bytes": 18780
+      },
+      "after": {
+        "vertices": 355,
+        "triangles": 734,
+        "bytes": 18748
+      }
+    }
+  ],
+  "before": {
+    "vertices": 11835,
+    "triangles": 10932,
+    "bytes": 462564
+  },
+  "after": {
+    "vertices": 5823,
+    "triangles": 11132,
+    "bytes": 296628
+  }
+}

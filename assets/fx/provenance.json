@@ -1,0 +1,9 @@
+{
+  "tool": "Built-in image_gen",
+  "transparent_background": true,
+  "prompt": "Use case: stylized-concept. Asset type: production RGBA PNG texture for a 3D spaceship engine exhaust, used on crossed additive transparent planes in a realtime browser game. Create exactly ONE isolated vertically oriented sci-fi ion thruster plume, nozzle end at the TOP CENTER and exhaust extending DOWN, centered with large genuinely transparent margins on every side. No engine or spacecraft hardware. Bright almost-white cyan plasma core, layered turquoise and ice-blue filaments, 4 subtle shock diamonds along the central axis, soft wispy taper toward a transparent tail, luminous feathered glow. No smoke clouds. The emission starts in a compact rounded base near y=15% and fades fully before y=85%; plume occupies the central 45% of image width. Detailed, refined VFX texture; no text, no watermark, no border, no checkerboard, no solid rectangle, no scene or background. Actual transparent alpha outside the plume, partial alpha on the glow.",
+  "asset": "ion-thruster-v24.png",
+  "generated": "2026-10-22",
+  "source": "exec-119f9306-9568-461f-a64a-d1997b613d73.png",
+  "alphaVerified": true
+}

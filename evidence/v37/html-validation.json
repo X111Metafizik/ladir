@@ -1,0 +1,78 @@
+[
+  {
+    "width": 390,
+    "bodyWidth": 390,
+    "images": [
+      {
+        "ok": true,
+        "width": 358,
+        "natural": 1440
+      },
+      {
+        "ok": true,
+        "width": 358,
+        "natural": 1440
+      },
+      {
+        "ok": true,
+        "width": 358,
+        "natural": 1440
+      },
+      {
+        "ok": true,
+        "width": 358,
+        "natural": 1440
+      },
+      {
+        "ok": true,
+        "width": 358,
+        "natural": 1440
+      },
+      {
+        "ok": true,
+        "width": 358,
+        "natural": 1440
+      }
+    ],
+    "sections": 8,
+    "paragraphs": 20
+  },
+  {
+    "width": 1280,
+    "bodyWidth": 1280,
+    "images": [
+      {
+        "ok": true,
+        "width": 944,
+        "natural": 1440
+      },
+      {
+        "ok": true,
+        "width": 944,
+        "natural": 1440
+      },
+      {
+        "ok": true,
+        "width": 944,
+        "natural": 1440
+      },
+      {
+        "ok": true,
+        "width": 944,
+        "natural": 1440
+      },
+      {
+        "ok": true,
+        "width": 944,
+        "natural": 1440
+      },
+      {
+        "ok": true,
+        "width": 944,
+        "natural": 1440
+      }
+    ],
+    "sections": 8,
+    "paragraphs": 20
+  }
+]

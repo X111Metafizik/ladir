@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#0b1016"><title>Atlas — Planet Studio</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Ccircle cx='20' cy='20' r='13' fill='none' stroke='%23e5ba77' stroke-width='2'/%3E%3Cellipse cx='20' cy='20' rx='19' ry='6' transform='rotate(-25 20 20)' fill='none' stroke='%23e5ba77' stroke-width='2'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="./studio/style.css">
+  <link rel="stylesheet" href="./studio/flight.css">
+  <script type="importmap">{"imports":{"three":"./node_modules/three/build/three.webgpu.js","three/webgpu":"./node_modules/three/build/three.webgpu.js","three/tsl":"./node_modules/three/build/three.tsl.js","three/addons/":"./node_modules/three/examples/jsm/"}}</script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="./" aria-label="Atlas Planet Studio"><svg viewBox="0 0 42 42" aria-hidden="true"><circle cx="21" cy="21" r="13"/><ellipse cx="21" cy="21" rx="20" ry="6" transform="rotate(-28 21 21)"/><path d="M21 3v5m0 26v5"/></svg><span>ATLAS<small>PLANET STUDIO</small></span></a>
+    <div class="mode-switch" role="group" aria-label="Çalışma modu"><button id="editor-mode" class="selected" aria-pressed="true">▦ Editör</button><button id="flight-mode" aria-pressed="false" disabled>✧ Uçuş modu</button><a href="reference.html" style="color:inherit;padding:8px">Havza incele</a></div><div class="project"><span class="status-dot"></span><span>BAĞIMSIZ KEŞİF ALANI</span><i>/</i><span id="project-seed">LUMEN-742</span></div>
+    <div class="header-actions"><button id="open-package" class="quiet">↥ <span>Paket aç</span></button><button id="export" class="outline" disabled>↓ <span>Gezegeni kaydet</span></button><button id="shot" class="icon-button" title="Yüksek çözünürlüklü görüntü kaydet" aria-label="Fotoğraf kaydet">◎</button></div>
+  </header>
+  <main>
+    <section id="viewport" aria-label="Üç boyutlu gezegen">
+      <canvas id="planet" tabindex="0" aria-label="Gezegen. Sol sürükle ile kaydır, tekerlek ile imlece yaklaş. Sağ sürükle ile eğ ve döndür. W A S D ile hareket et."></canvas>
+      <div id="markers"></div><div id="tactical-badge" hidden><span>◈ TAKTİK HARİTA</span><small>38 KM ÜZERİ · TOPOGRAFYA / BÖLGE SINIRLARI</small></div>
+      <div class="viewport-top">
+        <div class="camera-tabs" role="group" aria-label="Kamera"><button data-camera="orbit" class="active">◉ Yörünge <kbd>1</kbd></button><button data-camera="region">◈ Bölge <kbd>2</kbd></button><button data-camera="map">▦ Harita <kbd>4</kbd></button><button data-camera="surface">⌁ Yüzey <kbd>3</kbd></button></div>
+        <div class="viewport-tools"><button id="pause" title="Zamanı dondur" aria-label="Zamanı dondur">Ⅱ</button><button id="fullscreen" title="Tam ekran" aria-label="Tam ekran">⛶</button><button id="hide-ui" title="Panelleri gizle / göster" aria-label="Panelleri gizle">◧</button></div>
+      </div>
+      <div class="telemetry"><span class="tiny-label">İRTİFA</span><strong id="altitude">—</strong><span id="coordinates">—</span></div>
+      <div class="world-caption"><div class="eyebrow"><span></span> PROSEDÜREL DÜNYA <span class="caption-index">01 / TERRAN</span></div><h1 id="world-title">Lumen <em>742</em></h1><p id="world-summary">Yeni bir dünyanın kıyısında.</p></div>
+      <div class="controls-hint" id="controls-hint"><span>Sol sürükle · yerküreyi kaydır</span><span>Tekerlek · imlece yaklaş</span><span>Sağ sürükle · eğ / döndür</span></div>
+      <div class="destinations" aria-label="Keşif noktaları">
+        <div class="destinations-label">KEŞFEDİLECEK YERLER <span>↗</span></div>
+        <button data-visit="lake-lumen"><span class="destination-icon">◌</span><span><small>01 / GÖL</small>Lumen Havzası</span><b>↗</b></button>
+        <button data-visit="ford-aurora"><span class="destination-icon">≋</span><span><small>02 / NEHİR GEÇİDİ</small>Aurora Vadisi</span><b>↗</b></button>
+        <button data-visit="strait-iris"><span class="destination-icon">⋈</span><span><small>03 / DENİZ BOĞAZI</small>İris Koridoru</span><b>↗</b></button>
+      </div>
+      <div id="loading" role="status"><div class="loading-orbit"></div><strong id="progress-label">Stüdyo hazırlanıyor</strong><progress id="progress" max="1" value="0"></progress><button id="cancel">Üretimi iptal et</button></div>
+      <div id="error" hidden role="alert"><strong>Görünüm başlatılamadı</strong><p id="error-message"></p><button id="restart">Görünümü yeniden başlat</button><button id="dismiss-error" class="quiet">Kapat</button></div>
+      <div id="toast" role="status" hidden></div>
+    </section>
+    <aside class="sidebar" aria-label="Gezegen düzenleyicisi">
+      <div class="panel-heading"><span class="tiny-label">DÜNYA DÜZENLEYİCİSİ</span><span class="revision">V 1.22.1</span></div>
+      <div class="panel-tabs" role="tablist"><button role="tab" aria-selected="true" data-tab="geography">Coğrafya</button><button role="tab" aria-selected="false" data-tab="appearance">Görünüm</button><button role="tab" aria-selected="false" data-tab="inspect">İncele</button></div>
+      <div class="panel-body" data-panel="geography">
+        <div class="section-title"><span>01</span> Dünya tohumu</div>
+        <label class="field-label" for="seed">SEED</label><div class="seed-field"><input id="seed" value="LUMEN-742" spellcheck="false" maxlength="160"><button id="copy-seed" title="Seed kopyala" aria-label="Seed kopyala">⧉</button><button id="random-seed" title="Rastgele seed" aria-label="Rastgele seed">⤨</button></div>
+        <p class="field-note">Aynı tohum, aynı coğrafya.<br>Her dünya yeniden keşfedilebilir.</p>
+        <label class="field-label" for="preset">DÜNYA KARAKTERİ</label>
+        <select id="preset"><option value="terran">Terran · dengeli dünya</option><option value="continental">Pangea · geniş kıtalar</option><option value="coastal">Pelagos · kıyı ve boğazlar</option><option value="alpine">Alpina · dağ ve vadiler</option><option value="desert">Sahra · kum ve kayalık</option><option value="volcanic">Ignis · volkanik dünya</option><option value="mars">Ares · Mars esintisi</option><option value="moon">Selene · Ay esintisi</option><option value="alien">Prizma · mor ve turkuaz</option></select>
+        <div class="section-title divided"><span>02</span> Arazi karakteri</div>
+        <div id="generation-controls"></div>
+        <details class="advanced"><summary>İklim ve üretim ayarları <span>+</span></summary><div id="climate-controls"></div><div class="inline-actions"><button id="save-settings">Ayarları kaydet</button><button id="load-settings">Ayarları yükle</button></div></details>
+        <button id="generate" class="primary"><span>Gezegen oluştur</span><span>↗</span></button>
+        <p id="generation-note" class="field-note">Değişiklikler yeni bir dünya oluşturur.</p>
+      </div>
+      <div class="panel-body" data-panel="appearance" hidden>
+        <div class="section-title"><span>01</span> Işık ve atmosfer</div>
+        <div id="appearance-controls"></div>
+        <label class="field-label" for="tint-mode">BÖLGESEL RENK KATMANI</label>
+        <select id="tint-mode"><option value="0">Kapalı · doğal yüzey</option><option value="1">Mor</option><option value="2">Kızıl</option><option value="3">Turkuaz</option><option value="4">Mor / turkuaz mozaik</option></select>
+        <div class="inline-actions"><button id="sunset">Gün batımı</button><button id="daylight">Gündüz</button></div>
+        <div class="section-title divided"><span>02</span> Görüntü ayrıntısı</div><div id="render-controls"></div>
+        <p class="field-note">0–2.000 m: en yüksek yakın yüzey ayrıntısı. Uzak görünümün ayrıntısını buradan seçebilirsin.</p>
+        <button id="photo" class="primary">Fotoğraf kaydet <span>◎</span></button>
+      </div>
+      <div class="panel-body" data-panel="inspect" hidden>
+        <div class="section-title"><span>01</span> Coğrafya katmanları</div>
+        <label class="field-label" for="layer">GÖRÜNÜR KATMAN</label>
+        <select id="layer"><option value="natural">Doğal yüzey</option><option value="gray">Gri geometri</option><option value="height">Yükselti</option><option value="biome">Biyomlar</option><option value="basin">Drenaj havzaları</option><option value="flow">Akış birikimi</option><option value="water">Kara / su alanları</option><option value="protected">Korunan geçişler ve kıyılar</option></select>
+        <label class="checkbox"><input id="show-markers" type="checkbox" checked> Coğrafya işaretleri</label>
+        <div id="world-stats" class="stats-grid"></div>
+        <label class="field-label" for="explore">BİYOM VE COĞRAFYA KEŞFİ</label><select id="explore"></select><button id="explore-go" class="primary">Seçilen bölgeye git ↗</button>
+        <div class="section-title divided"><span>02</span> Seçili konum</div>
+        <div id="selection-info" class="selection-info">Bir keşif noktasına veya yüzeye tıkla.</div>
+        <div class="inline-actions"><button id="walk-selected">Yüzeye in</button><button id="route-preview">Geçişi canlandır</button></div>
+        <details class="advanced"><summary>Geliştirici tanılaması <span>+</span></summary><pre id="diagnostics"></pre></details>
+      </div>
+      <div class="panel-footer"><span class="status-dot"></span><span id="backend">BAŞLATILIYOR</span><span id="saved-status">YEREL STÜDYO</span></div>
+    </aside>
+  </main>
+  <footer class="statusbar"><span><span class="status-dot"></span> <span id="status-text">Gezegen hazırlanıyor</span></span><span id="hash-label">SEED TABANLI ÜRETİM</span><button id="help">? Kontroller</button></footer>
+  <dialog id="help-dialog"><button class="close-dialog" aria-label="Kapat">×</button><span class="tiny-label">KEŞFE BAŞLA</span><h2>Dünyanı yakından tanı.</h2><p><b>Her irtifada:</b> Sol tuşla yüzeyi tutup kaydır. Tekerlek imlecin altındaki konuma yaklaşır; çift tık o noktaya odaklanıp yakınlaştırır.</p><p><b>Bakış yönü:</b> Sağ tuşla veya Shift + sol tuşla sürükleyerek eğ ve döndür. <kbd>N</kbd> kuzey yukarı, <kbd>Home</kbd> tüm gezegen.</p><p><kbd>W A S D</kbd> veya oklar kaydırır. <kbd>Q / E</kbd> yaklaş / uzaklaş; <kbd>Shift</kbd> hızlan.</p><p><b>1 / 2 / 3:</b> Yörünge, bölge ve yüzey kameraları. <kbd>H</kbd> paneller. <kbd>Esc</kbd> kapat.</p><p>Gezegeni <b>.planet</b> dosyasına kaydedebilir ve daha sonra aynı verilerle açabilirsin.</p><p><a href="./assets/terrain-stamps/sources.html" target="_blank" rel="noopener">GLB arazi kaynakları ve yükseklik haritaları ↗</a></p><button class="primary close-dialog">Keşfe devam et ↗</button></dialog>
+  <input type="file" id="package-input" accept=".planet" hidden><input type="file" id="settings-input" accept=".json,application/json" hidden>
+  <script type="module" src="./studio/main.mjs"></script>
+</body></html>
+

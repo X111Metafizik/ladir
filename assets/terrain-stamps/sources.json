@@ -1,0 +1,206 @@
+{
+  "atlasSHA256": "72f5f9fac3a8f165be21f74d3ab36c62363ea16118b810edc1cd29d9a2bc5526",
+  "bytes": 3670016,
+  "maps": [
+    {
+      "id": "snowy_mountain_-_terrain",
+      "source": "snowy_mountain_-_terrain.glb",
+      "sourceSHA256": "046f2e001067bf8046a86c08857e2300853034a467e5e26a231a102a5d7c0b1f",
+      "sourceBytes": 15979412,
+      "sourceTriangles": 260642,
+      "sourceVertices": 156810,
+      "skippedWaterPrimitives": 0,
+      "heightChannel": "transformed mesh Y, barycentric bake in source UV",
+      "nativeImages": [
+        {
+          "index": 0,
+          "mimeType": "image/jpeg",
+          "usage": "material texture; not used as elevation",
+          "width": 4096,
+          "height": 4096,
+          "mode": "RGB"
+        }
+      ],
+      "width": 1024,
+      "height": 1024,
+      "minimum": -0.0729241372000719,
+      "maximum": 0.07030749133397407,
+      "filledBoundaryTexels": 0,
+      "attribution": {
+        "author": "artfromheath (https://sketchfab.com/artfromheath)",
+        "license": "CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)",
+        "source": "https://sketchfab.com/3d-models/snowy-mountain-terrain-9fa3c56fd32746bcb0e06cd2c4229ca0",
+        "title": "Snowy Mountain - Terrain"
+      },
+      "bakedHeightMap": "snowy_mountain_-_terrain-height16.png",
+      "runtimeSize": 512,
+      "runtimeBytes": 524288,
+      "range": "0..65535 unsigned 16-bit linear height",
+      "resampling": "Lanczos offline, cubic B-spline runtime; no albedo used"
+    },
+    {
+      "id": "snowy_mountain_v2_-_terrain",
+      "source": "snowy_mountain_v2_-_terrain.glb",
+      "sourceSHA256": "b379653a17cd097541b0c39026194e715c34b71fe27f73cb11d0cb5495d72684",
+      "sourceBytes": 56362188,
+      "sourceTriangles": 524288,
+      "sourceVertices": 273958,
+      "skippedWaterPrimitives": 0,
+      "heightChannel": "transformed mesh Y, barycentric bake in source UV",
+      "nativeImages": [
+        {
+          "index": 0,
+          "mimeType": "image/png",
+          "usage": "material texture; not used as elevation",
+          "width": 4096,
+          "height": 4096,
+          "mode": "L"
+        },
+        {
+          "index": 1,
+          "mimeType": "image/png",
+          "usage": "material texture; not used as elevation",
+          "width": 4096,
+          "height": 4096,
+          "mode": "P"
+        },
+        {
+          "index": 2,
+          "mimeType": "image/png",
+          "usage": "material texture; not used as elevation",
+          "width": 4096,
+          "height": 4096,
+          "mode": "RGB"
+        },
+        {
+          "index": 3,
+          "mimeType": "image/png",
+          "usage": "material texture; not used as elevation",
+          "width": 4096,
+          "height": 4096,
+          "mode": "LA"
+        }
+      ],
+      "width": 1024,
+      "height": 1024,
+      "minimum": -0.044534999877215896,
+      "maximum": 3.8506979942321773,
+      "filledBoundaryTexels": 0,
+      "attribution": {
+        "author": "artfromheath (https://sketchfab.com/artfromheath)",
+        "license": "CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)",
+        "source": "https://sketchfab.com/3d-models/snowy-mountain-v2-terrain-4c70cd82edd44951b7af6c144545df34",
+        "title": "Snowy Mountain V2 - Terrain"
+      },
+      "bakedHeightMap": "snowy_mountain_v2_-_terrain-height16.png",
+      "runtimeSize": 512,
+      "runtimeBytes": 524288,
+      "range": "0..65535 unsigned 16-bit linear height",
+      "resampling": "Lanczos offline, cubic B-spline runtime; no albedo used"
+    },
+    {
+      "id": "terrain",
+      "source": "terrain.glb",
+      "sourceSHA256": "502cf8e68ff57a718215bd6145f23b93ac0409eac937fb445f0c66f6f2525fba",
+      "sourceBytes": 137734384,
+      "sourceTriangles": 2000000,
+      "sourceVertices": 1023281,
+      "skippedWaterPrimitives": 1,
+      "heightChannel": "transformed mesh Y, barycentric bake in source UV",
+      "nativeImages": [
+        {
+          "index": 0,
+          "mimeType": "image/jpeg",
+          "usage": "material texture; not used as elevation",
+          "width": 4096,
+          "height": 4096,
+          "mode": "RGB"
+        },
+        {
+          "index": 1,
+          "mimeType": "image/png",
+          "usage": "material texture; not used as elevation",
+          "width": 4096,
+          "height": 4096,
+          "mode": "LA"
+        },
+        {
+          "index": 2,
+          "mimeType": "image/png",
+          "usage": "material texture; not used as elevation",
+          "width": 4096,
+          "height": 4096,
+          "mode": "RGB"
+        },
+        {
+          "index": 3,
+          "mimeType": "image/png",
+          "usage": "material texture; not used as elevation",
+          "width": 4096,
+          "height": 4096,
+          "mode": "P"
+        }
+      ],
+      "width": 1024,
+      "height": 1024,
+      "minimum": -0.017966193751256354,
+      "maximum": 0.2999999932944779,
+      "filledBoundaryTexels": 0,
+      "attribution": {
+        "author": "FNG (https://sketchfab.com/FirstNG)",
+        "license": "CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)",
+        "source": "https://sketchfab.com/3d-models/terrain-826c41844d4243599649c07caac5112f",
+        "title": "Terrain"
+      },
+      "bakedHeightMap": "terrain-height16.png",
+      "runtimeSize": 1024,
+      "runtimeBytes": 2097152,
+      "range": "0..65535 unsigned 16-bit linear height",
+      "resampling": "Lanczos offline, cubic B-spline runtime; no albedo used"
+    },
+    {
+      "id": "worldmachine_terrain",
+      "source": "worldmachine_terrain.glb",
+      "sourceSHA256": "2d926b62808b43e96ae86d5624e593b31780568fbfdedbb6830d82790c3bb684",
+      "sourceBytes": 12681428,
+      "sourceTriangles": 260642,
+      "sourceVertices": 136744,
+      "skippedWaterPrimitives": 0,
+      "heightChannel": "transformed mesh Y, barycentric bake in source UV",
+      "nativeImages": [
+        {
+          "index": 0,
+          "mimeType": "image/png",
+          "usage": "material texture; not used as elevation",
+          "width": 2048,
+          "height": 2048,
+          "mode": "RGB"
+        },
+        {
+          "index": 1,
+          "mimeType": "image/png",
+          "usage": "material texture; not used as elevation",
+          "width": 2048,
+          "height": 2048,
+          "mode": "P"
+        }
+      ],
+      "width": 1024,
+      "height": 1024,
+      "minimum": 4343.6238432463315,
+      "maximum": 4351.292144537754,
+      "filledBoundaryTexels": 0,
+      "attribution": {
+        "author": "Hannes Delbeke (https://sketchfab.com/han)",
+        "license": "CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)",
+        "source": "https://sketchfab.com/3d-models/worldmachine-terrain-550d7edf4bcb4e79acd4a1bd13c4b5ba",
+        "title": "Worldmachine Terrain"
+      },
+      "bakedHeightMap": "worldmachine_terrain-height16.png",
+      "runtimeSize": 512,
+      "runtimeBytes": 524288,
+      "range": "0..65535 unsigned 16-bit linear height",
+      "resampling": "Lanczos offline, cubic B-spline runtime; no albedo used"
+    }
+  ]
+}

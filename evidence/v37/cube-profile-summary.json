@@ -1,0 +1,112 @@
+[
+  {
+    "function": "(idle)",
+    "selfMs": 3829.4770000000003,
+    "source": ""
+  },
+  {
+    "function": "(program)",
+    "selfMs": 1182.2900000000004,
+    "source": ""
+  },
+  {
+    "function": "Kz",
+    "selfMs": 157.2740000000001,
+    "source": "../../render/terrain-grids.mjs:17"
+  },
+  {
+    "function": "w",
+    "selfMs": 108.27799999999999,
+    "source": "../../studio/flight-ui.mjs:51"
+  },
+  {
+    "function": "submit",
+    "selfMs": 105.57799999999997,
+    "source": ""
+  },
+  {
+    "function": "(garbage collector)",
+    "selfMs": 102.42400000000002,
+    "source": ""
+  },
+  {
+    "function": "d",
+    "selfMs": 100.40000000000002,
+    "source": "../../render/flight-streaks.mjs:7"
+  },
+  {
+    "function": "_update",
+    "selfMs": 78.13499999999998,
+    "source": "../../node_modules/three/build/three.webgpu.js:33882"
+  },
+  {
+    "function": "_",
+    "selfMs": 78.096,
+    "source": "../../render/terrain-grids.mjs:74"
+  },
+  {
+    "function": "writeBuffer",
+    "selfMs": 63.78699999999999,
+    "source": ""
+  },
+  {
+    "function": "Mp.worker.onmessage",
+    "selfMs": 56.690000000000005,
+    "source": "../../render/terrain-stream.mjs:22"
+  },
+  {
+    "function": "updateForRender",
+    "selfMs": 54.3,
+    "source": "../../node_modules/three/build/three.webgpu.js:58581"
+  },
+  {
+    "function": "_renderObjectDirect",
+    "selfMs": 50.981,
+    "source": "../../node_modules/three/build/three.webgpu.js:65514"
+  },
+  {
+    "function": "beginRenderPass",
+    "selfMs": 46.81800000000001,
+    "source": ""
+  },
+  {
+    "function": "_projectObject",
+    "selfMs": 42.74800000000001,
+    "source": "../../node_modules/three/build/three.webgpu.js:64903"
+  },
+  {
+    "function": "_getChildren",
+    "selfMs": 40.78300000000001,
+    "source": "../../node_modules/three/build/three.webgpu.js:2033"
+  },
+  {
+    "function": "beginRender",
+    "selfMs": 40.583999999999996,
+    "source": "../../node_modules/three/build/three.webgpu.js:87838"
+  },
+  {
+    "function": "createCommandEncoder",
+    "selfMs": 38.669999999999995,
+    "source": ""
+  },
+  {
+    "function": "update",
+    "selfMs": 38.361000000000004,
+    "source": "../../node_modules/three/build/three.webgpu.js:66245"
+  },
+  {
+    "function": "writeBuffer",
+    "selfMs": 36.169999999999995,
+    "source": ""
+  },
+  {
+    "function": "M",
+    "selfMs": 33.07899999999999,
+    "source": "../../render/water-batches.mjs:34"
+  },
+  {
+    "function": "io",
+    "selfMs": 28.802999999999997,
+    "source": "../../render/view.mjs:104"
+  }
+]

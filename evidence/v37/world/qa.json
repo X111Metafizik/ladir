@@ -1,0 +1,161 @@
+{
+  "default": {
+    "radius": 4000000,
+    "diameter": 8000000,
+    "model": "watershed-2",
+    "hash": "595aee80687ce1d3acf102bfd9e8bb925f9b5ee4a3bca2bdc3fca5f58b2b463d",
+    "reference": true,
+    "summary": "8.000 km çap · 4.000 km yarıçap · %48 su · 295 akarsu",
+    "settings": {
+      "detail": 1,
+      "volumeSteps": 32,
+      "pixelRatio": 1,
+      "shadowResolution": 2048
+    },
+    "camera": {
+      "altitude": 24043.445581965898,
+      "fov": 48,
+      "near": 0.007425000000000001,
+      "far": 15000
+    },
+    "terrain": {
+      "patches": 689,
+      "maxLevel": 12
+    },
+    "previousConfig": {
+      "radiusMeters": 6000000,
+      "terrainModel": "legacy-1.6",
+      "seed": "LUMEN-742"
+    }
+  },
+  "saved": {
+    "radius": 4000000,
+    "diameter": 8000000,
+    "model": "watershed-2",
+    "hash": "595aee80687ce1d3acf102bfd9e8bb925f9b5ee4a3bca2bdc3fca5f58b2b463d",
+    "reference": true,
+    "summary": "8.000 km çap · 4.000 km yarıçap · %48 su · 295 akarsu",
+    "settings": {
+      "detail": 1,
+      "volumeSteps": 32,
+      "pixelRatio": 1,
+      "shadowResolution": 2048
+    },
+    "camera": {
+      "altitude": 21510.483826339623,
+      "fov": 48,
+      "near": 0.007425000000000001,
+      "far": 15000
+    },
+    "terrain": {
+      "patches": 689,
+      "maxLevel": 12
+    },
+    "previousConfig": {
+      "radiusMeters": 6000000,
+      "terrainModel": "legacy-1.6",
+      "seed": "LUMEN-742"
+    }
+  },
+  "flight": {
+    "radius": 4000000,
+    "agl": 502.5569975332987,
+    "altitude": 2177.466569028329,
+    "state": "flying",
+    "tactical": false,
+    "layer": "natural"
+  },
+  "orbit": {
+    "radius": 4000000,
+    "diameter": 8000000,
+    "model": "watershed-2",
+    "hash": "595aee80687ce1d3acf102bfd9e8bb925f9b5ee4a3bca2bdc3fca5f58b2b463d",
+    "reference": true,
+    "summary": "8.000 km çap · 4.000 km yarıçap · %48 su · 295 akarsu",
+    "settings": {
+      "detail": 1,
+      "volumeSteps": 32,
+      "pixelRatio": 1,
+      "shadowResolution": 2048
+    },
+    "camera": {
+      "altitude": 7601676.112420475,
+      "fov": 48,
+      "near": 1.9000000000000001,
+      "far": 15000
+    },
+    "terrain": {
+      "patches": 290,
+      "maxLevel": 4
+    },
+    "previousConfig": {
+      "radiusMeters": 6000000,
+      "terrainModel": "legacy-1.6",
+      "seed": "LUMEN-742"
+    }
+  },
+  "previous": {
+    "radius": 12000000,
+    "diameter": 24000000,
+    "hash": "dd675188f0a485787337d3e23178139f978c30edb17a4fc3d1438fcfd1d6319c",
+    "reference": false,
+    "summary": "24.000 km çap · 12.000 km yarıçap · %48 su · 264 akarsu",
+    "settings": {
+      "detail": 1,
+      "volumeSteps": 32,
+      "pixelRatio": 1,
+      "shadowResolution": 2048
+    },
+    "camera": {
+      "altitude": 17177.548520641267,
+      "fov": 48,
+      "near": 0.0015,
+      "far": 15000
+    },
+    "terrain": {
+      "patches": 1864,
+      "maxLevel": 14
+    },
+    "previousConfig": {
+      "radiusMeters": 6000000,
+      "terrainModel": "legacy-1.6",
+      "seed": "LUMEN-742"
+    }
+  },
+  "classic": {
+    "radius": 6000000,
+    "diameter": 12000000,
+    "model": "legacy-1.6",
+    "hash": "9e6053fb9667322ae452e3f9421cb6982de31ea36496199ac7e273b39f95780c",
+    "reference": false,
+    "summary": "12.000 km çap · 6.000 km yarıçap · %48 su · 271 akarsu",
+    "settings": {
+      "detail": 1,
+      "volumeSteps": 32,
+      "pixelRatio": 1,
+      "shadowResolution": 2048
+    },
+    "camera": {
+      "altitude": 15817.218666302779,
+      "fov": 48,
+      "near": 0.003,
+      "far": 15000
+    },
+    "terrain": {
+      "patches": 1086,
+      "maxLevel": 13
+    },
+    "previousConfig": {
+      "radiusMeters": 6000000,
+      "terrainModel": "legacy-1.6",
+      "seed": "LUMEN-742"
+    }
+  },
+  "passed": true,
+  "errors": [],
+  "hashes": {
+    "dist/studio/main.mjs": "10ffdfd53dfe29c9e51459625c703d8a6c98abf8f5d2aafd489a67515d9fd364",
+    "dist/workers/generator.mjs": "d5255760d9eb74d78f4c922c51337fcd0d168bef8db462531325d02e2917fa66",
+    "dist/fixtures/lumen-v35.planet": "b070b3e26a568f7d2cdbaaddc0e4c34608d85d7bf2021ad4d28eda8cd0f33b0c"
+  }
+}

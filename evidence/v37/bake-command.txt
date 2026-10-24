@@ -1,0 +1,7 @@
+Baked face 0 64 tiles 734376 bytes
+Baked face 1 64 tiles 774344 bytes
+Baked face 2 64 tiles 805520 bytes
+Baked face 3 64 tiles 759960 bytes
+Baked face 4 64 tiles 700072 bytes
+Baked face 5 64 tiles 770952 bytes
+{"worldHash":"595aee80687ce1d3acf102bfd9e8bb925f9b5ee4a3bca2bdc3fca5f58b2b463d","version":"atlas-terrain-35.1/e0d8b9cfabac95a7a54988cd1633ba9308ac982b7d72cfeebbc9aaa213694eb4","faces":6,"tiles":384,"level":3,"wholeGlobe":true,"nearDetail":"Generated at original LOD quality and persisted on demand","bytes":4545224,"milliseconds":2666.1818,"samples":{"hits":6526,"misses":24578,"size":24578}}
