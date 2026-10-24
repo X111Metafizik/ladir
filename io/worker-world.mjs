@@ -1,3 +1,4 @@
+import {requestedTerrainKernel} from '../wasm/runtime.mjs';
 // World arrays are immutable after generation/loading. Keep a single shared
 // snapshot for worker consumers; the authoritative main-thread world stays
 // owned and serializable. Generated meshes still use transferable ArrayBuffers.
@@ -95,6 +96,7 @@ export function receiveWorkerWorld(message) {
   return world;
 }
 export function postWorkerWorld(worker, message, options) {
+  message = {...message, terrainKernel: message.terrainKernel ?? requestedTerrainKernel()};
   const source = message.world, record = recordFor(source);
   let world = worldForWorker(source, options);
   let shared = Object.values(world.buffers ?? {}).some(view => isShared(view.buffer));

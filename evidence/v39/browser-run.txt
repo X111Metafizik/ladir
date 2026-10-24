@@ -1,0 +1,17 @@
+wasm-shared: loading production build
+wasm-shared: entering flight
+wasm-shared: preparing warp destination worker
+wasm-shared: passed
+js-shared: loading production build
+js-shared: entering flight
+js-shared: preparing warp destination worker
+js-shared: passed
+wasm-copy: loading production build
+wasm-copy: entering flight
+wasm-copy: preparing warp destination worker
+wasm-copy: passed
+blocked-wasm: loading production build
+blocked-wasm: entering flight
+blocked-wasm: preparing warp destination worker
+blocked-wasm: passed
+{"passed":["wasm-shared","js-shared","wasm-copy","blocked-wasm"],"worldHash":"595aee80687ce1d3acf102bfd9e8bb925f9b5ee4a3bca2bdc3fca5f58b2b463d"}

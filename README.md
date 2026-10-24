@@ -37,3 +37,5 @@ Use `npm run dev` for development and `npm test` to run the tests.
 - [Third-party credits and licenses](THIRD_PARTY_NOTICES.md)
 
 Historical reports and development notes are in Turkish and retain the former ATLAS name.
+
+Rust/WASM terrain kernel, fallback and measured limits: [WASM implementation](docs/WASM.md).

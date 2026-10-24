@@ -1,8 +1,10 @@
+import {initTerrainKernel} from '../wasm/runtime.mjs';
 import {generatePlanet} from '../core/world.mjs';
 import {readCachedWorld,saveCachedWorld} from '../io/world-cache.mjs';
 self.onmessage=async({data})=>{
   const {generationId,config,importedLayout}=data;
   try{
+    await initTerrainKernel({mode:data.terrainKernel});
     const cached=data.reuseCache&&!importedLayout?await readCachedWorld(config):null;
     const world=cached??await generatePlanet(config,{importedLayout,onProgress:p=>self.postMessage({generationId,type:'progress',...p})});
     const saved=cached?true:!importedLayout&&await saveCachedWorld(world);

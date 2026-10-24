@@ -31,3 +31,6 @@ Thumbs.db
 !/output/pdf/
 !/output/reports/
 /output/regions/
+
+/wasm/terrain-kernel/target/
+!/evidence/v39/

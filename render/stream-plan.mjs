@@ -26,9 +26,4 @@ export function transitionGroups(previous,wanted){
  }
  const merged=new Map();list.forEach((g,i)=>{const key=root(i);if(!merged.has(key))merged.set(key,{remove:[],add:[]});const target=merged.get(key);target.remove.push(...g.remove);target.add.push(...g.add);});return [...merged.values()];
 }
-export function createSampleCache(sample,limit=120000){
- const cache=new Map();let hits=0,misses=0;
- const get=(d,options)=>{const key=Math.round(d[0]*4398046511104)+'/'+Math.round(d[1]*4398046511104)+'/'+Math.round(d[2]*4398046511104)+'/'+(options?.micro!==false)+'/'+(options?.microWeight??1);let s=cache.get(key);if(s){hits++;return s;}misses++;s=sample(d,options);cache.set(key,s);if(cache.size>limit){const keys=cache.keys();for(let i=0;i<2048;i++)cache.delete(keys.next().value);}return s;};
- get.stats=()=>({hits,misses,size:cache.size});return get;
-}
-
+export {createNumericSampleCache as createSampleCache} from './sample-cache.mjs';

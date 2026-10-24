@@ -1,3 +1,5 @@
+import {verifyWasmArtifact} from './verify-wasm-artifact.mjs';
+await verifyWasmArtifact();
 import {build} from 'esbuild';
 import {updateTerrainBakeSignature} from './terrain-bake-signature.mjs';
 await updateTerrainBakeSignature();

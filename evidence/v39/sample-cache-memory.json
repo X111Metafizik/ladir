@@ -1,0 +1,45 @@
+{
+  "scope": "Isolated Node cache workload, synthetic immutable samples, 500000 queries, 80000-slot limit. Includes retained JS heap and ArrayBuffers separately; not browser/whole-app RAM or GC.",
+  "cases": {
+    "legacy": {
+      "mode": "legacy",
+      "queries": 500000,
+      "ms": 600.8498,
+      "checksum": 749992500.0000001,
+      "cache": {
+        "hits": 0,
+        "misses": 500000,
+        "size": 78112
+      },
+      "retainedHeapBytes": 44340120,
+      "retainedArrayBufferBytes": 0,
+      "gcDuringWork": {
+        "count": 15,
+        "totalMs": 75.83229998499155,
+        "maxMs": 27.29280000180006
+      }
+    },
+    "numeric": {
+      "mode": "numeric",
+      "queries": 500000,
+      "ms": 108.3785,
+      "checksum": 749992500.0000001,
+      "cache": {
+        "hits": 105096,
+        "misses": 394904,
+        "size": 71158,
+        "capacity": 80000,
+        "keyBytes": 3300000,
+        "referenceSlots": 80000,
+        "evictions": 323746
+      },
+      "retainedHeapBytes": 13862296,
+      "retainedArrayBufferBytes": 3300000,
+      "gcDuringWork": {
+        "count": 10,
+        "totalMs": 18.63510002195835,
+        "maxMs": 4.6173000037670135
+      }
+    }
+  }
+}

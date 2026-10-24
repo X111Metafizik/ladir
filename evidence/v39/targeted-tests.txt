@@ -1,0 +1,34 @@
+✔ patch production is bounded and completes every patch exactly once (2.2994ms)
+✔ retargeting drops all queued obsolete work and does not publish stale chunks (1.1992ms)
+✔ empty plans complete and worker errors reject instead of leaving loading pending (0.6512ms)
+✔ world cache keys separate every generation setting and ignore object key order (0.2458ms)
+✔ server isolates both document and worker responses, and preserves archived URLs (220.5506ms)
+✔ non-isolated hosting remains supported for the ordinary worker-copy path (127.3868ms)
+✔ frame uploads remain below 128 KiB and leave excess ready records queued (0.5484ms)
+✔ a frame admits two dense surface tiles while the third waits below the 144 KiB ceiling (0.4207ms)
+✔ streamed children replace a parent only as a complete footprint (1.5385ms)
+✔ coarsening, refinement and stitch changes partition replacements without duplicates (0.5399ms)
+✔ an unfinished neighboring grid blocks a refinement from exposing an edge (0.56ms)
+✔ sample cache reuses exact terrain samples and remains bounded (5.0464ms)
+✔ coarse filtered samples cannot overwrite full close-range terrain samples (0.5759ms)
+✔ a replacement remains atomic until every new geometry has finished GPU preparation (0.856ms)
+✔ tree ground sampler uses the visible triangle rather than hidden procedural relief (1.015ms)
+✔ numeric sample keys obey their byte cap and retain exact filtering semantics (5.3994ms)
+✔ linear camera coordinates distribute across the bounded sample cache (20.1833ms)
+✔ checked-in Rust binary matches its source and has bounded independent memory (7.2146ms)
+✔ Rust f64 noise matches JS at negative, high, boundary and seeded coordinates exactly (20.8416ms)
+✔ fixed Rust cache survives eviction and repeated flight-sized workloads without memory growth (33.0894ms)
+✔ missing, corrupt and timed-out kernels preserve the JavaScript path and cancel reading (18.7686ms)
+✔ concurrent initialization activates one kernel and explicit JS choice wins an in-flight load (4.0712ms)
+✔ complete terrain, hydrology, stitched meshes, LOD selection and saved world stay identical (3253.2582ms)
+✔ real worker transfer preserves canonical geometry and keeps WASM memory owned by the worker (1354.8961ms)
+✔ newly generated worlds have identical signed bytes on JS and WASM (180.2687ms)
+✔ production patch worker cancels a build queued during kernel load, then serves the new request (710.8073ms)
+ℹ tests 26
+ℹ suites 0
+ℹ pass 26
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 6121.1168

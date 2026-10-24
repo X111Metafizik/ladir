@@ -1,5 +1,8 @@
 # Architecture and worker transport
 
+For the v1.24.0 Rust/WASM kernel and bounded numeric sample keys, see
+[WASM implementation and measurements](WASM.md).
+
 LADIR uses Three.js/WebGPU for rendering and Web Workers for terrain planning,
 mesh generation, vegetation and regional package loading. Physics uses meters;
 rendering uses a camera-relative origin. The reference planet remains 8,000 km

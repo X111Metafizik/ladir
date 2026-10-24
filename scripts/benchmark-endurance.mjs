@@ -6,7 +6,7 @@ const {chromium}=await import(process.env.PLAYWRIGHT_MODULE||'playwright');
 const url=process.env.BENCH_URL||'http://127.0.0.1:4399/dist/?world=fixtures/lumen-v33.planet&view=stamps';
 const out=path.resolve(process.env.BENCH_OUT||'evidence/v34/endurance');await mkdir(out,{recursive:true});
 const pinnedRoute=process.env.BENCH_ROUTE?JSON.parse(await readFile(process.env.BENCH_ROUTE,'utf8')):null;
-const repeats=Number(process.env.BENCH_REPEATS||3),report={date:new Date().toISOString(),url,viewport:[1440,1000],runs:[],errors:[],method:'Three fresh browser contexts; replay in each for warm cache. Recorded geographic repositioning between scenarios is included in timing. Warp cooldown reset between scenarios only. Default quality. GPU timestamps summed by actual animation frame id, never averaged across frames.'};
+const repeats=Number(process.env.BENCH_REPEATS||3),report={date:new Date().toISOString(),url,viewport:[1440,1000],runs:[],errors:[],method:`${repeats} fresh browser context(s); replay in each for warm cache. Recorded geographic repositioning between scenarios is included in timing. Warp cooldown reset between scenarios only. Default quality. GPU timestamps summed by actual animation frame id, never averaged across frames.`};
 const browser=await chromium.launch({channel:'chrome',headless:true,args:['--enable-unsafe-webgpu','--disable-background-timer-throttling','--disable-renderer-backgrounding','--disable-backgrounding-occluded-windows','--disable-features=CalculateNativeWinOcclusion']});
 report.hardware=(await (await browser.newBrowserCDPSession()).send('SystemInfo.getInfo')).gpu.devices;
 async function save(){await writeFile(path.join(out,'benchmark.json'),JSON.stringify(report,null,2));}
@@ -48,7 +48,7 @@ try{for(let repeat=1;repeat<=repeats;repeat++){
   });
  });
  if(pinnedRoute)await page.evaluate(route=>window.__route=route,pinnedRoute);
- const environment=await page.evaluate(()=>({settings:planetStudio.settings,world:planetStudio.world.manifest,radius:planetStudio.world.radiusMeters,route:__route,diagnostics:planetStudio.view.diagnostics,userAgent:navigator.userAgent}));
+ const environment=await page.evaluate(()=>({kernel:planetStudio.view.terrainKernel,settings:planetStudio.settings,world:planetStudio.world.manifest,radius:planetStudio.world.radiusMeters,route:__route,diagnostics:planetStudio.view.diagnostics,userAgent:navigator.userAgent}));
  for(const cache of ['cold','warm']){
   console.log(`START ${repeat} ${cache}`);
   const result=await page.evaluate(async()=>{

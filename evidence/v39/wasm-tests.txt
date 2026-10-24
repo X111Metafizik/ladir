@@ -1,0 +1,15 @@
+✔ checked-in Rust binary matches its source and has bounded independent memory (10.4892ms)
+✔ Rust f64 noise matches JS at negative, high, boundary and seeded coordinates exactly (23.6507ms)
+✔ fixed Rust cache survives eviction and repeated flight-sized workloads without memory growth (32.2853ms)
+✔ missing, corrupt and timed-out kernels preserve the JavaScript path and cancel reading (16.1044ms)
+✔ concurrent initialization activates one kernel and explicit JS choice wins an in-flight load (4.0504ms)
+✔ complete terrain, hydrology, stitched meshes, LOD selection and saved world stay identical (3215.5248ms)
+✔ real worker transfer preserves canonical geometry and keeps WASM memory owned by the worker (1381.2816ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4724.9005

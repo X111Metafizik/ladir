@@ -1,0 +1,146 @@
+{
+  "validatedAt": "2026-10-24T12:00:13.251661+00:00",
+  "version": "1.24.0",
+  "baseCommit": "5910d6d50c3248b6bb2215d34a29553666331d2d",
+  "radiusMeters": 4000000,
+  "diameterKm": 8000,
+  "worldHash": "595aee80687ce1d3acf102bfd9e8bb925f9b5ee4a3bca2bdc3fca5f58b2b463d",
+  "kernel": {
+    "abi": 1,
+    "rust": "1.90.0",
+    "binarySha256": "93686a5db80fef575604e7664c325cc727ed93e0de615777263f30ed44764e4d",
+    "sourceSha256": "68f8392d238efb1f156b865d09f69444cf11b0395f3b27e535c7688c7cd59a0c",
+    "bytes": 1908,
+    "memoryBytes": 589824,
+    "cacheBytes": 458752,
+    "cacheEntries": 8192
+  },
+  "tests": {
+    "fullSuite": {
+      "passed": 202,
+      "failed": 0,
+      "log": "tests.txt",
+      "scope": "Full suite before final targeted additions and numeric-key hash correction"
+    },
+    "finalTargeted": {
+      "passed": 26,
+      "failed": 0,
+      "log": "targeted-tests.txt",
+      "scope": "Final WASM, streaming and server tests; overlaps full suite, do not add as unique tests"
+    },
+    "build": "passed",
+    "browserCases": [
+      {
+        "mode": "wasm-shared",
+        "passed": true,
+        "errors": 0
+      },
+      {
+        "mode": "js-shared",
+        "passed": true,
+        "errors": 0
+      },
+      {
+        "mode": "wasm-copy",
+        "passed": true,
+        "errors": 0
+      },
+      {
+        "mode": "blocked-wasm",
+        "passed": true,
+        "errors": 0
+      }
+    ],
+    "flightReplays": 4,
+    "flightErrors": 0,
+    "visualInspection": [
+      "browser/wasm-shared-flight.png",
+      "browser/js-shared-flight.png"
+    ]
+  },
+  "protectedCanonicalFilesSha256": {
+    "core/build-id.mjs": "6922cd64a45838ddf953aa159e69112e2ec576678e0e46251e1d15a6a71c7af4",
+    "io/terrain-bake-build.mjs": "7287f9f8878dbb7ac54307c0b430a0fd8314d7730c3180f27a1be072169ac510",
+    "render/terrain-data.mjs": "1edd657f0be96b85928351436b2fbce1d0957a6d09292825676a16a41656a2c0",
+    "render/water-clip.mjs": "eb5b87297795c24ec22a1ea8c3715ef5fe363e29f613cd27d9b38cfad23d5ae7",
+    "render/terrain-budget.mjs": "82f2ab7df8ec863dfb76153de3449f7e92c1f0cb1d070ec577623e2b5f88788a",
+    "io/regional-field.mjs": "1d08c4ae17d84eff770546f2e81d00d74fa95c4aa2f3b1e3db7435b2f35601e6",
+    "io/regional-catalog.mjs": "f3ce4f92b430672ed86cde30214c6bd74905a75da8a027363c46e763fe17c8be",
+    "fixtures/lumen-v35.planet": "b070b3e26a568f7d2cdbaaddc0e4c34608d85d7bf2021ad4d28eda8cd0f33b0c"
+  },
+  "qualityReduction": false,
+  "comparisonScope": "CPU: legacy cache vs numeric JS vs numeric WASM. Browser: numeric JS vs numeric WASM. Same world, geometry, route and settings.",
+  "limitations": [
+    "No established browser FPS gain or 100 FPS guarantee",
+    "Long frames persist during warp/geographic transitions",
+    "Cache-only synthetic memory test is not whole-application RAM",
+    "No zero-GC or hardware-only memory-limit claim",
+    "Full terrain/hydrology remains partly JavaScript"
+  ],
+  "largestScenarioFrames": [
+    {
+      "mode": "wasm",
+      "cache": "cold",
+      "phase": "short-warp",
+      "maxCpuMs": 78.99500000476837,
+      "maxFrameMs": 216.74000000000524,
+      "over50": 3
+    },
+    {
+      "mode": "js",
+      "cache": "cold",
+      "phase": "short-warp",
+      "maxCpuMs": 79.85000000149012,
+      "maxFrameMs": 199.8249999999971,
+      "over50": 3
+    },
+    {
+      "mode": "js",
+      "cache": "cold",
+      "phase": "forest-low",
+      "maxCpuMs": 83.5949999988079,
+      "maxFrameMs": 149.9399999999987,
+      "over50": 3
+    },
+    {
+      "mode": "wasm",
+      "cache": "cold",
+      "phase": "forest-low",
+      "maxCpuMs": 86.45499999821186,
+      "maxFrameMs": 149.9300000000003,
+      "over50": 4
+    },
+    {
+      "mode": "js",
+      "cache": "warm",
+      "phase": "forest-low",
+      "maxCpuMs": 94.2199999988079,
+      "maxFrameMs": 133.20500000000175,
+      "over50": 5
+    },
+    {
+      "mode": "wasm",
+      "cache": "warm",
+      "phase": "forest-low",
+      "maxCpuMs": 57.435000002384186,
+      "maxFrameMs": 116.68499999999767,
+      "over50": 4
+    },
+    {
+      "mode": "js",
+      "cache": "warm",
+      "phase": "short-warp",
+      "maxCpuMs": 41.32500000298023,
+      "maxFrameMs": 116.5,
+      "over50": 1
+    },
+    {
+      "mode": "wasm",
+      "cache": "warm",
+      "phase": "short-warp",
+      "maxCpuMs": 55.73499999940395,
+      "maxFrameMs": 99.84999999999127,
+      "over50": 1
+    }
+  ]
+}

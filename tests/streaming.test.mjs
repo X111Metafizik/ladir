@@ -42,3 +42,17 @@ test('a replacement remains atomic until every new geometry has finished GPU pre
 test('tree ground sampler uses the visible triangle rather than hidden procedural relief',()=>{const positions=new Float32Array((PATCH+1)**2*3),level=18,size=2/2**level,x=131072,y=131072,u=0,v=0,center=new Vector3(1000,0,0);for(let j=0;j<=PATCH;j++)for(let i=0;i<=PATCH;i++){const d=faceDirection(0,u+i/PATCH*size,v+j/PATCH*size),height=100+i*2+j*3;for(let k=0;k<3;k++)positions[(j*(PATCH+1)+i)*3+k]=d[k]*(1000+height/12000)-center.getComponent(k);}
  const mesh={position:center,geometry:{attributes:{position:{array:positions}}},userData:{patch:{u,v,size}}},context={stats:{maxLevel:level},lookup:new Map([[`0/${level}/${x}/${y}`,mesh]]),world:{radiusMeters:12000000}},d=faceDirection(0,7.3/PATCH*size,6.2/PATCH*size),height=StreamingTerrain.prototype.surfaceAt.call(context,d);assert.ok(Math.abs(height-(100+7.3*2+6.2*3))<.002,`${height}`);
 });
+
+// Hash collisions and bounded eviction must never substitute another sample.
+test('numeric sample keys obey their byte cap and retain exact filtering semantics',()=>{
+ const sample=createSampleCache((d,o)=>({height:d[0]+(o?.microWeight??1),micro:o?.micro!==false}),1000000,{keyByteBudget:4096});
+ for(let i=0;i<10000;i++){const d=[(i%231)/1000,.7,-.23],o={micro:i%2===0,microWeight:(i%17)/16},value=sample(d,o);assert.equal(value.height,d[0]+o.microWeight);assert.equal(value.micro,o.micro);}
+ const stats=sample.stats();assert.ok(stats.keyBytes<=4096);assert.ok(stats.size<=stats.capacity);assert.ok(stats.evictions>0);
+ const d=[.22,.4,.7],a=sample(d,{microWeight:.25}),b=sample(d,{microWeight:.75});assert.equal(a.height,.47);assert.equal(b.height,.97);assert.notEqual(a,b);
+});
+
+test('linear camera coordinates distribute across the bounded sample cache',()=>{
+ const value={elevationMeters:1},sample=createSampleCache(()=>value,80000);
+ for(let i=0;i<100000;i++)sample([i/100000,.2,.8]);
+ assert.ok(sample.stats().size>68000,JSON.stringify(sample.stats()));assert.ok(sample.stats().keyBytes<=4*1024*1024);
+});

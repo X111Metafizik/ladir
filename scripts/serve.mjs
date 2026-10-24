@@ -4,7 +4,7 @@ import {readFile,stat} from 'node:fs/promises';
 import {fileURLToPath} from 'node:url';
 import path from 'node:path';
 const root=path.resolve(fileURLToPath(new URL(process.argv.includes('--dist')?'../dist/':'../',import.meta.url))),port=Number(process.env.PORT??4399);
-const types={'.html':'text/html; charset=utf-8','.css':'text/css; charset=utf-8','.mjs':'application/javascript; charset=utf-8','.js':'application/javascript; charset=utf-8','.json':'application/json','.png':'image/png','.svg':'image/svg+xml','.planet':'application/octet-stream','.woff2':'font/woff2'};
+const types={'.wasm':'application/wasm','.html':'text/html; charset=utf-8','.css':'text/css; charset=utf-8','.mjs':'application/javascript; charset=utf-8','.js':'application/javascript; charset=utf-8','.json':'application/json','.png':'image/png','.svg':'image/svg+xml','.planet':'application/octet-stream','.woff2':'font/woff2'};
 // All runtime assets are same-origin. Other hosts retain the copy fallback.
 const isolation=process.env.WORLD_SHARED_MEMORY==='0'?{}:{'Cross-Origin-Opener-Policy':'same-origin','Cross-Origin-Embedder-Policy':'require-corp'};
 const server=http.createServer(async(req,res)=>{

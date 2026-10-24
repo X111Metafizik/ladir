@@ -1,0 +1,1045 @@
+{
+  "date": "2026-10-24T11:52:16.994Z",
+  "node": "v24.18.0",
+  "worldHash": "595aee80687ce1d3acf102bfd9e8bb925f9b5ee4a3bca2bdc3fca5f58b2b463d",
+  "quality": "Same 32-cell patches, globe and reference-basin coordinates. No quality overrides.",
+  "scope": "CPU kernel and generation benchmark; not FPS, GPU time or total browser RAM.",
+  "rounds": [
+    {
+      "round": 0,
+      "mode": "jsLegacy",
+      "samplingMs": 38.92000000000007,
+      "checksum": 1144895.4311560458,
+      "patchMs": [
+        16.840099999999893,
+        21.396899999999732,
+        11.183199999999943,
+        27.065700000000106,
+        22.970400000000154,
+        21.674999999999727,
+        15.535100000000057,
+        32.34389999999985,
+        31.463900000000194,
+        20.329099999999926,
+        19.198199999999815,
+        23.49369999999999
+      ],
+      "patch": {
+        "n": 12,
+        "median": 21.674999999999727,
+        "p95": 32.34389999999985,
+        "max": 32.34389999999985
+      },
+      "planningMs": 6.071999999999662,
+      "leaves": 155,
+      "outputPositionBytes": 156816,
+      "sampleCache": {
+        "hits": 31,
+        "misses": 15821,
+        "size": 15821
+      },
+      "kernel": {
+        "memoPolicy": "explicit-only; canonical sample cache owns reuse",
+        "mode": "js",
+        "requested": "js",
+        "loadMs": 0,
+        "bytes": 0,
+        "memoryBytes": 0,
+        "reason": "explicit JavaScript mode",
+        "cacheBytes": 0,
+        "cacheEntries": 0,
+        "cacheUsed": 0,
+        "hits": 0,
+        "misses": 0
+      }
+    },
+    {
+      "round": 0,
+      "mode": "js",
+      "samplingMs": 38.79410000000007,
+      "checksum": 1144895.4311560458,
+      "patchMs": [
+        17.74240000000009,
+        23.566699999999855,
+        10.531199999999899,
+        26.605099999999766,
+        24.59519999999975,
+        19.348700000000008,
+        15.201199999999972,
+        12.738200000000234,
+        13.892399999999725,
+        17.227800000000116,
+        12.757599999999911,
+        15.129599999999755
+      ],
+      "patch": {
+        "n": 12,
+        "median": 17.227800000000116,
+        "p95": 26.605099999999766,
+        "max": 26.605099999999766
+      },
+      "planningMs": 5.792599999999766,
+      "leaves": 155,
+      "outputPositionBytes": 156816,
+      "sampleCache": {
+        "hits": 31,
+        "misses": 15821,
+        "size": 15792,
+        "capacity": 80000,
+        "keyBytes": 3300000,
+        "referenceSlots": 80000,
+        "evictions": 29
+      },
+      "kernel": {
+        "memoPolicy": "explicit-only; canonical sample cache owns reuse",
+        "mode": "js",
+        "requested": "js",
+        "loadMs": 0,
+        "bytes": 0,
+        "memoryBytes": 0,
+        "reason": "explicit JavaScript mode",
+        "cacheBytes": 0,
+        "cacheEntries": 0,
+        "cacheUsed": 0,
+        "hits": 0,
+        "misses": 0
+      }
+    },
+    {
+      "round": 0,
+      "mode": "wasm",
+      "samplingMs": 42.75009999999975,
+      "checksum": 1144895.4311560458,
+      "patchMs": [
+        10.263699999999972,
+        16.545900000000074,
+        7.625,
+        15.90520000000015,
+        22.82089999999971,
+        15.563900000000103,
+        12.43939999999975,
+        12.8433,
+        14.596999999999753,
+        18.560699999999997,
+        13.367600000000039,
+        14.78879999999981
+      ],
+      "patch": {
+        "n": 12,
+        "median": 14.78879999999981,
+        "p95": 22.82089999999971,
+        "max": 22.82089999999971
+      },
+      "planningMs": 5.093199999999797,
+      "leaves": 155,
+      "outputPositionBytes": 156816,
+      "sampleCache": {
+        "hits": 31,
+        "misses": 15821,
+        "size": 15792,
+        "capacity": 80000,
+        "keyBytes": 3300000,
+        "referenceSlots": 80000,
+        "evictions": 29
+      },
+      "kernel": {
+        "memoPolicy": "explicit-only; canonical sample cache owns reuse",
+        "mode": "wasm",
+        "requested": "auto",
+        "loadMs": 2.3195999999998094,
+        "bytes": 1908,
+        "memoryBytes": 589824,
+        "reason": null,
+        "cacheBytes": 458752,
+        "cacheEntries": 8192,
+        "cacheUsed": 0,
+        "hits": 0,
+        "misses": 0
+      }
+    },
+    {
+      "round": 1,
+      "mode": "wasm",
+      "samplingMs": 40.66260000000011,
+      "checksum": 1144895.4311560458,
+      "patchMs": [
+        9.006599999999708,
+        19.31670000000031,
+        10.157599999999547,
+        20.2466000000004,
+        20.375299999999697,
+        14.214600000000246,
+        11.981999999999971,
+        11.796300000000883,
+        18.271600000000035,
+        15.152399999999943,
+        11.528000000000247,
+        13.993199999999888
+      ],
+      "patch": {
+        "n": 12,
+        "median": 14.214600000000246,
+        "p95": 20.375299999999697,
+        "max": 20.375299999999697
+      },
+      "planningMs": 5.382900000000518,
+      "leaves": 155,
+      "outputPositionBytes": 156816,
+      "sampleCache": {
+        "hits": 31,
+        "misses": 15821,
+        "size": 15792,
+        "capacity": 80000,
+        "keyBytes": 3300000,
+        "referenceSlots": 80000,
+        "evictions": 29
+      },
+      "kernel": {
+        "memoPolicy": "explicit-only; canonical sample cache owns reuse",
+        "mode": "wasm",
+        "requested": "auto",
+        "loadMs": 2.3195999999998094,
+        "bytes": 1908,
+        "memoryBytes": 589824,
+        "reason": null,
+        "cacheBytes": 458752,
+        "cacheEntries": 8192,
+        "cacheUsed": 0,
+        "hits": 0,
+        "misses": 0
+      }
+    },
+    {
+      "round": 1,
+      "mode": "js",
+      "samplingMs": 39.62259999999969,
+      "checksum": 1144895.4311560458,
+      "patchMs": [
+        10.544699999999466,
+        20.391099999999824,
+        14.493099999999686,
+        17.99039999999968,
+        19.73819999999978,
+        22.721999999999753,
+        12.65269999999964,
+        13.247400000000198,
+        19.721999999999753,
+        15.102600000000166,
+        13.518000000000029,
+        17.63469999999961
+      ],
+      "patch": {
+        "n": 12,
+        "median": 17.63469999999961,
+        "p95": 22.721999999999753,
+        "max": 22.721999999999753
+      },
+      "planningMs": 5.026499999999942,
+      "leaves": 155,
+      "outputPositionBytes": 156816,
+      "sampleCache": {
+        "hits": 31,
+        "misses": 15821,
+        "size": 15792,
+        "capacity": 80000,
+        "keyBytes": 3300000,
+        "referenceSlots": 80000,
+        "evictions": 29
+      },
+      "kernel": {
+        "memoPolicy": "explicit-only; canonical sample cache owns reuse",
+        "mode": "js",
+        "requested": "js",
+        "loadMs": 0,
+        "bytes": 0,
+        "memoryBytes": 0,
+        "reason": "explicit JavaScript mode",
+        "cacheBytes": 0,
+        "cacheEntries": 0,
+        "cacheUsed": 0,
+        "hits": 0,
+        "misses": 0
+      }
+    },
+    {
+      "round": 1,
+      "mode": "jsLegacy",
+      "samplingMs": 49.9992000000002,
+      "checksum": 1144895.4311560458,
+      "patchMs": [
+        11.944700000000012,
+        26.81880000000001,
+        10.473899999999958,
+        19.8765999999996,
+        21.15009999999984,
+        24.984400000000278,
+        14.83219999999983,
+        16.483400000000074,
+        23.827000000000226,
+        18.43499999999949,
+        13.899099999999635,
+        16.469999999999345
+      ],
+      "patch": {
+        "n": 12,
+        "median": 18.43499999999949,
+        "p95": 26.81880000000001,
+        "max": 26.81880000000001
+      },
+      "planningMs": 8.85069999999996,
+      "leaves": 155,
+      "outputPositionBytes": 156816,
+      "sampleCache": {
+        "hits": 31,
+        "misses": 15821,
+        "size": 15821
+      },
+      "kernel": {
+        "memoPolicy": "explicit-only; canonical sample cache owns reuse",
+        "mode": "js",
+        "requested": "js",
+        "loadMs": 0,
+        "bytes": 0,
+        "memoryBytes": 0,
+        "reason": "explicit JavaScript mode",
+        "cacheBytes": 0,
+        "cacheEntries": 0,
+        "cacheUsed": 0,
+        "hits": 0,
+        "misses": 0
+      }
+    },
+    {
+      "round": 2,
+      "mode": "jsLegacy",
+      "samplingMs": 38.54160000000047,
+      "checksum": 1144895.4311560458,
+      "patchMs": [
+        11.172599999999875,
+        27.011099999999715,
+        10.825699999999415,
+        18.96469999999954,
+        25.174399999999878,
+        18.805600000000595,
+        13.666699999999764,
+        14.047599999999875,
+        21.312200000000303,
+        16.17529999999988,
+        14.284499999999753,
+        21.254899999999907
+      ],
+      "patch": {
+        "n": 12,
+        "median": 18.805600000000595,
+        "p95": 27.011099999999715,
+        "max": 27.011099999999715
+      },
+      "planningMs": 5.368800000000192,
+      "leaves": 155,
+      "outputPositionBytes": 156816,
+      "sampleCache": {
+        "hits": 31,
+        "misses": 15821,
+        "size": 15821
+      },
+      "kernel": {
+        "memoPolicy": "explicit-only; canonical sample cache owns reuse",
+        "mode": "js",
+        "requested": "js",
+        "loadMs": 0,
+        "bytes": 0,
+        "memoryBytes": 0,
+        "reason": "explicit JavaScript mode",
+        "cacheBytes": 0,
+        "cacheEntries": 0,
+        "cacheUsed": 0,
+        "hits": 0,
+        "misses": 0
+      }
+    },
+    {
+      "round": 2,
+      "mode": "js",
+      "samplingMs": 40.174300000000585,
+      "checksum": 1144895.4311560458,
+      "patchMs": [
+        10.247000000000298,
+        25.98359999999957,
+        8.835700000000543,
+        18.274999999999636,
+        25.304699999999684,
+        18.80619999999999,
+        13.645100000000639,
+        17.090900000000147,
+        16.663400000000365,
+        14.493900000000394,
+        11.77809999999954,
+        18.473500000000058
+      ],
+      "patch": {
+        "n": 12,
+        "median": 17.090900000000147,
+        "p95": 25.98359999999957,
+        "max": 25.98359999999957
+      },
+      "planningMs": 5.515000000000327,
+      "leaves": 155,
+      "outputPositionBytes": 156816,
+      "sampleCache": {
+        "hits": 31,
+        "misses": 15821,
+        "size": 15792,
+        "capacity": 80000,
+        "keyBytes": 3300000,
+        "referenceSlots": 80000,
+        "evictions": 29
+      },
+      "kernel": {
+        "memoPolicy": "explicit-only; canonical sample cache owns reuse",
+        "mode": "js",
+        "requested": "js",
+        "loadMs": 0,
+        "bytes": 0,
+        "memoryBytes": 0,
+        "reason": "explicit JavaScript mode",
+        "cacheBytes": 0,
+        "cacheEntries": 0,
+        "cacheUsed": 0,
+        "hits": 0,
+        "misses": 0
+      }
+    },
+    {
+      "round": 2,
+      "mode": "wasm",
+      "samplingMs": 38.02639999999974,
+      "checksum": 1144895.4311560458,
+      "patchMs": [
+        10.135600000000522,
+        24.15350000000035,
+        8.238599999999678,
+        15.64220000000023,
+        17.147100000000137,
+        18.8132999999998,
+        11.733499999999367,
+        12.210100000000239,
+        15.362099999999373,
+        14.583800000000338,
+        15.812199999999393,
+        14.599200000000565
+      ],
+      "patch": {
+        "n": 12,
+        "median": 15.362099999999373,
+        "p95": 24.15350000000035,
+        "max": 24.15350000000035
+      },
+      "planningMs": 4.997699999999895,
+      "leaves": 155,
+      "outputPositionBytes": 156816,
+      "sampleCache": {
+        "hits": 31,
+        "misses": 15821,
+        "size": 15792,
+        "capacity": 80000,
+        "keyBytes": 3300000,
+        "referenceSlots": 80000,
+        "evictions": 29
+      },
+      "kernel": {
+        "memoPolicy": "explicit-only; canonical sample cache owns reuse",
+        "mode": "wasm",
+        "requested": "auto",
+        "loadMs": 2.0189000000000306,
+        "bytes": 1908,
+        "memoryBytes": 589824,
+        "reason": null,
+        "cacheBytes": 458752,
+        "cacheEntries": 8192,
+        "cacheUsed": 0,
+        "hits": 0,
+        "misses": 0
+      }
+    },
+    {
+      "round": 3,
+      "mode": "wasm",
+      "samplingMs": 36.70799999999963,
+      "checksum": 1144895.4311560458,
+      "patchMs": [
+        14.926699999999983,
+        18.754100000000108,
+        7.708599999999933,
+        16.46770000000015,
+        16.703999999999724,
+        19.68329999999969,
+        11.432200000000194,
+        11.79489999999987,
+        13.170600000000377,
+        19.028199999999742,
+        13.26339999999982,
+        14.021899999999732
+      ],
+      "patch": {
+        "n": 12,
+        "median": 14.926699999999983,
+        "p95": 19.68329999999969,
+        "max": 19.68329999999969
+      },
+      "planningMs": 5.495700000000397,
+      "leaves": 155,
+      "outputPositionBytes": 156816,
+      "sampleCache": {
+        "hits": 31,
+        "misses": 15821,
+        "size": 15792,
+        "capacity": 80000,
+        "keyBytes": 3300000,
+        "referenceSlots": 80000,
+        "evictions": 29
+      },
+      "kernel": {
+        "memoPolicy": "explicit-only; canonical sample cache owns reuse",
+        "mode": "wasm",
+        "requested": "auto",
+        "loadMs": 2.0189000000000306,
+        "bytes": 1908,
+        "memoryBytes": 589824,
+        "reason": null,
+        "cacheBytes": 458752,
+        "cacheEntries": 8192,
+        "cacheUsed": 0,
+        "hits": 0,
+        "misses": 0
+      }
+    },
+    {
+      "round": 3,
+      "mode": "js",
+      "samplingMs": 41.12549999999919,
+      "checksum": 1144895.4311560458,
+      "patchMs": [
+        10.616699999999582,
+        20.157100000000355,
+        8.719000000000051,
+        22.59900000000016,
+        19.18409999999949,
+        16.49829999999929,
+        14.899699999999939,
+        12.714699999999539,
+        13.678199999999379,
+        15.094900000000052,
+        15.096199999999953,
+        15.279199999999946
+      ],
+      "patch": {
+        "n": 12,
+        "median": 15.096199999999953,
+        "p95": 22.59900000000016,
+        "max": 22.59900000000016
+      },
+      "planningMs": 4.626299999999901,
+      "leaves": 155,
+      "outputPositionBytes": 156816,
+      "sampleCache": {
+        "hits": 31,
+        "misses": 15821,
+        "size": 15792,
+        "capacity": 80000,
+        "keyBytes": 3300000,
+        "referenceSlots": 80000,
+        "evictions": 29
+      },
+      "kernel": {
+        "memoPolicy": "explicit-only; canonical sample cache owns reuse",
+        "mode": "js",
+        "requested": "js",
+        "loadMs": 0,
+        "bytes": 0,
+        "memoryBytes": 0,
+        "reason": "explicit JavaScript mode",
+        "cacheBytes": 0,
+        "cacheEntries": 0,
+        "cacheUsed": 0,
+        "hits": 0,
+        "misses": 0
+      }
+    },
+    {
+      "round": 3,
+      "mode": "jsLegacy",
+      "samplingMs": 41.90950000000066,
+      "checksum": 1144895.4311560458,
+      "patchMs": [
+        11.027900000000045,
+        20.989799999999377,
+        11.090699999999742,
+        25.685300000000097,
+        21.250699999999597,
+        19.097000000000662,
+        17.110599999999977,
+        13.860800000000381,
+        15.134399999999914,
+        19.805500000000393,
+        15.693600000000515,
+        16.157000000000153
+      ],
+      "patch": {
+        "n": 12,
+        "median": 17.110599999999977,
+        "p95": 25.685300000000097,
+        "max": 25.685300000000097
+      },
+      "planningMs": 4.800900000000183,
+      "leaves": 155,
+      "outputPositionBytes": 156816,
+      "sampleCache": {
+        "hits": 31,
+        "misses": 15821,
+        "size": 15821
+      },
+      "kernel": {
+        "memoPolicy": "explicit-only; canonical sample cache owns reuse",
+        "mode": "js",
+        "requested": "js",
+        "loadMs": 0,
+        "bytes": 0,
+        "memoryBytes": 0,
+        "reason": "explicit JavaScript mode",
+        "cacheBytes": 0,
+        "cacheEntries": 0,
+        "cacheUsed": 0,
+        "hits": 0,
+        "misses": 0
+      }
+    },
+    {
+      "round": 4,
+      "mode": "jsLegacy",
+      "samplingMs": 42.05549999999948,
+      "checksum": 1144895.4311560458,
+      "patchMs": [
+        10.623499999999694,
+        20.67450000000008,
+        10.281300000000556,
+        24.160899999999856,
+        20.21600000000035,
+        22.493400000000292,
+        13.141700000000128,
+        13.850800000000163,
+        16.09569999999985,
+        20.782499999999345,
+        13.547899999999572,
+        15.932700000000295
+      ],
+      "patch": {
+        "n": 12,
+        "median": 16.09569999999985,
+        "p95": 24.160899999999856,
+        "max": 24.160899999999856
+      },
+      "planningMs": 4.606499999999869,
+      "leaves": 155,
+      "outputPositionBytes": 156816,
+      "sampleCache": {
+        "hits": 31,
+        "misses": 15821,
+        "size": 15821
+      },
+      "kernel": {
+        "memoPolicy": "explicit-only; canonical sample cache owns reuse",
+        "mode": "js",
+        "requested": "js",
+        "loadMs": 0,
+        "bytes": 0,
+        "memoryBytes": 0,
+        "reason": "explicit JavaScript mode",
+        "cacheBytes": 0,
+        "cacheEntries": 0,
+        "cacheUsed": 0,
+        "hits": 0,
+        "misses": 0
+      }
+    },
+    {
+      "round": 4,
+      "mode": "js",
+      "samplingMs": 43.04780000000028,
+      "checksum": 1144895.4311560458,
+      "patchMs": [
+        9.595400000000154,
+        18.296699999999873,
+        8.792499999999563,
+        25.217499999999745,
+        19.407000000000153,
+        19.12329999999929,
+        13.258899999999812,
+        12.77099999999973,
+        13.98869999999988,
+        17.194799999999304,
+        12.146300000000338,
+        14.346400000000358
+      ],
+      "patch": {
+        "n": 12,
+        "median": 14.346400000000358,
+        "p95": 25.217499999999745,
+        "max": 25.217499999999745
+      },
+      "planningMs": 4.541200000000572,
+      "leaves": 155,
+      "outputPositionBytes": 156816,
+      "sampleCache": {
+        "hits": 31,
+        "misses": 15821,
+        "size": 15792,
+        "capacity": 80000,
+        "keyBytes": 3300000,
+        "referenceSlots": 80000,
+        "evictions": 29
+      },
+      "kernel": {
+        "memoPolicy": "explicit-only; canonical sample cache owns reuse",
+        "mode": "js",
+        "requested": "js",
+        "loadMs": 0,
+        "bytes": 0,
+        "memoryBytes": 0,
+        "reason": "explicit JavaScript mode",
+        "cacheBytes": 0,
+        "cacheEntries": 0,
+        "cacheUsed": 0,
+        "hits": 0,
+        "misses": 0
+      }
+    },
+    {
+      "round": 4,
+      "mode": "wasm",
+      "samplingMs": 43.29820000000018,
+      "checksum": 1144895.4311560458,
+      "patchMs": [
+        12.454099999999926,
+        19.516599999999926,
+        8.170099999999366,
+        22.28769999999986,
+        17.890000000000327,
+        15.018100000000231,
+        11.699900000000525,
+        18.070700000000215,
+        13.59519999999975,
+        14.823900000000322,
+        11.966099999999642,
+        18.19000000000051
+      ],
+      "patch": {
+        "n": 12,
+        "median": 15.018100000000231,
+        "p95": 22.28769999999986,
+        "max": 22.28769999999986
+      },
+      "planningMs": 6.834100000000035,
+      "leaves": 155,
+      "outputPositionBytes": 156816,
+      "sampleCache": {
+        "hits": 31,
+        "misses": 15821,
+        "size": 15792,
+        "capacity": 80000,
+        "keyBytes": 3300000,
+        "referenceSlots": 80000,
+        "evictions": 29
+      },
+      "kernel": {
+        "memoPolicy": "explicit-only; canonical sample cache owns reuse",
+        "mode": "wasm",
+        "requested": "auto",
+        "loadMs": 30.72479999999996,
+        "bytes": 1908,
+        "memoryBytes": 589824,
+        "reason": null,
+        "cacheBytes": 458752,
+        "cacheEntries": 8192,
+        "cacheUsed": 0,
+        "hits": 0,
+        "misses": 0
+      }
+    },
+    {
+      "round": 5,
+      "mode": "wasm",
+      "samplingMs": 36.717500000000655,
+      "checksum": 1144895.4311560458,
+      "patchMs": [
+        8.261499999999614,
+        22.223699999999553,
+        8.083399999999529,
+        16.40689999999995,
+        19.39090000000033,
+        14.824899999999616,
+        16.774099999999635,
+        11.85320000000047,
+        13.137799999999515,
+        14.77099999999973,
+        15.030700000000252,
+        14.79189999999926
+      ],
+      "patch": {
+        "n": 12,
+        "median": 14.824899999999616,
+        "p95": 22.223699999999553,
+        "max": 22.223699999999553
+      },
+      "planningMs": 6.068699999999808,
+      "leaves": 155,
+      "outputPositionBytes": 156816,
+      "sampleCache": {
+        "hits": 31,
+        "misses": 15821,
+        "size": 15792,
+        "capacity": 80000,
+        "keyBytes": 3300000,
+        "referenceSlots": 80000,
+        "evictions": 29
+      },
+      "kernel": {
+        "memoPolicy": "explicit-only; canonical sample cache owns reuse",
+        "mode": "wasm",
+        "requested": "auto",
+        "loadMs": 30.72479999999996,
+        "bytes": 1908,
+        "memoryBytes": 589824,
+        "reason": null,
+        "cacheBytes": 458752,
+        "cacheEntries": 8192,
+        "cacheUsed": 0,
+        "hits": 0,
+        "misses": 0
+      }
+    },
+    {
+      "round": 5,
+      "mode": "js",
+      "samplingMs": 37.83989999999994,
+      "checksum": 1144895.4311560458,
+      "patchMs": [
+        14.582000000000335,
+        19.233500000000276,
+        8.29030000000057,
+        22.141099999999824,
+        18.408699999999953,
+        15.97320000000036,
+        11.57169999999951,
+        14.892799999999625,
+        13.41359999999986,
+        14.707499999999527,
+        14.41319999999996,
+        15.268799999999828
+      ],
+      "patch": {
+        "n": 12,
+        "median": 14.892799999999625,
+        "p95": 22.141099999999824,
+        "max": 22.141099999999824
+      },
+      "planningMs": 4.956199999999626,
+      "leaves": 155,
+      "outputPositionBytes": 156816,
+      "sampleCache": {
+        "hits": 31,
+        "misses": 15821,
+        "size": 15792,
+        "capacity": 80000,
+        "keyBytes": 3300000,
+        "referenceSlots": 80000,
+        "evictions": 29
+      },
+      "kernel": {
+        "memoPolicy": "explicit-only; canonical sample cache owns reuse",
+        "mode": "js",
+        "requested": "js",
+        "loadMs": 0,
+        "bytes": 0,
+        "memoryBytes": 0,
+        "reason": "explicit JavaScript mode",
+        "cacheBytes": 0,
+        "cacheEntries": 0,
+        "cacheUsed": 0,
+        "hits": 0,
+        "misses": 0
+      }
+    },
+    {
+      "round": 5,
+      "mode": "jsLegacy",
+      "samplingMs": 36.20680000000084,
+      "checksum": 1144895.4311560458,
+      "patchMs": [
+        15.154499999999643,
+        19.721300000000156,
+        10.71730000000025,
+        24.373499999999694,
+        20.105099999999766,
+        18.26220000000012,
+        12.577900000000227,
+        19.6904999999997,
+        15.333200000000033,
+        16.601200000000063,
+        18.06829999999991,
+        18.11040000000048
+      ],
+      "patch": {
+        "n": 12,
+        "median": 18.11040000000048,
+        "p95": 24.373499999999694,
+        "max": 24.373499999999694
+      },
+      "planningMs": 5.019000000000233,
+      "leaves": 155,
+      "outputPositionBytes": 156816,
+      "sampleCache": {
+        "hits": 31,
+        "misses": 15821,
+        "size": 15821
+      },
+      "kernel": {
+        "memoPolicy": "explicit-only; canonical sample cache owns reuse",
+        "mode": "js",
+        "requested": "js",
+        "loadMs": 0,
+        "bytes": 0,
+        "memoryBytes": 0,
+        "reason": "explicit JavaScript mode",
+        "cacheBytes": 0,
+        "cacheEntries": 0,
+        "cacheUsed": 0,
+        "hits": 0,
+        "misses": 0
+      }
+    }
+  ],
+  "noise": {
+    "js": {
+      "calls": 60000,
+      "checksum": -356.39370128491805,
+      "milliseconds": {
+        "n": 6,
+        "median": 25.018299999999726,
+        "p95": 27.794199999999364,
+        "max": 27.794199999999364
+      },
+      "samples": [
+        25.018299999999726,
+        27.794199999999364,
+        25.29739999999947,
+        23.00709999999981,
+        22.818500000000313,
+        23.400699999999233
+      ]
+    },
+    "wasmUncached": {
+      "calls": 60000,
+      "checksum": -356.39370128491805,
+      "milliseconds": {
+        "n": 6,
+        "median": 19.098700000000463,
+        "p95": 19.779899999999543,
+        "max": 19.779899999999543
+      },
+      "samples": [
+        19.098700000000463,
+        19.779899999999543,
+        19.000500000000102,
+        18.969099999999344,
+        19.463600000000042,
+        18.716599999999744
+      ]
+    },
+    "wasmCached": {
+      "calls": 60000,
+      "checksum": -356.39370128491805,
+      "milliseconds": {
+        "n": 6,
+        "median": 9.524699999999939,
+        "p95": 9.98069999999916,
+        "max": 9.98069999999916
+      },
+      "samples": [
+        9.98069999999916,
+        9.524699999999939,
+        8.749899999999798,
+        9.6812000000009,
+        9.251100000000406,
+        8.920100000000275
+      ]
+    }
+  },
+  "summary": {
+    "jsLegacy": {
+      "samplingMs": {
+        "n": 6,
+        "median": 41.90950000000066,
+        "p95": 49.9992000000002,
+        "max": 49.9992000000002
+      },
+      "patchMs": {
+        "n": 72,
+        "median": 18.26220000000012,
+        "p95": 27.011099999999715,
+        "max": 32.34389999999985
+      },
+      "planningMs": {
+        "n": 6,
+        "median": 5.368800000000192,
+        "p95": 8.85069999999996,
+        "max": 8.85069999999996
+      }
+    },
+    "js": {
+      "samplingMs": {
+        "n": 6,
+        "median": 40.174300000000585,
+        "p95": 43.04780000000028,
+        "max": 43.04780000000028
+      },
+      "patchMs": {
+        "n": 72,
+        "median": 15.129599999999755,
+        "p95": 25.217499999999745,
+        "max": 26.605099999999766
+      },
+      "planningMs": {
+        "n": 6,
+        "median": 5.026499999999942,
+        "p95": 5.792599999999766,
+        "max": 5.792599999999766
+      }
+    },
+    "wasm": {
+      "samplingMs": {
+        "n": 6,
+        "median": 40.66260000000011,
+        "p95": 43.29820000000018,
+        "max": 43.29820000000018
+      },
+      "patchMs": {
+        "n": 72,
+        "median": 14.79189999999926,
+        "p95": 22.223699999999553,
+        "max": 24.15350000000035
+      },
+      "planningMs": {
+        "n": 6,
+        "median": 5.495700000000397,
+        "p95": 6.834100000000035,
+        "max": 6.834100000000035
+      }
+    }
+  },
+  "memory": {
+    "wasmLinearBytes": 589824,
+    "wasmCacheBytes": 458752,
+    "cacheCapacity": 8192,
+    "ownership": "One fixed arena per worker/realm; mesh ArrayBuffers still transfer ownership. No WASM memory is transferred or freed per tile."
+  }
+}

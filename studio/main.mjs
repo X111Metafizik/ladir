@@ -1,3 +1,4 @@
+import {requestedTerrainKernel} from '../wasm/runtime.mjs';
 import {stableStringify} from '../core/math.mjs';
 import {stampDiagnostics} from '../core/terrain-stamps.mjs';
 import {createFlightUI} from './flight-ui.mjs';
@@ -68,7 +69,7 @@ async function generate(options={}){
       worker.terminate();worker=null;worldCacheStatus=data.cache;await activate(data.world,id);if(id===generationId)$('#generate').disabled=false;
     }
   };
-  worker.postMessage({generationId:id,config,reuseCache:options.reuseCache===true});
+  worker.postMessage({terrainKernel:requestedTerrainKernel(),generationId:id,config,reuseCache:options.reuseCache===true});
 }
 async function activate(next,id=generationId){
   flightUI.exit();

@@ -1,3 +1,5 @@
+import {activeTerrainKernel} from '../wasm/runtime.mjs';
+import {noise3JS,fbmJS} from './noise-js.mjs';
 export const clamp=(x,a=0,b=1)=>Math.max(a,Math.min(b,x));
 export const mix=(a,b,t)=>a+(b-a)*t;
 export const smooth=(a,b,x)=>{const t=clamp((x-a)/(b-a));return t*t*(3-2*t);};
@@ -16,20 +18,13 @@ export function randomStream(seed) {
   return ()=>{s^=s<<13;s^=s>>>17;s^=s<<5;return (s>>>0)/4294967296;};
 }
 export const randomAt=(seed,id)=>hash32(`${seed}/${id}`)/4294967296;
-function lattice(x,y,z,seed){
-  let h=Math.imul(x,374761393)^Math.imul(y,668265263)^Math.imul(z,2147483647)^seed;
-  h=Math.imul(h^(h>>>13),1274126177); return ((h^(h>>>16))>>>0)/2147483647.5-1;
-}
 export function noise3(x,y,z,seed){
-  const ix=Math.floor(x),iy=Math.floor(y),iz=Math.floor(z),fx=x-ix,fy=y-iy,fz=z-iz;
-  const f=t=>t*t*t*(t*(t*6-15)+10),u=f(fx),v=f(fy),w=f(fz);
-  return mix(mix(mix(lattice(ix,iy,iz,seed),lattice(ix+1,iy,iz,seed),u),mix(lattice(ix,iy+1,iz,seed),lattice(ix+1,iy+1,iz,seed),u),v),
-    mix(mix(lattice(ix,iy,iz+1,seed),lattice(ix+1,iy,iz+1,seed),u),mix(lattice(ix,iy+1,iz+1,seed),lattice(ix+1,iy+1,iz+1,seed),u),v),w);
+  return activeTerrainKernel ? activeTerrainKernel.noise3(x,y,z,seed) : noise3JS(x,y,z,seed);
 }
 export function fbm(p,frequency,seed,octaves=5){
-  let sum=0,amp=.5;
-  for(let i=0;i<octaves;i++){sum+=amp*noise3(p[0]*frequency,p[1]*frequency,p[2]*frequency,seed+i*1013);frequency*=2.03;amp*=.49;}
-  return sum;
+  // Keep the original public function valid outside the bounded terrain domain.
+  return activeTerrainKernel && Number.isInteger(octaves) && octaves>=0 && octaves<=32
+    ? activeTerrainKernel.fbm_uncached(p[0],p[1],p[2],frequency,seed,octaves) : fbmJS(p,frequency,seed,octaves);
 }
 export const localDirection=(world,x,y)=>normalize(world.frame.center.map((v,i)=>v+world.frame.east[i]*x+world.frame.north[i]*y));
 export function localCoordinates(world,d){

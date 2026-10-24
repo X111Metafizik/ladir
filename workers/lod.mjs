@@ -1,3 +1,5 @@
+import {initTerrainKernel,terrainKernelStats} from '../wasm/runtime.mjs';
+let initialization=Promise.resolve();
 import {postWorkerWorld,receiveWorkerWorld} from '../io/worker-world.mjs';
 import {initRegional} from '../io/regional-runtime.mjs';
 import {TERRAIN_BUDGET,patchBytes} from '../render/terrain-budget.mjs';
@@ -10,7 +12,8 @@ import {sampleTerrain,nearestRiver} from '../core/terrain.mjs';
 let sharedWorld=false,planningController,region,regionOptions,world,pool,workerCount,terrainRequest=0,inflightBytes=0,deliveryId=0;const vegetationCache=new Map(),yieldWork=()=>new Promise(r=>setTimeout(r,0));
 function ensurePool(){return pool??=new PatchPool(()=>{const w=new Worker(new URL('./patches.mjs',import.meta.url),{type:'module'});postWorkerWorld(w,{type:'init',world,warm:!!workerCount,regionalOptions:regionOptions,bake:regionOptions?.meshBake!==false},{shared:sharedWorld});return w;},workerCount??Math.min(3,Math.max(1,Math.floor((navigator.hardwareConcurrency??4)/2))));}
 self.onmessage=async({data})=>{
- if(data.type==='init'){world=receiveWorkerWorld(data);sharedWorld=data.worldTransport?.shared===true;regionOptions=data.regionalOptions;region=initRegional(world,regionOptions);workerCount=data.workerCount;pool?.dispose();pool=null;vegetationCache.clear();if(workerCount){ensurePool();sampleTerrain(world,world.frame.center);nearestRiver(world,world.frame.center);}return;}
+ if(data.type==='init'){initialization=(async()=>{await initTerrainKernel({mode:data.terrainKernel});world=receiveWorkerWorld(data);sharedWorld=data.worldTransport?.shared===true;regionOptions=data.regionalOptions;region=initRegional(world,regionOptions);workerCount=data.workerCount;pool?.dispose();pool=null;vegetationCache.clear();if(workerCount){ensurePool();sampleTerrain(world,world.frame.center);nearestRiver(world,world.frame.center);}})();return;}
+ await initialization;
  if(data.type==='terrain-consumed'){if(data.id===deliveryId){inflightBytes=Math.max(0,inflightBytes-data.bytes);pool?.setPaused(inflightBytes>TERRAIN_BUDGET.inflightBytes);}return;}
  if(data.type==='dispose'){pool?.dispose();self.close();return;}
  if(data.type==='cancel-terrain'){planningController?.abort();terrainRequest++;pool?.run([],'natural',()=>{});return;}
@@ -31,7 +34,7 @@ self.onmessage=async({data})=>{
    self.postMessage({id:data.id,type:'terrain-plan',patches,transitions});
    const planningMs=performance.now()-planStarted;ensurePool();
    const result=await pool.run(missing,data.layer,patches=>{inflightBytes+=patches.reduce((n,p)=>n+patchBytes(p),0);pool.setPaused(inflightBytes>TERRAIN_BUDGET.inflightBytes);self.postMessage({id:data.id,type:'terrain-chunk',patches},patches.flatMap(p=>Object.values(p).filter(ArrayBuffer.isView).map(v=>v.buffer)));});
-   if(result&&request===terrainRequest)self.postMessage({id:data.id,type:'terrain-done',milliseconds:performance.now()-start,...result,planningMs,plannerRegion:region?.snapshot()});
+   if(result&&request===terrainRequest)self.postMessage({id:data.id,type:'terrain-done',milliseconds:performance.now()-start,...result,planningMs,plannerKernel:terrainKernelStats(),plannerRegion:region?.snapshot()});
   }else if(data.type==='vegetation'){
    if(region)await region.ensure(region.keysForDirections([data.direction],2000),{limit:9});
    const [face,u,v]=directionFace(data.direction),level=Math.ceil(Math.log2(2*world.radiusMeters/2800)),n=2**level,span=2*world.radiusMeters/n,tx=Math.min(n-1,Math.floor((u+1)*n/2)),ty=Math.min(n-1,Math.floor((v+1)*n/2)),tiles=[],seen=new Set(),radius=3000,ring=Math.ceil(radius/span)+1,known=new Set(data.known??[]);

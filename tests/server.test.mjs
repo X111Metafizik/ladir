@@ -15,8 +15,9 @@ async function start(shared) {
 test('server isolates both document and worker responses, and preserves archived URLs',async()=>{
   const server=await start(true);
   try{
-    for(const path of ['/', '/workers/lod.mjs']){
+    for(const path of ['/', '/workers/lod.mjs', '/assets/wasm/terrain-kernel.wasm']){
       const response=await fetch(server.url+path);assert.equal(response.status,200);
+      if(path.endsWith('.wasm'))assert.equal(response.headers.get('content-type'),'application/wasm');
       assert.equal(response.headers.get('Cross-Origin-Opener-Policy'),'same-origin');
       assert.equal(response.headers.get('Cross-Origin-Embedder-Policy'),'require-corp');
       await response.arrayBuffer();
