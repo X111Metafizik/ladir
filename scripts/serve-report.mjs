@@ -19,7 +19,7 @@ const server=http.createServer(async(req,res)=>{
  }catch{res.writeHead(404);res.end('Rapor bulunamadi.');}
 });
 server.listen(port,host,()=>{
- console.log(`NADİR report: http://127.0.0.1:${port}/`);
+ console.log(`LADİR report: http://127.0.0.1:${port}/`);
  if(host==='0.0.0.0')for(const addresses of Object.values(networkInterfaces()))for(const a of addresses??[])if(a.family==='IPv4'&&!a.internal)console.log(`LAN: http://${a.address}:${port}/`);
 });
 server.on('error',e=>{console.error(e.message);process.exitCode=1;});

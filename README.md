@@ -1,4 +1,4 @@
-# NADIR
+# LADİR
 
 A browser-based procedural planet generator with terrain streaming and flight simulation.
 
@@ -16,8 +16,8 @@ Explore planets, shape terrain in the editor, and fly from the surface into spac
 Requires **Node.js 24+**, npm, and a browser with WebGPU support.
 
 ```sh
-git clone https://github.com/X111Metafizik/nadir.git
-cd nadir
+git clone https://github.com/X111Metafizik/ladir.git
+cd ladir
 npm ci
 npm run build
 npm start
