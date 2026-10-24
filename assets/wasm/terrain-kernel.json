@@ -3,6 +3,7 @@
   "rust": "1.90.0",
   "binarySha256": "93686a5db80fef575604e7664c325cc727ed93e0de615777263f30ed44764e4d",
   "sourceSha256": "68f8392d238efb1f156b865d09f69444cf11b0395f3b27e535c7688c7cd59a0c",
+  "buildInputsSha256": "9d8ad98b6586474d3a0b84a5f86d93ac776272e1e60134eaa354b18e9bde4e20",
   "bytes": 1908,
   "memoryBytes": 589824,
   "cacheBytes": 458752,

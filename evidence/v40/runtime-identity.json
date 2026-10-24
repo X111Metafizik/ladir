@@ -1,0 +1,6 @@
+{
+  "baseCommit": "8d71c08f7c37b733f7dc3ccdaffcad7d5ffec4a1",
+  "unchangedRuntimeAndAssetFiles": 379,
+  "wasmBinarySha256": "93686a5db80fef575604e7664c325cc727ed93e0de615777263f30ed44764e4d",
+  "excludedMetadataOnly": "assets/wasm/terrain-kernel.json"
+}

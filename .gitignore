@@ -34,3 +34,6 @@ Thumbs.db
 
 /wasm/terrain-kernel/target/
 !/evidence/v39/
+
+/test-results/
+!/evidence/v40/

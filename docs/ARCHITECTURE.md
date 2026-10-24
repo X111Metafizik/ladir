@@ -1,5 +1,7 @@
 # Architecture and worker transport
 
+For reproducible builds and v1.25.0 CI, see [Development](DEVELOPMENT.md).
+
 For the v1.24.0 Rust/WASM kernel and bounded numeric sample keys, see
 [WASM implementation and measurements](WASM.md).
 

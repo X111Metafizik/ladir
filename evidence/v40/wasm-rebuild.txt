@@ -1,0 +1,6 @@
+
+> ladir-planet-studio@1.25.0 build:wasm
+> node scripts/build-wasm.mjs --check
+
+    Finished `release` profile [optimized] target(s) in 0.01s
+Pinned Rust release build reproduces the committed WASM artifact.

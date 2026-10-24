@@ -1,6 +1,6 @@
 {
   "name": "ladir-planet-studio",
-  "version": "1.24.0",
+  "version": "1.25.0",
   "private": true,
   "type": "module",
   "scripts": {
@@ -16,13 +16,18 @@
     "bake:region": "node scripts/bake-region.mjs",
     "build:wasm": "node scripts/build-wasm.mjs",
     "test:wasm": "node --test --test-isolation=none tests/wasm.test.mjs",
-    "benchmark:wasm": "node scripts/benchmark-wasm.mjs"
+    "benchmark:wasm": "node scripts/benchmark-wasm.mjs",
+    "check": "node scripts/check-repository.mjs",
+    "verify:wasm": "node scripts/verify-wasm-artifact.mjs",
+    "test:ci": "node scripts/test-ci.mjs",
+    "test:smoke": "node scripts/smoke-production.mjs"
   },
   "dependencies": {
     "three": "0.186.1"
   },
   "devDependencies": {
-    "esbuild": "0.28.2"
+    "esbuild": "0.28.2",
+    "playwright": "1.64.1"
   },
   "engines": {
     "node": ">=24"

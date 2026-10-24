@@ -29,13 +29,16 @@ Use `npm run dev` for development and `npm test` to run the tests.
 
 ## Documentation
 
+- [Development, build and CI guide](docs/DEVELOPMENT.md)
 - [Architecture and worker transport](docs/ARCHITECTURE.md)
-
-- [Performance report](output/reports/ATLAS_V37_Rapor.md) / [PDF](output/pdf/ATLAS_V37_Sonuc.pdf)
-- [Benchmark results](evidence/v37/results.json)
-- [Development history and bake instructions](docs/history/PROJECT_HISTORY_TR.md)
+- [Rust/WASM implementation and measurements](docs/WASM.md)
+- [Project history](docs/PROJECT_HISTORY.md)
+- [Production-plan review](docs/PRODUCTION_REVIEW.md)
 - [Third-party credits and licenses](THIRD_PARTY_NOTICES.md)
 
-Historical reports and development notes are in Turkish and retain the former ATLAS name.
+[CI status](https://github.com/X111Metafizik/ladir/actions/workflows/ci.yml)
+checks Windows/Linux builds, determinism, the Rust artifact and production WebGPU shaders.
 
-Rust/WASM terrain kernel, fallback and measured limits: [WASM implementation](docs/WASM.md).
+Earlier reports and original Turkish notes remain in [the historical archive](docs/history/README.md).
+[The V37 report](output/reports/ATLAS_V37_Rapor.md) and [PDF](output/pdf/ATLAS_V37_Sonuc.pdf)
+retain their original ATLAS name and measurement context.

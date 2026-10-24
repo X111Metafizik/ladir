@@ -1,0 +1,5 @@
+
+> ladir-planet-studio@1.25.0 check
+> node scripts/check-repository.mjs
+
+Repository checks passed: 7 current documents, 33 local links, lockfile and WASM build identity.
