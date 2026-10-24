@@ -12,5 +12,5 @@ const server=http.createServer(async(req,res)=>{
     res.writeHead(200,{'Content-Type':types[path.extname(file)]??'application/octet-stream','Cache-Control':'no-cache','X-Content-Type-Options':'nosniff'});res.end(await readFile(file));
   }catch{res.writeHead(404,{'Content-Type':'text/plain'});res.end('Dosya bulunamadi.');}
 });
-server.listen(port,'127.0.0.1',()=>console.log(`Planet Studio: http://127.0.0.1:${port}`));
+server.listen(port,'127.0.0.1',()=>console.log(`ORVANTA / Planet Studio: http://127.0.0.1:${port}`));
 server.on('error',error=>{console.error(error.message);process.exitCode=1;});

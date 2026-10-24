@@ -1,0 +1,5 @@
+
+> orvanta-planet-studio@1.22.2 build
+> node scripts/build.mjs
+
+Bağımsız dağıtım dist/ dizinine oluşturuldu.

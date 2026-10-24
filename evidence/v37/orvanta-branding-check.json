@@ -1,0 +1,10 @@
+{
+  "brand": "ORVANTA",
+  "version": "1.22.2",
+  "protectedFilesUnchanged": true,
+  "protectedFiles": {
+    "io/terrain-bake-build.mjs": "7287f9f8878dbb7ac54307c0b430a0fd8314d7730c3180f27a1be072169ac510",
+    "io/regional-catalog.mjs": "f3ce4f92b430672ed86cde30214c6bd74905a75da8a027363c46e763fe17c8be",
+    "fixtures/lumen-v35.planet": "b070b3e26a568f7d2cdbaaddc0e4c34608d85d7bf2021ad4d28eda8cd0f33b0c"
+  }
+}

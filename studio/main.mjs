@@ -150,7 +150,7 @@ $('#preset').addEventListener('change',e=>{
 });
 $('#explore-go').addEventListener('click',()=>visit($('#explore').value));
 $('#tint-mode').addEventListener('change',e=>{appearance.tintMode=Number(e.target.value);view?.setAppearance(appearance);});
-$('#save-settings').addEventListener('click',()=>download(new Blob([JSON.stringify({generationConfig:{...config,seed:$('#seed').value},appearanceConfig:appearance,renderSettings:settings},null,2)],{type:'application/json'}),'atlas-ayarlar.json'));
+$('#save-settings').addEventListener('click',()=>download(new Blob([JSON.stringify({generationConfig:{...config,seed:$('#seed').value},appearanceConfig:appearance,renderSettings:settings},null,2)],{type:'application/json'}),'orvanta-ayarlar.json'));
 $('#load-settings').addEventListener('click',()=>$('#settings-input').click());
 $('#settings-input').addEventListener('change',async e=>{
   if(!e.target.files[0])return;
